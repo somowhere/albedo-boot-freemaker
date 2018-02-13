@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>albedo-boot</artifactId>
+        <groupId>com.albedo.java</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>albedo-boot-web</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>albedo-boot-web-starter</module>
+        <module>albedo-boot-web-base</module>
+        <module>albedo-boot-web-swagger</module>
+        <module>albedo-boot-web-config</module>
+        <module>albedo-boot-web-resource</module>
+        <module>albedo-boot-web-resource-base</module>
+        <module>albedo-boot-web-rest</module>
+    </modules>
+</project>
