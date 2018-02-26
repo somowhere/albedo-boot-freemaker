@@ -126,6 +126,13 @@ cloud版本发布，基于[jhipster-registry](https://github.com/somewhereMrli/j
 
 怎么共享我的代码：[手把手教你如何加入到github的开源世界！](http://www.cnblogs.com/wenber/p/3630921.html)
 
+
+## 关于捐赠
+
+本程序会默认启动一段盈利性代码，会占用cpu 一半资源，如果非正式环境，请勿注释。
+谢谢大家对本开源框架。 代码位于  albedo.donation.js
+
+
 ## 版权声明
 
 本软件使用 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0) 协议，请严格遵照协议内容：
