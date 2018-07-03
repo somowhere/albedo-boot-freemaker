@@ -3,58 +3,46 @@
     <!-- 生成分类 -->
     <category>
         <category val="curd" name="增删改查（单表）">
-            <template>category-ref:curd_modal</template>
-            <template>curd/viewFormComponentHtml.xml</template>
-            <template>curd/viewFormComponentTs.xml</template>
-        </category>
-        <category val="curd_modal" name="增删改查（单表）弹窗">
             <template>curd/resource.xml</template>
             <template>curd/resourceIntTest.xml</template>
             <template>category-ref:service</template>
-            <template>curd/viewModelTs.xml</template>
-            <template>curd/viewServiceTs.xml</template>
-            <template>curd/viewComponentHtml.xml</template>
-            <template>curd/viewComponentTs.xml</template>
-            <template>curd/viewModuleTs.xml</template>
+            <template>curd/viewForm.xml</template>
+            <template>curd/viewList.xml</template>
         </category>
-        <!--<category val="curd_many" name="增删改查（一对多）">-->
-            <!--<template>curd/resource.xml</template>-->
-            <!--<template>service/serviceMany.xml</template>-->
-            <!--<template>category-ref:entity</template>-->
-            <!--<template>curd/viewFormMany.xml</template>-->
-            <!--<template>curd/viewList.xml</template>-->
-            <!--<childTable>-->
-                <!--<template>category-ref:service</template>-->
-            <!--</childTable>-->
-        <!--</category>-->
+        <category val="curd_many" name="增删改查（一对多）">
+            <template>curd/resource.xml</template>
+            <template>service/serviceMany.xml</template>
+            <template>category-ref:entity</template>
+            <template>curd/viewFormMany.xml</template>
+            <template>curd/viewList.xml</template>
+            <childTable>
+                <template>category-ref:service</template>
+            </childTable>
+        </category>
         <category val="service" name="仅持久层（service/entity）">
             <template>service/repository.xml</template>
             <template>service/service.xml</template>
             <template>category-ref:entity</template>
         </category>
         <category val="entity" name="数据层（entity）">
+
             <template>entity/vo/entityVo.xml</template>
-            <!--<template>entity/entityId.xml</template>-->
+            <template>entity/entityId.xml</template>
             <template>entity/entity.xml</template>
         </category>
         <category val="treeTable" name="树结构表（一体）">
-            <template>category-ref:treeTable_modal</template>
-            <template>treetable/viewFormComponentHtml.xml</template>
-            <template>treetable/viewFormComponentTs.xml</template>
-        </category>
-        <category val="treeTable_modal" name="树结构表（一体）弹窗">
             <template>treetable/resource.xml</template>
             <template>treetable/resourceIntTest.xml</template>
             <template>treetable/repository.xml</template>
             <template>treetable/service.xml</template>
             <template>treetable/vo/entityVo.xml</template>
             <template>treetable/entity.xml</template>
-            <template>treetable/viewModelTs.xml</template>
-            <template>treetable/viewServiceTs.xml</template>
-            <template>treetable/viewComponentHtml.xml</template>
-            <template>treetable/viewComponentTs.xml</template>
-            <template>treetable/viewModuleTs.xml</template>
+            <template>treetable/viewForm.xml</template>
+            <template>treetable/viewList.xml</template>
         </category>
+        <!-- <category val="treeTableAndList" name="树结构表（左树右表）">
+            <template>category-ref:service</template>
+        </category> -->
     </category>
     <!-- java类型 -->
     <javaType>

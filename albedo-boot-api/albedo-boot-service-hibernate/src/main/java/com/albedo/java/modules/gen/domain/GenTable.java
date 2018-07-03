@@ -61,7 +61,8 @@ public class GenTable extends IdEntity<String> {
     @NotFound(action = NotFoundAction.IGNORE)
     @JSONField(serialize = false)
     private GenTable parent; // 父表对象
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "parent", targetEntity = GenTable.class)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.EAGER, mappedBy = "parent", targetEntity = GenTable.class)
     @Where(clause = "status_ = 0")
     @Fetch(FetchMode.SUBSELECT)
     @JSONField(serialize = false)

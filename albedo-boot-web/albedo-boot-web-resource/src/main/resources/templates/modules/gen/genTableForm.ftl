@@ -114,7 +114,7 @@
                             <td>
                                 <input type="text" name="columnFormList[${(column_index)!}].comments"
                                        value="${(column.comments)!}" maxlength="200"
-                                       class="form-control required input-small"/>
+                                       class="form-control input-small"/>
                             </td>
                             <td nowrap>
                                 <input type="hidden" name="columnFormList[${(column_index)!}].jdbcType"

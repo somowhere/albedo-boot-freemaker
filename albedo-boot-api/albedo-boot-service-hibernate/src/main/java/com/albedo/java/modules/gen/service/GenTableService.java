@@ -235,7 +235,7 @@ public class GenTableService extends DataVoService<GenTableRepository,
     public Map<String, Object> findFormData(GenTableFormVo genTableFormVo) {
         Map<String, Object> map = Maps.newHashMap();
         //父表表名
-        map.put("tableList", PublicUtil.convertComboDataList(findTableListFormDb(new GenTableVo()), GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
+        map.put("tableList", PublicUtil.convertComboDataListStr(findTableListFormDb(new GenTableVo()), GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
         // 验证参数缺失
         if (StringUtil.isBlank(genTableFormVo.getId()) && StringUtil.isBlank(genTableFormVo.getName())) {
             throw new RuntimeMsgException(PublicUtil.toAppendStr("参数缺失！"));
@@ -251,16 +251,16 @@ public class GenTableService extends DataVoService<GenTableRepository,
         // 获取物理表字段
         genTableVo = getTableFormDb(genTableVo);
         //当前表外键
-        map.put("columnList", PublicUtil.convertComboDataList(genTableVo.getColumnList(), GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
+        map.put("columnList", PublicUtil.convertComboDataListStr(genTableVo.getColumnList(), GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
 
 
         map.put("genTableVo", genTableVo);
         GenConfig config = GenUtil.getConfig();
         map.put("config", config);
 
-        map.put("queryTypeList", PublicUtil.convertComboDataList(config.getQueryTypeList(), Dict.F_VAL, Dict.F_NAME));
-        map.put("showTypeList", PublicUtil.convertComboDataList(config.getShowTypeList(), Dict.F_VAL, Dict.F_NAME));
-        map.put("javaTypeList", PublicUtil.convertComboDataList(config.getJavaTypeList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("queryTypeList", PublicUtil.convertComboDataListStr(config.getQueryTypeList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("showTypeList", PublicUtil.convertComboDataListStr(config.getShowTypeList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("javaTypeList", PublicUtil.convertComboDataListStr(config.getJavaTypeList(), Dict.F_VAL, Dict.F_NAME));
 
 
         return map;

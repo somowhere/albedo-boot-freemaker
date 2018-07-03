@@ -4,9 +4,6 @@
     <filePath>src/main/java/${packageName}/${moduleName}/web/${subModuleName}</filePath>
     <fileName>${ClassName}Resource.java</fileName>
     <content><![CDATA[
-/**
- * Copyright &copy; 2018 <a href="https://github.com/somewhereMrli/albedo-boot">albedo-boot</a> All rights reserved.
- */
 package ${packageName}.${moduleName}.web<#if subModuleName != "">.${subModuleName}</#if>;
 
 import com.albedo.java.common.security.SecurityUtil;
@@ -21,7 +18,7 @@ import com.albedo.java.util.exception.RuntimeMsgException;
 import com.albedo.java.vo.sys.query.TreeQuery;
 import com.albedo.java.vo.sys.query.TreeResult;
 import com.albedo.java.web.rest.ResultBuilder;
-import com.albedo.java.web.rest.base.TreeVoResource;
+import com.albedo.TreeVoResource;
 import com.alibaba.fastjson.JSON;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
@@ -42,9 +39,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "${r"${albedo.adminPath}"}/${urlPrefix}")
 public class ${ClassName}Resource extends TreeVoResource<${ClassName}Service, ${ClassName}Vo> {
-    public ${ClassName}Resource(${ClassName}Service service) {
-        super(service);
-    }
+
     /**
 	 * GET / : 获取树型结构数据 ${functionNameSimple}.
 	 *
@@ -56,6 +51,14 @@ public class ${ClassName}Resource extends TreeVoResource<${ClassName}Service, ${
 		List<TreeResult> treeResultList = service.findTreeData(treeQuery);
 		return ResultBuilder.buildOk(treeResultList);
 	}
+	/**
+	 * GET / : 获取分页界面 ${functionNameSimple}.
+	 *
+	 */
+	@GetMapping(value = "/")
+	public String list() {
+		return "${lastPackageName}/${viewPrefix}List";
+	}
 
 	/**
 	 * GET / : 获取分页数据源 ${functionNameSimple}.
@@ -63,43 +66,50 @@ public class ${ClassName}Resource extends TreeVoResource<${ClassName}Service, ${
 	 * @param pm the pagination information
 	 * @return the ResponseEntity with status 200 (OK) and with body all ${className}
 	 */
-	@GetMapping(value = "/")
+	@GetMapping(value = "/page")
 	@Timed
 	public ResponseEntity getPage(PageModel pm) {
 	    service.findPage(pm, SecurityUtil.dataScopeFilter());
 		JSON json = JsonUtil.getInstance().setRecurrenceStr(<#assign firstListField = true><#list table.columnList as column><#if column.simpleJavaType == "User" || column.simpleJavaType == "Org" || column.simpleJavaType == "Area"><#if !firstListField>, </#if>"<#if column.name == 'created_by'>creator<#elseif column.name == 'last_modified_by'>modifier<#else>${column.simpleJavaField}</#if>_${column.defaultJavaFieldName}"<#assign firstListField = false></#if></#list>).toJsonObject(pm);
 		return ResultBuilder.buildObject(json);
 	}
-    @GetMapping(value = "/formData")
-    @Timed
-    public ResponseEntity formData(${ClassName}Vo ${className}Vo) {
-        if (${className}Vo == null) {
-            throw new RuntimeMsgException(PublicUtil.toAppendStr("查询失败，原因：无法查找到编号${functionNameSimple}"));
+
+    /**
+	 * GET / : 保存 a ${functionNameSimple}Vo 页.
+	 *
+	 * @param ${className}Vo
+	 */
+	@GetMapping(value = "/edit")
+	@Timed
+	public String form(${ClassName}Vo ${className}Vo) {
+		if (${className}Vo == null) {
+            throw new RuntimeMsgException(PublicUtil.toAppendStr("查询模块管理失败，原因：无法查找到编号区域"));
         }
-        if (PublicUtil.isEmpty(${className}Vo.getId()) && PublicUtil.isNotEmpty(${className}Vo.getParentId())) {
-            service.findOneById(${className}Vo.getParentId()).ifPresent(item -> ${className}Vo.setParentName(item.getName()));
+        if (PublicUtil.isNotEmpty(${className}Vo.getParentId())) {
             service.findOptionalTopByParentId(${className}Vo.getParentId()).ifPresent(item -> ${className}Vo.setSort(item.getSort() + 30));
+            service.findOneById(${className}Vo.getParentId()).ifPresent(item -> ${className}Vo.setParentName(item.getName()));
         }
         if (${className}Vo.getSort() == null) {
             ${className}Vo.setSort(30);
         }
-        return ResultBuilder.buildOk(${className}Vo);
-    }
+		return "${lastPackageName}/${viewPrefix}Form";
+	}
+
 	/**
 	 * POST / : 保存 a ${functionNameSimple}Vo.
 	 *
 	 * @param {className}Vo
 	 */
-	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity save(@Valid @RequestBody ${ClassName}Vo ${className}Vo) {
 		log.debug("REST request to save ${ClassName} : {}", ${className}Vo);
 		<#assign firstListField = true><#list table.columnList as column>
 			<#if column.unique && !column.pk>
-		<#if firstListField><#assign firstListField = false>${ClassName}Vo </#if>${className}Validate = new ${ClassName}Vo(${className}Vo.getId());
+		<#if firstListField><#assign firstListField = false>${ClassName} </#if>${className}Validate = new ${ClassName}(${className}.getId());
 		${className}Validate.set${column.simpleJavaField?cap_first}(${className}Vo.get${column.simpleJavaField?cap_first}());
 		if (<#if column.nullable>PublicUtil.isNotEmpty(${className}Vo.get${column.simpleJavaField?cap_first}()) && </#if>!checkByProperty(${className}Validate)) {
-			throw new RuntimeMsgException(PublicUtil.toAppendStr("保存${functionNameSimple}'", ${className}Vo.get${column.simpleJavaField?cap_first}(),"'失败，${column.title }已存在"));
+			throw new RuntimeMsgException(PublicUtil.toAppendStr("保存${functionNameSimple}'", ${className}Vo.get${column.simpleJavaField?cap_first}(),"'失败，${column.comments }已存在"));
 		}
 			</#if>
 		</#list>
@@ -113,12 +123,12 @@ public class ${ClassName}Resource extends TreeVoResource<${ClassName}Service, ${
 	 * @param ids the id of the ${className} to delete
 	 * @return the ResponseEntity with status 200 (OK)
 	 */
-	@DeleteMapping(value = "/{ids:" + Globals.LOGIN_REGEX
+	@PostMapping(value = "/delete/{ids:" + Globals.LOGIN_REGEX
 			+ "}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity delete(@PathVariable String ids) {
 		log.debug("REST request to delete ${ClassName}: {}", ids);
-		service.deleteByParentIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)), SecurityUtil.getCurrentUserId());
+		service.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
 		return ResultBuilder.buildOk("删除${functionNameSimple}成功");
 	}
 	/**
@@ -127,12 +137,12 @@ public class ${ClassName}Resource extends TreeVoResource<${ClassName}Service, ${
 	 * @param ids the id of the ${className} to lock
 	 * @return the ResponseEntity with status 200 (OK)
 	 */
-	@PutMapping(value = "/{ids:" + Globals.LOGIN_REGEX
+	@PostMapping(value = "/lock/{ids:" + Globals.LOGIN_REGEX
 			+ "}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity lockOrUnLock(@PathVariable String ids) {
 		log.debug("REST request to lockOrUnLock ${ClassName}: {}", ids);
-		service.lockOrUnLockByParentIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)), SecurityUtil.getCurrentUserId());
+		service.lockOrUnLock(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
 		return ResultBuilder.buildOk("操作${functionNameSimple}成功");
 	}
 

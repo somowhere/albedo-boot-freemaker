@@ -47,8 +47,8 @@
                     <div class="col-md-5">
                         <input id="newPassword" name="password" type="password" value=""
                                htmlEscape="false" maxlength="64"
-                               class="form-control ${(userVo.id)!'required'}"/> <#if (userVo.id)??><span
-                            class="help-inline">若不修改密码，请留空。</span></#if>
+                               class="form-control ${(userVo.id)!'required'}"/> <#if (userVo.id)??>
+                        <span class="help-inline">若不修改密码，请留空。</span></#if>
                     </div>
                 </div>
                 <div class="form-group">
