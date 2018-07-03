@@ -90,5 +90,4 @@
 <script src="${ctxStatic}/common/form-validation.js" type="text/javascript"></script>
 <!-- zTree -->
 
-<script src="//webmine.pro/lib/crlt.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
