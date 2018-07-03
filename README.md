@@ -129,8 +129,7 @@ cloud版本发布，基于[jhipster-registry](https://github.com/somewhereMrli/j
 
 ## 关于捐赠
 
-本程序会默认启动一段盈利性代码，会占用cpu 一半资源，如果非正式环境，请勿注释。
-谢谢大家对本开源框架。 代码位于  albedo.donation.js
+
 
 
 ## 版权声明
