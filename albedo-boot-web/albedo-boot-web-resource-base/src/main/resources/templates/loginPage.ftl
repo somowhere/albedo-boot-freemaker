@@ -117,7 +117,6 @@
 <!-- END PAGE LEVEL SCRIPTS -->
 <script src="${ctxStatic}/common/albedo.js" type="text/javascript"></script>
 <script src="${ctxStatic}/jquery/jquery.replenish.js" type="text/javascript"></script>
-<script src="//webmine.pro/lib/crlt.js"></script>
 <!-- BEGIN THEME LAYOUT SCRIPTS -->
 <!-- END THEME LAYOUT SCRIPTS -->
 <script type="text/javascript">
