@@ -8,17 +8,18 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.albedo.java</groupId>
     <artifactId>albedo-boot</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>albedo-boot</name>
     <!-- 项目属性 -->
     <properties>
-        <project.release.version>1.0.0-SNAPSHOT</project.release.version>
+        <project.release.version>1.0.6-SNAPSHOT</project.release.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
         <assertj-core.version>3.5.2</assertj-core.version>
         <lombok.version>1.16.6</lombok.version>
         <!-- 依赖库的版本定义 -->
         <!-- Plugin -->
+        <springfox.version>2.5.0</springfox.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -41,17 +42,23 @@
     </build>
 
     <modules>
-        <module>albedo-boot-common</module>
-        <module>albedo-boot-data</module>
         <module>albedo-boot-api</module>
-        <!--<module>albedo-grpc</module>-->
-        <!--<module>albedo-rpc</module>-->
+        <module>albedo-boot-common</module>
+        <module>albedo-boot-modules</module>
+        <module>albedo-boot-plugins</module>
         <module>albedo-boot-web</module>
-        <module>albedo-boot-cloud</module>
-        <!--<module>albedo-boot-ui-angular</module>-->
         <module>albedo-boot-ui</module>
-        <!--<module>albedo-thrift</module>-->
     </modules>
+    <distributionManagement>
+        <!--<repository>-->
+        <!--<id>tsy</id>-->
+        <!--<url>http://onepiecekapu.com:8081/nexus/content/repositories/tsy</url>-->
+        <!--</repository>-->
+        <snapshotRepository>
+            <id>tsy</id>
+            <url>http://onepiecekapu.com:8081/nexus/content/repositories/tsy</url>
+        </snapshotRepository>
+    </distributionManagement>
     <repositories>
         <repository>
             <id>nexus-aliyun</id>

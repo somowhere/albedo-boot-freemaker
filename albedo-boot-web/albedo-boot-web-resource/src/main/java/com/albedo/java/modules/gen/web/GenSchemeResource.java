@@ -8,9 +8,9 @@ import com.albedo.java.modules.gen.domain.GenTable;
 import com.albedo.java.modules.gen.domain.xml.GenConfig;
 import com.albedo.java.modules.gen.service.GenSchemeService;
 import com.albedo.java.modules.gen.service.GenTableService;
-import com.albedo.java.modules.gen.util.GenUtil;
 import com.albedo.java.modules.sys.domain.Dict;
 import com.albedo.java.modules.sys.service.ModuleService;
+import com.albedo.java.util.GenUtil;
 import com.albedo.java.util.JsonUtil;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.StringUtil;
@@ -98,7 +98,7 @@ public class GenSchemeResource extends DataVoResource<GenSchemeService, GenSchem
                 list.add(table);
             }
         }
-        model.addAttribute("tableList", FormDirective.convertComboDataList(list, GenTable.F_ID, GenTable.F_NAMESANDCOMMENTS));
+        model.addAttribute("tableList", FormDirective.convertComboDataList(list, GenTable.F_ID, GenTable.F_NAMESANDTITLE));
         return PublicUtil.toAppendStr("modules/gen/genSchemeForm", isModal ? "Modal" : "");
     }
 

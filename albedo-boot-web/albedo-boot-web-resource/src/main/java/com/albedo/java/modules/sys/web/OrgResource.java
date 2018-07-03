@@ -1,8 +1,7 @@
 package com.albedo.java.modules.sys.web;
 
-import com.albedo.java.common.domain.base.DataEntity;
 import com.albedo.java.common.security.SecurityUtil;
-import com.albedo.java.common.security.SecurityUtil;
+import com.albedo.java.modules.sys.domain.Org;
 import com.albedo.java.modules.sys.service.OrgService;
 import com.albedo.java.util.JsonUtil;
 import com.albedo.java.util.PublicUtil;
@@ -55,7 +54,7 @@ public class OrgResource extends TreeVoResource<OrgService, OrgVo> {
      */
     @GetMapping(value = "/page")
     public ResponseEntity getPage(PageModel pm) {
-        pm.setSortDefaultName(Direction.DESC, DataEntity.F_LASTMODIFIEDDATE);
+        pm.setSortDefaultName(Direction.DESC, Org.F_LASTMODIFIEDDATE);
         service.findPage(pm, SecurityUtil.dataScopeFilter(
                 SecurityUtil.getCurrentUserId(), "this", ""));
         JSON json = JsonUtil.getInstance().toJsonObject(pm);

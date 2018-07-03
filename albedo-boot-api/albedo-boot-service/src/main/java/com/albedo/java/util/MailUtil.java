@@ -1,7 +1,5 @@
 package com.albedo.java.util;
 
-import com.albedo.java.modules.gen.util.GenUtil;
-import com.albedo.java.util.mapper.JaxbMapper;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

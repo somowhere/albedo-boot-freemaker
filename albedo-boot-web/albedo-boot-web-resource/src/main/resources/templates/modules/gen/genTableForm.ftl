@@ -74,7 +74,8 @@
                         <thead>
                         <tr>
                             <th title="数据库字段名">列名</th>
-                            <th title="默认读取数据库字段备注">说明</th>
+                            <th title="默认读取数据库字段备注">标题</th>
+                            <th title="描述字段">说明</th>
                             <th title="数据库中设置的字段类型及长度">物理类型</th>
                             <th title="实体对象的属性字段类型">Java类型</th>
                             <th title="实体对象的属性字段（对象名.属性名|属性名2|属性名3，例如：用户user.id|name|loginName，属性名2和属性名3为Join时关联查询的字段）">
@@ -104,6 +105,11 @@
                                        value="${(column.genTableVo.id)!}"/>
                                 <input type="hidden" name="columnFormList[${(column_index)!}].name"
                                        value="${(column.name)!}"/>${(column.name)!}
+                            </td>
+                            <td>
+                                <input type="text" name="columnFormList[${(column_index)!}].title"
+                                       value="${(column.title)!}" maxlength="200"
+                                       class="form-control required input-small"/>
                             </td>
                             <td>
                                 <input type="text" name="columnFormList[${(column_index)!}].comments"

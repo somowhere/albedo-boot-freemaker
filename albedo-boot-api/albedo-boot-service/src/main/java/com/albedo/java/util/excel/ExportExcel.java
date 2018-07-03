@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * 导出Excel文件（导出“XLSX”格式，支持大数据量导出 @see org.apache.poi.ss.SpreadsheetVersion） copyright 2014 albedo all right reserved author 李杰 created on 2014年10月20日 下午1:53:42
+ * 导出Excel文件（导出“XLSX”格式，支持大数据量导出 @see org.apache.poi.ss.SpreadsheetVersion） copyright 2014 albedo all right reserved author somewhere created on 2014年10月20日 下午1:53:42
  */
 public class ExportExcel {
 
@@ -461,7 +461,7 @@ public class ExportExcel {
 
 //	/**
 //	 * 输出到客户端
-//	 * 
+//	 *
 //	 * @param fileName 输出文件名
 //	 */
 //	public ExportExcel write(HttpServletResponse response, String fileName) throws IOException {

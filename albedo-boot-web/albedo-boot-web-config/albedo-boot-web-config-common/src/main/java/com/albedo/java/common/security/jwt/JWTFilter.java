@@ -49,7 +49,7 @@ public class JWTFilter extends GenericFilterBean {
     }
 
     private String resolveToken(HttpServletRequest request){
-        String bearerToken = albedoProperties.getHttp().getRestful() || RequestUtil.isRestfulRequest(request)
+        String bearerToken = albedoProperties.getHttp().isRestful() || RequestUtil.isRestfulRequest(request)
         ? request.getHeader(SecurityConstants.AUTHORIZATION_HEADER) : CookieUtil.getCookie(request, SecurityConstants.AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
             return bearerToken.substring(6, bearerToken.length());

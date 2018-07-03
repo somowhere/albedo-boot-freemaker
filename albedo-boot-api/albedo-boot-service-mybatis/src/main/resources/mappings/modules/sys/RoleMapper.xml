@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.albedo.java.modules.sys.repository.RoleRepository">
+
+
+    <resultMap id="RoleResultMap" type="com.albedo.java.modules.sys.domain.Role">
+        <id property="id" column="id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="createdBy" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="createdDate" column="createdDate" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="dataScope" column="dataScope" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="description" column="description" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="en" column="en" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="lastModifiedBy" column="lastModifiedBy" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="lastModifiedDate" column="lastModifiedDate" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="name" column="name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="orgId" column="orgId" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="sysData" column="sysData" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="type" column="type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="version" column="version" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <association column="org" property="org" select="com.albedo.java.modules.sys.repository.OrgRepository.selectById"/>
+    </resultMap>
+
+    <sql id="pageRoleColumn">
+        a.id_ AS `id`,
+        a.created_by AS `createdBy`,
+        a.created_date AS `createdDate`,
+        a.data_scope AS `dataScope`,
+        a.description_ AS `description`,
+        a.en_ AS `en`,
+        a.last_modified_by AS `lastModifiedBy`,
+        a.last_modified_date AS `lastModifiedDate`,
+        a.name_ AS `name`,
+        a.org_id AS `orgId`,
+        a.sys_data AS `sysData`,
+        a.sort_ AS `sort`,
+        a.status_ AS `status`,
+        a.type_ AS `type`,
+        a.version_ AS `version`
+    </sql>
+
+
+    <!-- 建议字段，采用驼峰命名方法，不然很麻烦 -->
+    <select id="selectListByUserId" resultType="Role">
+        select <include refid="pageRoleColumn"/> from sys_role_t a LEFT JOIN sys_user_role_t b on a.id_=b.role_id where b.user_id=#{id}
+    </select>
+
+
+    <select id="addRoleOrgs" parameterType="com.albedo.java.modules.sys.domain.Role">
+        insert into sys_role_org_t (role_id, org_id)
+        values
+        <foreach collection="role.orgIdList" item="item" separator=",">
+            (#{role.id},#{item})
+        </foreach>
+    </select>
+
+    <select id="deleteRoleOrgs" parameterType="com.albedo.java.modules.sys.domain.Role">
+        DELETE FROM sys_role_org_t where role_id=#{role.id}
+    </select>
+
+    <select id="addRoleModules" parameterType="com.albedo.java.modules.sys.domain.Role">
+        insert into sys_role_module_t (role_id, module_id)
+        values
+        <foreach collection="role.moduleIdList" item="item" separator=",">
+            (#{role.id},#{item})
+        </foreach>
+    </select>
+    <select id="deleteRoleModules" parameterType="com.albedo.java.modules.sys.domain.Role">
+        DELETE FROM sys_role_module_t where role_id=#{role.id}
+    </select>
+</mapper>
