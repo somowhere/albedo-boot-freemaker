@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * json操作常用类
  *
- * @author lijie version 2014-3-12 下午4:20:24
+ * @author somewhere version 2014-3-12 下午4:20:24
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class JsonUtil {

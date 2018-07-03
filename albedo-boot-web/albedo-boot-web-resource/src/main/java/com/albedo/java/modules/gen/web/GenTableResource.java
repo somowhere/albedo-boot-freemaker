@@ -11,6 +11,7 @@ import com.albedo.java.util.StringUtil;
 import com.albedo.java.util.domain.Globals;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.exception.RuntimeMsgException;
+import com.albedo.java.vo.gen.GenTableFormVo;
 import com.albedo.java.vo.gen.GenTableVo;
 import com.albedo.java.web.rest.ResultBuilder;
 import com.albedo.java.web.rest.base.DataVoResource;
@@ -39,7 +40,7 @@ public class GenTableResource extends DataVoResource<GenTableService, GenTableVo
     @GetMapping(value = "/")
     @Timed
     public String list(Model model) {
-        model.addAttribute("tableList", FormDirective.convertComboDataList(service.findTableListFormDb(null), GenTable.F_NAME, GenTable.F_NAMESANDCOMMENTS));
+        model.addAttribute("tableList", FormDirective.convertComboDataList(service.findTableListFormDb(null), GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
         return "modules/gen/genTableList";
     }
 
@@ -57,8 +58,8 @@ public class GenTableResource extends DataVoResource<GenTableService, GenTableVo
     }
 
     @GetMapping(value = "/edit")
-    public String form(GenTableVo genTableVo, Model model) {
-        Map<String, Object> map = service.findFormData(genTableVo);
+    public String form(GenTableFormVo genTableFormVo, Model model) {
+        Map<String, Object> map = service.findFormData(genTableFormVo);
         model.addAllAttributes(map);
         return "modules/gen/genTableForm";
     }

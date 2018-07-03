@@ -1,14 +1,15 @@
 package com.albedo.java.common.audit;
 
 import com.albedo.java.common.config.audit.AuditEventConverter;
-import com.albedo.java.modules.sys.repository.PersistenceAuditEventRepository;
+import com.albedo.java.common.persistence.DynamicSpecifications;
+import com.albedo.java.modules.sys.domain.PersistentAuditEvent;
+import com.albedo.java.modules.sys.service.PersistenceAuditEventService;
+import com.albedo.java.util.domain.PageModel;
+import com.albedo.java.util.domain.QueryCondition;
 import org.springframework.boot.actuate.audit.AuditEvent;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -22,30 +23,32 @@ import java.util.Optional;
 @Transactional
 public class AuditEventService {
 
-    private PersistenceAuditEventRepository persistenceAuditEventRepository;
+    private PersistenceAuditEventService persistenceAuditEventService;
 
     private AuditEventConverter auditEventConverter;
 
     public AuditEventService(
-            PersistenceAuditEventRepository persistenceAuditEventRepository,
+        PersistenceAuditEventService persistenceAuditEventService,
             AuditEventConverter auditEventConverter) {
 
-        this.persistenceAuditEventRepository = persistenceAuditEventRepository;
+        this.persistenceAuditEventService = persistenceAuditEventService;
         this.auditEventConverter = auditEventConverter;
     }
 
-    public Page<AuditEvent> findAll(Pageable pageable) {
-        return persistenceAuditEventRepository.findAll(pageable)
-                .map(persistentAuditEvents -> auditEventConverter.convertToAuditEvent(persistentAuditEvents));
+    public PageModel<AuditEvent> findAll(PageModel<PersistentAuditEvent> pm) {
+        return persistenceAuditEventService.findPage(pm)
+            .map(auditEventConverter::convertToAuditEvent);
     }
-
-    public Page<AuditEvent> findByDates(Date fromDate, Date toDate, Pageable pageable) {
-        return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
-                .map(persistentAuditEvents -> auditEventConverter.convertToAuditEvent(persistentAuditEvents));
+    //findAllByAuditEventDateBetween
+    public PageModel<AuditEvent> findByDates(Date fromDate, Date toDate, PageModel<PersistentAuditEvent> pm) {
+        return persistenceAuditEventService.findPage(pm, DynamicSpecifications.bySearchQueryCondition(
+            QueryCondition.between(PersistentAuditEvent.F_AUDITEVENTDATE,
+                fromDate, toDate
+            ))).map(auditEventConverter::convertToAuditEvent);
     }
 
     public Optional<AuditEvent> find(Long id) {
-        return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map
+        return Optional.ofNullable(persistenceAuditEventService.findOne(id)).map
                 (auditEventConverter::convertToAuditEvent);
     }
 }

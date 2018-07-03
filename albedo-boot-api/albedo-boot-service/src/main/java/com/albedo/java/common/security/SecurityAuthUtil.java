@@ -43,7 +43,7 @@ public final class SecurityAuthUtil {
             } else if (authentication.getPrincipal() instanceof UserDetails) {
                 UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
                 userName = springSecurityUser.getUsername();
-            } else if (authentication.getPrincipal() instanceof String) {
+            } else if (authentication.getPrincipal() instanceof String && !"anonymousUser".equals(authentication.getPrincipal())) {
                 userName = (String) authentication.getPrincipal();
             }
         }

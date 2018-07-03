@@ -1,6 +1,6 @@
 package com.albedo.java.web.rest.base;
 
-import com.albedo.java.common.service.TreeVoService;
+import com.albedo.java.common.persistence.service.TreeVoService;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.domain.Globals;
 import com.albedo.java.vo.base.TreeEntityVo;

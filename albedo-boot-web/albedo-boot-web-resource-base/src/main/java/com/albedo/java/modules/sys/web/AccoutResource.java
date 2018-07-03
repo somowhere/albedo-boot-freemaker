@@ -9,7 +9,7 @@ import com.albedo.java.modules.sys.service.UserService;
 import com.albedo.java.util.LoginUtil;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.domain.Globals;
-import com.albedo.java.vo.base.LoginVo;
+import com.albedo.java.vo.account.LoginVo;
 import com.albedo.java.web.rest.ResultBuilder;
 import com.albedo.java.web.rest.base.BaseResource;
 import com.albedo.java.web.rest.util.CookieUtil;
@@ -94,7 +94,7 @@ public class AccoutResource extends BaseResource {
 
     @PostMapping("authenticate")
     @Timed
-    public ResponseEntity authorize(@RequestBody  LoginVo loginVo, HttpServletResponse response) {
+    public ResponseEntity authorize(@RequestBody LoginVo loginVo, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginVo.getUsername(), loginVo.getPassword());
@@ -122,7 +122,7 @@ public class AccoutResource extends BaseResource {
         }
         CookieUtil.removeCookie(request, response, SecurityConstants.AUTHORIZATION_HEADER);
         request.getSession().invalidate();
-        if (albedoProperties.getHttp().getRestful() || RequestUtil.isRestfulRequest(request)) {
+        if (albedoProperties.getHttp().isRestful() || RequestUtil.isRestfulRequest(request)) {
             writeJsonHttpResponse(ResultBuilder.buildFailed("退出登录成功"), response);
             return null;
         } else {

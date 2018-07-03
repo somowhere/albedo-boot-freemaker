@@ -21,10 +21,10 @@ public class PageInitParamFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         AlbedoProperties albedoProperties = SpringContextHolder.getBean(AlbedoProperties.class);
-        String basePath =  albedoProperties.getMicroModel() ? "" : PublicUtil.toAppendStr(request.getScheme(), "://", request.getServerName(), ":", request.getServerPort(), request.getContextPath());
+        String basePath =  albedoProperties.getGatewayModel() ? "" : PublicUtil.toAppendStr(request.getScheme(), "://", request.getServerName(), ":", request.getServerPort(), request.getContextPath());
         request.setAttribute("basePath", basePath);
         String adminPath = albedoProperties.getAdminPath();
-        request.setAttribute("ctx", PublicUtil.toAppendStr(basePath, (albedoProperties.getMicroModel() ? "../" + albedoProperties.getMicorservice() : "") + adminPath));
+        request.setAttribute("ctx", PublicUtil.toAppendStr(basePath, (albedoProperties.getGatewayModel() ? "../" + albedoProperties.getMicorservice() : "") + adminPath));
         request.setAttribute("gatewayModel", albedoProperties.getGatewayModel());
         request.setAttribute("assets", PublicUtil.toAppendStr(basePath, "/statics/assets"));
         request.setAttribute("ctxStatic", PublicUtil.toAppendStr(basePath, "/statics/frame"));
