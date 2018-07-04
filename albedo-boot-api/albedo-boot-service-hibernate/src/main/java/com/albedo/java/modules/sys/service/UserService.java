@@ -10,6 +10,7 @@ import com.albedo.java.modules.sys.repository.UserRepository;
 import com.albedo.java.util.DateUtil;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.RandomUtil;
+import com.albedo.java.util.base.Assert;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.util.spring.SpringContextHolder;
@@ -101,6 +102,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public UserVo getUserWithAuthorities(String id) {
+        Assert.assertIsTrue(PublicUtil.isNotEmpty(id), "id 不能为空");
         User user = repository.findOne(id);
         user.getRoles().size(); // eagerly load the association
         return copyBeanToVo(user);
@@ -187,7 +189,8 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         Optional<User> user = null;
         try {
             user = repository.findOneByLoginId(loginId);
-            if(PublicUtil.isEmpty(user.get().getId())){
+
+            if(user.isPresent() && PublicUtil.isEmpty(user.get().getId())){
                 cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(loginId);
                 user = repository.findOneByLoginId(loginId);
             }

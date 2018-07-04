@@ -10,6 +10,7 @@ import com.albedo.java.util.LoginUtil;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.domain.Globals;
 import com.albedo.java.vo.account.LoginVo;
+import com.albedo.java.vo.sys.UserVo;
 import com.albedo.java.web.rest.ResultBuilder;
 import com.albedo.java.web.rest.base.BaseResource;
 import com.albedo.java.web.rest.util.CookieUtil;
@@ -31,6 +32,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.
@@ -63,7 +65,14 @@ public class AccoutResource extends BaseResource {
     @GetMapping("/account")
     @Timed
     public ResponseEntity getAccount() {
-        return ResultBuilder.buildOk(userService.getUserWithAuthorities(SecurityUtil.getCurrentUserId()));
+        String id = SecurityUtil.getCurrentUserId();
+        if(PublicUtil.isNotEmpty(id)){
+            Optional<UserVo> userVo = userService.findOneById(id)
+                .map(item -> userService.copyBeanToVo(item));
+            userVo.get().setAuthorities(SecurityUtil.getCurrentUserAuthorities());
+            return ResultBuilder.buildOk(userVo);
+        }
+        return ResultBuilder.buildFailed("没有数据");
     }
 
     /**

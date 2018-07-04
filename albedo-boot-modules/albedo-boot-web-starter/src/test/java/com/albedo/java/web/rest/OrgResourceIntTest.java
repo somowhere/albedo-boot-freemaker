@@ -33,6 +33,8 @@ import java.util.List;
 
 import static com.albedo.java.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -134,7 +136,7 @@ public class OrgResourceIntTest {
         long databaseSizeBeforeCreate = orgService.findCount();
         OrgVo orgVo = orgService.copyBeanToVo(org);
         // Create the Org
-        restOrgMockMvc.perform(post(DEFAULT_API_URL)
+        restOrgMockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(orgVo)))
             .andExpect(status().isOk());
@@ -167,10 +169,13 @@ public class OrgResourceIntTest {
             null, org.getCode());
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restOrgMockMvc.perform(post(DEFAULT_API_URL)
+        restOrgMockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(orgVo)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.status").value(equalTo(2)))
+            .andExpect(jsonPath("$.statusName").value(equalToIgnoringCase("MSG_TYPE_WARNING")));
 
         // Validate the Org in the database
         List<Org> orgList = orgService.findAll();
@@ -186,10 +191,13 @@ public class OrgResourceIntTest {
 
         // Create the Org, which fails.
 
-        restOrgMockMvc.perform(post(DEFAULT_API_URL)
+        restOrgMockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(org)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.status").value(equalTo(2)))
+            .andExpect(jsonPath("$.statusName").value(equalToIgnoringCase("MSG_TYPE_WARNING")));
 
         List<Org> orgList = orgService.findAll();
         assertThat(orgList).hasSize(databaseSizeBeforeTest);
@@ -202,7 +210,7 @@ public class OrgResourceIntTest {
         orgService.save(org);
 
         // Get all the orgList
-        restOrgMockMvc.perform(get(DEFAULT_API_URL))
+        restOrgMockMvc.perform(get(DEFAULT_API_URL+"page"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data.[*].id").value(hasItem(org.getId())))
@@ -343,7 +351,7 @@ public class OrgResourceIntTest {
      * Executes the search, and checks that the default entity is returned
      */
     private void defaultOrgShouldBeFound(QueryCondition... queryCondition) throws Exception {
-        restOrgMockMvc.perform(get(DEFAULT_API_URL).param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
+        restOrgMockMvc.perform(get(DEFAULT_API_URL+"page").param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data").isArray())
@@ -361,7 +369,7 @@ public class OrgResourceIntTest {
      * Executes the search, and checks that the default entity is not returned
      */
     private void defaultOrgShouldNotBeFound(QueryCondition... queryCondition) throws Exception {
-        restOrgMockMvc.perform(get(DEFAULT_API_URL).param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
+        restOrgMockMvc.perform(get(DEFAULT_API_URL+"page").param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data").isArray())
@@ -395,7 +403,7 @@ public class OrgResourceIntTest {
         ), UPDATED_NAME, UPDATED_CODE,UPDATED_SORT,UPDATED_TYPE,UPDATED_PARENTID,UPDATED_EN,UPDATED_GRADE,UPDATED_DESCRIPTION);
 
         OrgVo orgVo = orgService.copyBeanToVo(updatedOrg);
-        restOrgMockMvc.perform(post(DEFAULT_API_URL)
+        restOrgMockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(orgVo)))
             .andExpect(status().isOk());
@@ -429,7 +437,7 @@ public class OrgResourceIntTest {
         long databaseSizeBeforeDelete = orgService.findCount(spec);
 
         // Get the org
-        restOrgMockMvc.perform(delete(DEFAULT_API_URL+"{id}", org.getId())
+        restOrgMockMvc.perform(post(DEFAULT_API_URL+"delete/{id}", org.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 

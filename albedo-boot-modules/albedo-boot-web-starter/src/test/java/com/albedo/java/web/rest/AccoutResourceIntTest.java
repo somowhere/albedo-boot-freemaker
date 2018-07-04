@@ -152,8 +152,7 @@ public class AccoutResourceIntTest {
         mockMvc.perform(post("/api/authenticate")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(login)))
-                .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.data").isEmpty());
+                .andExpect(status().isUnauthorized());
     }
 
 }

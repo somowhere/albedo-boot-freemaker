@@ -157,7 +157,7 @@ public class UserResourceIntTest {
                 null,
                 null,null);
 
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isOk());
@@ -196,7 +196,7 @@ public class UserResourceIntTest {
                 null,null);
 
         // Create the User
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
@@ -214,10 +214,10 @@ public class UserResourceIntTest {
         // Initialize the database
         userService.save(user);
         // Get all the users
-        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/"))
+        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/page"))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.data.[*].loginId").value(hasItem(DEFAULT_LOGIN)))
                 .andExpect(jsonPath("$.data.[*].name").value(hasItem(DEFAULT_NAME)))
                 .andExpect(jsonPath("$.data.[*].phone").value(hasItem(DEFAULT_PHONE)))
@@ -234,7 +234,6 @@ public class UserResourceIntTest {
         // Get the user
         restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/{id}"), user.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data.loginId").value(user.getLoginId()))
                 .andExpect(jsonPath("$.data.name").value(DEFAULT_NAME))
                 .andExpect(jsonPath("$.data.phone").value(DEFAULT_PHONE))
@@ -276,7 +275,7 @@ public class UserResourceIntTest {
                 null,
                 null,null);
         managedUserVM.setId(updatedUser.getId());
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
@@ -320,7 +319,7 @@ public class UserResourceIntTest {
                 null,
                 null,null);
         managedUserVM.setId(updatedUser.getId());
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
@@ -354,7 +353,7 @@ public class UserResourceIntTest {
                 null,null,null
                 );
         managedUserVM.setId(updatedUser.getId());
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
