@@ -60,7 +60,7 @@ public class ResultBuilder {
 
     public static <X> ResponseEntity<X> wrapOrNotFound(Optional<X> maybeResponse, HttpHeaders header) {
         return (ResponseEntity) maybeResponse.map((response) -> {
-            return ((ResponseEntity.BodyBuilder) ResponseEntity.ok().headers(header)).body(response);
+            return ((ResponseEntity.BodyBuilder) ResponseEntity.ok().headers(header)).body(CustomMessage.createSuccessData(response));
         }).orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 

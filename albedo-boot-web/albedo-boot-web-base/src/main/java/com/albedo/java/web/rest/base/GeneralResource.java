@@ -12,16 +12,19 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Validator;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 /**
- * Created by lijie on 2017/3/23.
+ * Created by somewhere on 2017/3/23.
  */
 public class GeneralResource {
 
@@ -59,10 +62,11 @@ public class GeneralResource {
      */
     @Resource
     protected Validator validator;
-    @Resource
-    protected HttpServletRequest request;
-    protected HttpServletResponse response;
-    protected HttpSession session;
+    /**
+     * ThreadLocal确保高并发下每个请求的request，response都是独立的
+     */
+    private static ThreadLocal<ServletRequest> currentRequest = new ThreadLocal<ServletRequest>();
+    private static ThreadLocal<ServletResponse> currentResponse = new ThreadLocal<ServletResponse>();
 
     public static final void writeStringHttpResponse(String str, HttpServletResponse response) {
         if (str == null) {
@@ -84,7 +88,6 @@ public class GeneralResource {
             throw new RuntimeMsgException("WRITE_JSON_RESPONSE_NULL");
         }
         try {
-            response.reset();
             response.setContentType(RESPONSE_JSON);
             response.setCharacterEncoding("UTF-8");
             String str = object instanceof String ? (String) object : Json.toJsonString(object);
@@ -96,10 +99,34 @@ public class GeneralResource {
         }
     }
 
+    /**
+     * 线程安全初始化reque，respose对象
+     *
+     * @param request
+     * @param response
+     */
     @ModelAttribute
-    public void setReqAndRes(HttpServletResponse response) {
-        this.response = response;
-        this.session = request.getSession();
+    public void initReqAndRep(HttpServletRequest request, HttpServletResponse response) {
+        currentRequest.set(request);
+        currentResponse.set(response);
+    }
+
+    /**
+     * 线程安全
+     *
+     * @return
+     */
+    public HttpServletRequest request() {
+        return (HttpServletRequest) currentRequest.get();
+    }
+
+    /**
+     * 线程安全
+     *
+     * @return
+     */
+    public HttpServletResponse response() {
+        return (HttpServletResponse) currentResponse.get();
     }
 
     /**

@@ -56,13 +56,12 @@ public class TaskScheduleJobResource extends DataVoResource<TaskScheduleJobExcut
 
     /**
      * @param taskScheduleJobVo
-     * @param model
      * @return
      */
     @GetMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String form(TaskScheduleJobVo taskScheduleJobVo, Model model) {
+    public String form(TaskScheduleJobVo taskScheduleJobVo) {
         if (taskScheduleJobVo == null) {
-            throw new RuntimeMsgException(PublicUtil.toAppendStr("查询任务调度失败，原因：无法查找到编号为[", request.getParameter("id"), "]的任务调度"));
+            throw new RuntimeMsgException(PublicUtil.toAppendStr("无法查找到任务调度"));
         }
         return "modules/sys/taskScheduleJobForm";
     }

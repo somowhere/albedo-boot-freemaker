@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 基础控制器支持类 copyright 2014 albedo all right reserved author MrLi created on 2014年10月15日 下午4:04:00
  */
@@ -19,7 +21,7 @@ public class DataResource<Service extends DataService, T extends DataEntity> ext
     protected Service service;
 
     @ModelAttribute
-    public T get(@RequestParam(required = false) String id) throws Exception {
+    public T get(@RequestParam(required = false) String id, HttpServletRequest request) throws Exception {
         String path = request.getRequestURI();
         if (path != null && !path.contains(Globals.URL_CHECKBY) && !path.contains(Globals.URL_FIND) &&
                 PublicUtil.isNotEmpty(id)) {

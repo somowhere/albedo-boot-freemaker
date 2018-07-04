@@ -43,7 +43,7 @@ public class ExceptionTranslator {
      */
     @ExceptionHandler({Exception.class})
     public String bindException(Exception e, HttpServletRequest request, HttpServletResponse response) {
-        log.warn("请求链接:{} 操作异常:{}", request.getRequestURI(), e.getMessage());
+        log.warn("请求链接:{} 操作警告:{}", request.getRequestURI(), e);
         CustomMessage message = new CustomMessage();
         message.setStatusEmun(Globals.StatusEmun.MSG_TYPE_WARNING);
         if (e instanceof RuntimeMsgException) {

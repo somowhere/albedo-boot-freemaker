@@ -228,7 +228,10 @@ public class ${ClassName}ResourceIntTest {
         rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className})))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.status").value(equalTo(2)))
+            .andExpect(jsonPath("$.statusName").value(equalToIgnoringCase("MSG_TYPE_WARNING")));
 
         List<${ClassName}> ${className}List = ${className}Service.findAll();
         assertThat(${className}List).hasSize(databaseSizeBeforeTest);

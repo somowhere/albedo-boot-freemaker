@@ -168,7 +168,7 @@ public class ${ClassName}ResourceIntTest {
         int databaseSizeBeforeCreate = ${className}Repository.findAll().size();
         ${ClassName}Vo ${className}Vo = ${className}Service.copyBeanToVo(${className});
         // Create the ${ClassName}
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className}Vo)))
             .andExpect(status().isOk());
@@ -196,7 +196,7 @@ public class ${ClassName}ResourceIntTest {
             null, ${className}.get${column.simpleJavaField?cap_first}());
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className}Vo)))
             .andExpect(status().isBadRequest());
@@ -219,10 +219,13 @@ public class ${ClassName}ResourceIntTest {
 
         // Create the ${ClassName}, which fails.
 
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className})))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.status").value(equalTo(2)))
+            .andExpect(jsonPath("$.statusName").value(equalToIgnoringCase("MSG_TYPE_WARNING")));
 
         List<${ClassName}> ${className}List = ${className}Repository.findAll();
         assertThat(${className}List).hasSize(databaseSizeBeforeTest);
@@ -238,7 +241,7 @@ public class ${ClassName}ResourceIntTest {
         ${className}Repository.saveAndFlush(${className});
 
         // Get all the ${className}List
-        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL))
+        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL+"page"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
     <#list table.columnList as column>
@@ -382,7 +385,7 @@ public class ${ClassName}ResourceIntTest {
      * Executes the search, and checks that the default entity is returned
      */
     private void default${ClassName}ShouldBeFound(QueryCondition... queryCondition) throws Exception {
-        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL).param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
+        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL+"page").param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data").isArray())
@@ -399,7 +402,7 @@ public class ${ClassName}ResourceIntTest {
      * Executes the search, and checks that the default entity is not returned
      */
     private void default${ClassName}ShouldNotBeFound(QueryCondition... queryCondition) throws Exception {
-        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL).param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
+        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL+"page").param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data").isArray())
@@ -441,7 +444,7 @@ public class ${ClassName}ResourceIntTest {
 	</#list>);
 
         ${ClassName}Vo ${className}Vo = ${className}Service.copyBeanToVo(updated${ClassName});
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className}Vo)))
             .andExpect(status().isOk());
@@ -469,7 +472,7 @@ public class ${ClassName}ResourceIntTest {
         int databaseSizeBeforeDelete = ${className}Repository.findAll(spec).size();
 
         // Get the ${className}
-        rest${ClassName}MockMvc.perform(delete(DEFAULT_API_URL+"{id}", ${className}.getId())
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"delete/{id}", ${className}.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 

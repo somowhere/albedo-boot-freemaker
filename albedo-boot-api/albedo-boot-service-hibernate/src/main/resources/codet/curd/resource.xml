@@ -63,7 +63,7 @@ public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${
 	@Timed
 	public String form(${ClassName}Vo ${className}Vo) {
 		if(${className}Vo == null){
-			throw new RuntimeMsgException(PublicUtil.toAppendStr("查询${functionNameSimple}失败，原因：无法查找到编号为[", request.getParameter("id"), "]的${functionNameSimple}"));
+			throw new RuntimeMsgException(PublicUtil.toAppendStr("查询${functionNameSimple}失败，原因：无法查找到编号为[", request().getParameter("id"), "]的${functionNameSimple}"));
 		}
 		return "${lastPackageName}/${viewPrefix}Form";
 	}
