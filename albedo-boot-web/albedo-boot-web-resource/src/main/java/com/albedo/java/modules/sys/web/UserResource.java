@@ -78,6 +78,10 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
     @Autowired
     private ModuleService moduleService;
 
+    public UserResource(UserService service) {
+        super(service);
+    }
+
 
     @GetMapping(value = "/")
     @Timed
@@ -95,20 +99,6 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
         pm = service.findPage(pm, SecurityUtil.dataScopeFilterSql("d", "a"));
         JSON rs = JsonUtil.getInstance().setFreeFilters("roleIdList").setRecurrenceStr("org_name").toJsonObject(pm);
         return ResultBuilder.buildObject(rs);
-    }
-
-    /**
-     * GET  /users/:id : get the "login" user.
-     *
-     * @param id the login of the user to find
-     * @return the ResponseEntity with status 200 (OK) and with body the "id" user, or with status 404 (Not Found)
-     */
-    @GetMapping("/{id:" + Globals.LOGIN_REGEX + "}")
-    @Timed
-    public ResponseEntity getUser(@PathVariable String id) {
-        log.debug("REST request to get User : {}", id);
-        return ResultBuilder.buildOk(service.findOneById(id)
-                .map(item -> service.copyBeanToVo(item)));
     }
 
 

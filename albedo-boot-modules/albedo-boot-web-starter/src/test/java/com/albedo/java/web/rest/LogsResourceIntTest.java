@@ -1,10 +1,10 @@
 package com.albedo.java.web.rest;
 
+import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import com.albedo.java.AlbedoBootWebApp;
 import com.albedo.java.modules.sys.web.LogsResource;
 import com.albedo.java.web.rest.vm.LoggerVM;
-import ch.qos.logback.classic.LoggerContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

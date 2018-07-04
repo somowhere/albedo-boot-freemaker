@@ -7,6 +7,7 @@ import com.albedo.java.common.persistence.service.TreeVoService;
 import com.albedo.java.modules.sys.domain.Module;
 import com.albedo.java.modules.sys.repository.ModuleRepository;
 import com.albedo.java.util.PublicUtil;
+import com.albedo.java.util.StringUtil;
 import com.albedo.java.util.base.Assert;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.util.domain.RequestMethod;
@@ -147,8 +148,6 @@ public class ModuleService extends TreeVoService<ModuleRepository, Module, Strin
         }
         Module parentModule = repository.findOne(parentModuleId);
         Assert.assertIsTrue(parentModule != null, PublicUtil.toAppendStr("根据模块id[", parentModuleId, "无法查询到模块信息]"));
-
-
         Module module = new Module();
         module.setPermission(permission.substring(0, permission.length() - 1));
         module.setName(moduleName);
@@ -156,7 +155,7 @@ public class ModuleService extends TreeVoService<ModuleRepository, Module, Strin
         module.setType(Module.TYPE_MENU);
         module.setRequestMethod(RequestMethod.GET);
         module.setIconCls("fa-file");
-        module.setUrl(url + "list");
+        module.setUrl(url);
         save(module);
 
         Module moduleView = new Module();
@@ -168,7 +167,7 @@ public class ModuleService extends TreeVoService<ModuleRepository, Module, Strin
         moduleView.setType(Module.TYPE_OPERATE);
         moduleView.setRequestMethod(RequestMethod.GET);
         moduleView.setSort(20);
-        moduleView.setUrl(url);
+        moduleView.setUrl(url + "page");
         save(moduleView);
         Module moduleEdit = new Module();
         moduleEdit.setParent(module);
@@ -178,8 +177,8 @@ public class ModuleService extends TreeVoService<ModuleRepository, Module, Strin
         moduleEdit.setParentId(module.getId());
         moduleEdit.setType(Module.TYPE_OPERATE);
         moduleEdit.setSort(40);
-        moduleEdit.setUrl(url);
-        moduleEdit.setRequestMethod(RequestMethod.POST);
+        moduleEdit.setUrl(url + "edit");
+        moduleEdit.setRequestMethod(PublicUtil.toAppendStr(RequestMethod.GET, StringUtil.SPLIT_DEFAULT, RequestMethod.POST));
         save(moduleEdit);
         Module moduleLock = new Module();
         moduleLock.setParent(module);
@@ -189,8 +188,8 @@ public class ModuleService extends TreeVoService<ModuleRepository, Module, Strin
         moduleLock.setParentId(module.getId());
         moduleLock.setType(Module.TYPE_OPERATE);
         moduleLock.setSort(60);
-        moduleLock.setUrl(url);
-        moduleLock.setRequestMethod(RequestMethod.PUT);
+        moduleLock.setUrl(url + "lock");
+        moduleLock.setRequestMethod(RequestMethod.POST);
         save(moduleLock);
         Module moduleDelete = new Module();
         moduleDelete.setParent(module);
@@ -200,7 +199,7 @@ public class ModuleService extends TreeVoService<ModuleRepository, Module, Strin
         moduleDelete.setParentId(module.getId());
         moduleDelete.setType(Module.TYPE_OPERATE);
         moduleDelete.setSort(80);
-        moduleDelete.setUrl(url);
+        moduleDelete.setUrl(url + "delete");
         moduleDelete.setRequestMethod(RequestMethod.DELETE);
         save(moduleDelete);
 

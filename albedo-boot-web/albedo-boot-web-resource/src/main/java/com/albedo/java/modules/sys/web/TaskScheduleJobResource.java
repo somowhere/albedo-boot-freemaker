@@ -35,6 +35,10 @@ import javax.validation.Valid;
 public class TaskScheduleJobResource extends DataVoResource<TaskScheduleJobExcutorService, TaskScheduleJobVo> {
 
 
+    public TaskScheduleJobResource(TaskScheduleJobExcutorService service) {
+        super(service);
+    }
+
     @GetMapping(value = "/")
     public String list() {
         return "modules/sys/taskScheduleJobList";

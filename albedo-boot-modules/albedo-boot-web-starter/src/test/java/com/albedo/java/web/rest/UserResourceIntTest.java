@@ -4,12 +4,11 @@ import com.albedo.java.AlbedoBootWebApp;
 import com.albedo.java.common.config.AlbedoProperties;
 import com.albedo.java.common.persistence.DynamicSpecifications;
 import com.albedo.java.common.persistence.SpecificationDetail;
-import com.albedo.java.common.persistence.domain.BaseEntity;
+import com.albedo.java.common.persistence.domain.DataEntity;
 import com.albedo.java.common.security.MailService;
 import com.albedo.java.modules.sys.domain.Org;
 import com.albedo.java.modules.sys.domain.Role;
 import com.albedo.java.modules.sys.domain.User;
-import com.albedo.java.modules.sys.repository.UserRepository;
 import com.albedo.java.modules.sys.service.OrgService;
 import com.albedo.java.modules.sys.service.RoleService;
 import com.albedo.java.modules.sys.service.UserService;
@@ -32,17 +31,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the UserResource REST controller.
@@ -73,14 +67,8 @@ public class UserResourceIntTest {
     private static final String DEFAULT_NAME = "doe";
     private static final String UPDATED_NAME = "jhipsterLastName";
 
-    private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
-    private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
-
     private static final String DEFAULT_LANGKEY = "en";
     private static final String UPDATED_LANGKEY = "fr";
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private MailService mailService;
@@ -93,10 +81,6 @@ public class UserResourceIntTest {
     private RoleService roleService;
     @Autowired
     private AlbedoProperties albedoProperties;
-
-
-    @Autowired
-    private EntityManager em;
 
     private MockMvc restUserMockMvc;
 
@@ -127,7 +111,7 @@ public class UserResourceIntTest {
         user.setPhone(DEFAULT_PHONE);
         user.setName(DEFAULT_NAME);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setOrgId(orgs.get(0).getId());
+        user.setOrg(orgs.get(0));
         user.setRoleIdList(Collections3.extractToList(roles, Role.F_ID));
         return user;
     }
@@ -146,33 +130,42 @@ public class UserResourceIntTest {
         anotherUser.setEmail(DEFAULT_ANOTHER_EMAIL);
         anotherUser.setName("java");
         anotherUser.setLangKey("en");
-        userRepository.saveAndFlush(anotherUser);
+        userService.save(anotherUser);
     }
 
     @Test
     @Transactional
     public void createUser() throws Exception {
-        int databaseSizeBeforeCreate = userRepository.findAll().size();
-        UserVo managedUserVM = new UserVo();
-        user.setLoginId(DEFAULT_LOGIN);
-        user.setPassword(PublicUtil.getRandomString(60));
-        user.setActivated(true);
-        user.setEmail(DEFAULT_EMAIL);
-        user.setPhone(DEFAULT_PHONE);
-        user.setName(DEFAULT_NAME);
-        user.setLangKey(DEFAULT_LANGKEY);
-        user.setOrgId(orgs.get(0).getId());
-        user.setRoleIdList(Collections3.extractToList(roles, Role.F_ID));
+        userService.deleteAll();
+        int databaseSizeBeforeCreate = userService.findAll().size();
 
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
+        // Create the User
+        UserVo managedUserVM = new UserVo(null,
+                DEFAULT_LOGIN,
+                DEFAULT_PASSWORD,
+                DEFAULT_PASSWORD,
+                orgs.get(0).getId(),
+                DEFAULT_NAME,
+                DEFAULT_PHONE,
+                DEFAULT_EMAIL,
+                true,
+                DEFAULT_LANGKEY,
+                null,
+                null,
+                null,
+                Collections3.extractToList(roles, Role.F_ID),
+                null,
+                null,null);
+
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isOk());
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userService.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeCreate + 1);
-        User testUser = userRepository.findOneByLoginId(managedUserVM.getLoginId()).get();
+        User testUser = userService.findOneByLoginId(managedUserVM.getLoginId()).get();
         assertThat(testUser.getLoginId()).isEqualTo(DEFAULT_LOGIN);
         assertThat(testUser.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
@@ -181,24 +174,29 @@ public class UserResourceIntTest {
 
     @Test
     @Transactional
-    public void createUserWithExistingLogin() throws Exception {
-        int databaseSizeBeforeCreate = userRepository.findAll().size();
+    public void createUserWithExistingEmail() throws Exception {
+        int databaseSizeBeforeCreate = userService.findAll().size();
 
         // Create the User
-
-        UserVo managedUserVM = new UserVo();
-        user.setLoginId(DEFAULT_LOGIN);
-        user.setPassword(PublicUtil.getRandomString(60));
-        user.setActivated(true);
-        user.setEmail(DEFAULT_EMAIL);
-        user.setPhone(DEFAULT_PHONE);
-        user.setName(DEFAULT_NAME);
-        user.setLangKey(DEFAULT_LANGKEY);
-        user.setOrgId(orgs.get(0).getId());
-        user.setRoleIdList(Collections3.extractToList(roles, Role.F_ID));
+        UserVo managedUserVM = new UserVo(null,
+                DEFAULT_ANOTHER_LOGIN,
+                DEFAULT_PASSWORD,
+                DEFAULT_PASSWORD,
+                orgs.get(0).getId(),
+                DEFAULT_NAME,
+                DEFAULT_PHONE,
+                DEFAULT_EMAIL,
+                true,
+                DEFAULT_LANGKEY,
+                null,
+                null,
+                null,
+                Collections3.extractToList(roles, Role.F_ID),
+                null,
+                null,null);
 
         // Create the User
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
@@ -206,7 +204,7 @@ public class UserResourceIntTest {
                 .andExpect(jsonPath("$.message").isNotEmpty());
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userService.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -214,9 +212,9 @@ public class UserResourceIntTest {
     @Transactional
     public void getAllUsers() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userService.save(user);
         // Get all the users
-        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/page"))
+        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/"))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -231,10 +229,10 @@ public class UserResourceIntTest {
     @Transactional
     public void getUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userService.save(user);
 
         // Get the user
-        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/{login}"), user.getId()))
+        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/{id}"), user.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data.loginId").value(user.getLoginId()))
@@ -255,34 +253,39 @@ public class UserResourceIntTest {
     @Transactional
     public void updateUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
-        int databaseSizeBeforeUpdate = userRepository.findAll().size();
+        userService.save(user);
+        int databaseSizeBeforeUpdate = userService.findAll().size();
 
         // Update the user
-        User updatedUser = userRepository.findOne(user.getId());
+        User updatedUser = userService.findOne(user.getId());
 
-
-        UserVo managedUserVM = new UserVo();
-        user.setLoginId(UPDATED_LOGIN);
-        user.setPassword(PublicUtil.getRandomString(60));
-        user.setActivated(true);
-        user.setEmail(UPDATED_EMAIL);
-        user.setPhone(UPDATED_PHONE);
-        user.setName(UPDATED_NAME);
-        user.setLangKey(UPDATED_LANGKEY);
-        user.setOrgId(orgs.get(0).getId());
-        user.setRoleIdList(Collections3.extractToList(roles, Role.F_ID));
-
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
+        UserVo managedUserVM = new UserVo(null,
+                UPDATED_LOGIN,
+                UPDATED_PASSWORD,
+                UPDATED_PASSWORD,
+                orgs.get(0).getId(),
+                UPDATED_NAME,
+                UPDATED_PHONE,
+                UPDATED_EMAIL,
+                true,
+                UPDATED_LANGKEY,
+                null,
+                null,
+                null,
+                Collections3.extractToList(roles, Role.F_ID),
+                null,
+                null,null);
+        managedUserVM.setId(updatedUser.getId());
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_SUCCESS));
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userService.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        User testUser = userRepository.findOne(updatedUser.getId());
+        User testUser = userService.findOne(updatedUser.getId());
         assertThat(testUser.getLoginId()).isEqualTo(UPDATED_LOGIN);
         assertThat(testUser.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -295,24 +298,29 @@ public class UserResourceIntTest {
     @Transactional
     public void updateUserExistingEmail() throws Exception {
 
-        userRepository.save(user);
+        userService.save(user);
         // Update the user
-        User updatedUser = userRepository.findOne(user.getId());
+        User updatedUser = userService.findOne(user.getId());
 
 
-
-        UserVo managedUserVM = new UserVo();
-        user.setLoginId(UPDATED_LOGIN);
-        user.setPassword(PublicUtil.getRandomString(60));
-        user.setActivated(true);
-        user.setEmail(UPDATED_EMAIL);
-        user.setPhone(UPDATED_PHONE);
-        user.setName(UPDATED_NAME);
-        user.setLangKey(UPDATED_LANGKEY);
-        user.setOrgId(orgs.get(0).getId());
-        user.setRoleIdList(Collections3.extractToList(roles, Role.F_ID));
-
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
+        UserVo managedUserVM = new UserVo(null,
+                UPDATED_LOGIN,
+                UPDATED_PASSWORD,
+                UPDATED_PASSWORD,
+                orgs.get(0).getId(),
+                UPDATED_NAME,
+                UPDATED_PHONE,
+                DEFAULT_ANOTHER_EMAIL,
+                true,
+                UPDATED_LANGKEY,
+                null,
+                null,
+                null,
+                Collections3.extractToList(roles, Role.F_ID),
+                null,
+                null,null);
+        managedUserVM.setId(updatedUser.getId());
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
@@ -325,45 +333,68 @@ public class UserResourceIntTest {
     @Transactional
     public void updateUserExistingLogin() throws Exception {
 
-        userRepository.save(user);
+        userService.save(user);
         // Update the user
-        User updatedUser = userRepository.findOne(user.getId());
+        User updatedUser = userService.findOne(user.getId());
 
-
-        UserVo managedUserVM = new UserVo();
-        user.setLoginId(UPDATED_LOGIN);
-        user.setPassword(PublicUtil.getRandomString(60));
-        user.setActivated(true);
-        user.setEmail(UPDATED_EMAIL);
-        user.setPhone(UPDATED_PHONE);
-        user.setName(UPDATED_NAME);
-        user.setLangKey(UPDATED_LANGKEY);
-        user.setOrgId(orgs.get(0).getId());
-        user.setRoleIdList(Collections3.extractToList(roles, Role.F_ID));
-        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
+        UserVo managedUserVM = new UserVo(null,
+                DEFAULT_ANOTHER_LOGIN,
+                UPDATED_PASSWORD,
+                UPDATED_PASSWORD,
+                orgs.get(0).getId(),
+                UPDATED_NAME,
+                UPDATED_PHONE,
+                UPDATED_EMAIL,
+                true,
+                UPDATED_LANGKEY,
+                null,
+                null,
+                null,
+                Collections3.extractToList(roles, Role.F_ID),
+                null,null,null
+                );
+        managedUserVM.setId(updatedUser.getId());
+        restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/"))
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_WARNING))
                 .andExpect(jsonPath("$.message").isNotEmpty());
     }
+    @Test
+    @Transactional
+    public void lockOrUnLockUser() throws Exception {
+        // Initialize the database
+        userService.save(user);
+        SpecificationDetail<User> specificationDetail =
+            DynamicSpecifications.bySearchQueryCondition(QueryCondition.eq(DataEntity.F_STATUS, DataEntity.FLAG_NORMAL));
+        long databaseSizeBeforeLock = userService.findCount(specificationDetail);
 
+        // Delete the user
+        restUserMockMvc.perform(put(albedoProperties.getAdminPath("/sys/user/{id}"), user.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+
+        // Validate the database is empty
+        long databaseSizeAfterLock = userService.findCount(specificationDetail);
+        assertThat(databaseSizeAfterLock == databaseSizeBeforeLock - 1);
+    }
     @Test
     @Transactional
     public void deleteUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
-        SpecificationDetail<User> spec = DynamicSpecifications.bySearchQueryCondition(
-                QueryCondition.ne(BaseEntity.F_STATUS, BaseEntity.FLAG_DELETE));
-        long databaseSizeBeforeDelete = userRepository.count(spec);
+        userService.save(user);
+        SpecificationDetail<User> specificationDetail =
+            DynamicSpecifications.bySearchQueryCondition(QueryCondition.eq(DataEntity.F_STATUS, DataEntity.FLAG_NORMAL));
+        long databaseSizeBeforeDelete = userService.findCount(specificationDetail);
 
         // Delete the user
-        restUserMockMvc.perform(delete(albedoProperties.getAdminPath("/sys/user/delete/{login}"), user.getId())
+        restUserMockMvc.perform(delete(albedoProperties.getAdminPath("/sys/user/{id}"), user.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
         // Validate the database is empty
-        long databaseSizeAfterDelete = userRepository.count(spec);
+        long databaseSizeAfterDelete = userService.findCount(specificationDetail);
         assertThat(databaseSizeAfterDelete == databaseSizeBeforeDelete - 1);
     }
 

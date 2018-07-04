@@ -36,6 +36,10 @@ import java.util.List;
 @RequestMapping(value = "${albedo.adminPath}/sys/area")
 public class AreaResource extends TreeVoResource<AreaService, AreaVo> {
 
+    public AreaResource(AreaService service) {
+        super(service);
+    }
+
     /**
      * GET / : 获取树型结构数据 区域.
      *

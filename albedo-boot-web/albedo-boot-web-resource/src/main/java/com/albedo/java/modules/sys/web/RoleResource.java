@@ -34,21 +34,13 @@ import java.util.stream.Collectors;
 @RequestMapping("${albedo.adminPath}/sys/role")
 public class RoleResource extends DataVoResource<RoleService, RoleVo> {
 
+    public RoleResource(RoleService service) {
+        super(service);
+    }
+
     @GetMapping(value = "/findSelectData")
     public ResponseEntity findSelectData() {
         return ResultBuilder.buildOk(SecurityUtil.getRoleList().stream().map(item -> new SelectResult(item.getId(), item.getName())).collect(Collectors.toList()));
-    }
-
-    /**
-     * @param id
-     * @return
-     */
-    @GetMapping("/{id:" + Globals.LOGIN_REGEX + "}")
-    @Timed
-    public ResponseEntity getUser(@PathVariable String id) {
-        log.debug("REST request to get Role : {}", id);
-        return ResultBuilder.buildOk(service.findOneById(id)
-                .map(item -> service.copyBeanToVo(item)));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

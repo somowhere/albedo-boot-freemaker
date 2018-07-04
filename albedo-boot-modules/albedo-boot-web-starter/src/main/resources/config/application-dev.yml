@@ -67,7 +67,7 @@ spring:
         #prefix:
         suffix: .ftl
         prefer-file-system-access: false
-        template-loader-path: /templates,classpath:/templates,classpath*:/templates
+        template-loader-path: /templates,classpath:/templates,/WEB-INF/views/
 #    redis:
 #       host: localhost
 #       port: 6379

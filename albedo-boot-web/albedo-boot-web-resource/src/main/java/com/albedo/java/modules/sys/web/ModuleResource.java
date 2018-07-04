@@ -40,18 +40,19 @@ import java.util.List;
 @RequestMapping("${albedo.adminPath}/sys/module")
 public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
 
-    @Resource
-    private ModuleService moduleService;
+    public ModuleResource(ModuleService service) {
+        super(service);
+    }
 
     @GetMapping(value = "findMenuData")
     public ResponseEntity findMenuData(ModuleTreeQuery moduleTreeQuery) {
-        List<ModuleMenuTreeResult> rs = moduleService.findMenuData(moduleTreeQuery, SecurityUtil.getModuleList());
+        List<ModuleMenuTreeResult> rs = service.findMenuData(moduleTreeQuery, SecurityUtil.getModuleList());
         return ResultBuilder.buildOk(rs);
     }
 
     @GetMapping(value = "findTreeData")
     public ResponseEntity findTreeData(ModuleTreeQuery moduleTreeQuery) {
-        List<TreeResult> rs = moduleService.findTreeData(moduleTreeQuery, SecurityUtil.getModuleList());
+        List<TreeResult> rs = service.findTreeData(moduleTreeQuery, SecurityUtil.getModuleList());
         return ResultBuilder.buildOk(rs);
     }
 
@@ -71,7 +72,7 @@ public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
      */
     @GetMapping(value = "/page")
     public ResponseEntity getPage(PageModel pm) {
-        moduleService.findPage(pm, SecurityUtil.dataScopeFilter());
+        service.findPage(pm, SecurityUtil.dataScopeFilter());
         pm.setSortDefaultName(Direction.DESC, Module.F_LASTMODIFIEDDATE);
         JSON rs = JsonUtil.getInstance().toJsonObject(pm);
         return ResultBuilder.buildObject(rs);
@@ -84,8 +85,8 @@ public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
             throw new RuntimeMsgException(PublicUtil.toAppendStr("查询模块管理失败，原因：无法查找到编号区域"));
         }
         if (PublicUtil.isNotEmpty(moduleVo.getParentId())) {
-            moduleService.findOneById(moduleVo.getParentId()).ifPresent(item -> moduleVo.setParentName(item.getName()));
-            moduleService.findOptionalTopByParentId(moduleVo.getParentId()).ifPresent(item -> moduleVo.setSort(item.getSort() + 30));
+            service.findOneById(moduleVo.getParentId()).ifPresent(item -> moduleVo.setParentName(item.getName()));
+            service.findOptionalTopByParentId(moduleVo.getParentId()).ifPresent(item -> moduleVo.setSort(item.getSort() + 30));
         }
         if (moduleVo.getSort() == null) {
             moduleVo.setSort(30);
@@ -108,7 +109,7 @@ public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
                 moduleVo.getId(), moduleVo.getPermission()))) {
             throw new RuntimeMsgException("权限已存在");
         }
-        moduleService.save(moduleVo);
+        service.save(moduleVo);
         SecurityUtil.clearUserJedisCache();
         JedisUtil.removeSys(GlobalJedis.RESOURCE_MODULE_DATA_MAP);
         return ResultBuilder.buildOk("保存", moduleVo.getName(), "成功");
@@ -123,7 +124,7 @@ public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
     @Timed
     public ResponseEntity delete(@PathVariable String ids) {
         log.debug("REST request to delete Module: {}", ids);
-        moduleService.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
         SecurityUtil.clearUserJedisCache();
         JedisUtil.removeSys(GlobalJedis.RESOURCE_MODULE_DATA_MAP);
         return ResultBuilder.buildOk("删除成功");
@@ -139,7 +140,7 @@ public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity lockOrUnLock(@PathVariable String ids) {
         log.debug("REST request to lockOrUnLock User: {}", ids);
-        moduleService.lockOrUnLock(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.lockOrUnLock(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
         SecurityUtil.clearUserJedisCache();
         JedisUtil.removeSys(GlobalJedis.RESOURCE_MODULE_DATA_MAP);
         return ResultBuilder.buildOk("操作成功");
