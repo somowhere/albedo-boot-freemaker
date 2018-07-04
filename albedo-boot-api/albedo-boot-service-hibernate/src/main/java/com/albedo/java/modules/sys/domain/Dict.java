@@ -45,6 +45,9 @@ public class Dict extends TreeEntity<Dict> {
     /*** 字典值 */
     @Column(name = "val_")
     private String val;
+    /*** 字典值 */
+    @Column(name = "key_")
+    private String key;
     /*** 资源文件key */
     @Column(name = "show_name")
     private String showName;
@@ -124,4 +127,11 @@ public class Dict extends TreeEntity<Dict> {
         this.parentCode = parentCode;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 }
