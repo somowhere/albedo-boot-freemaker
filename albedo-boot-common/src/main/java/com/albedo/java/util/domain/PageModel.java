@@ -23,7 +23,6 @@ public class PageModel<T> implements Pageable, Serializable {
     public static final String F_DATA = "data";
     private static final long serialVersionUID = 1L;
     private int page = 1;
-    @JSONField(name="perpage")
     private int size = 10;
     @JSONField(serialize = false)
     private Sort sort;
@@ -34,9 +33,10 @@ public class PageModel<T> implements Pageable, Serializable {
     private String queryConditionJson;
     @JSONField(serialize = false)
     private String sqlConditionDsf;
-    @JSONField(name="total")
+    @JSONField(name="recordsTotal")
     private long recordsTotal;
-
+    private long recordsFiltered;
+    private int draw;
 
     @JSONField(name = "data", serialzeFeatures = {SerializerFeature.WriteNullListAsEmpty})
     private List<T> data;
@@ -294,5 +294,21 @@ public class PageModel<T> implements Pageable, Serializable {
 
     public void setSqlConditionDsf(String sqlConditionDsf) {
         this.sqlConditionDsf = sqlConditionDsf;
+    }
+    public long getRecordsFiltered() {
+        if (recordsFiltered == 0) recordsFiltered = getRecordsTotal();
+        return recordsFiltered;
+    }
+
+    public void setRecordsFiltered(long recordsFiltered) {
+        this.recordsFiltered = recordsFiltered;
+    }
+
+    public int getDraw() {
+        return draw;
+    }
+
+    public void setDraw(int draw) {
+        this.draw = draw;
     }
 }
