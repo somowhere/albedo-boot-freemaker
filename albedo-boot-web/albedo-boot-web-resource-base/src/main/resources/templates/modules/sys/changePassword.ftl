@@ -13,7 +13,7 @@
             <div class="portlet-body form form-no-modal change-password-portlet">
                 <!-- BEGIN FORM-->
                 <div id="bootstrap-alerts"></div>
-                <form id="changePasswordAjaxForm" action="${ctx}/api/account/changePassword" method="post"
+                <form id="changePasswordAjaxForm" action="${ctx}/account/changePassword" method="post"
                       class="form-horizontal form-validation form-bordered form-label-stripped"
                       config="{}">
                     <div class="form-body">
