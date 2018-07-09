@@ -164,7 +164,7 @@ public class AccoutResource extends BaseResource {
      */
     @PostMapping(path = "/account/changePassword")
     @Timed
-    public ResponseEntity changePassword(@Valid @RequestBody PasswordChangeVo passwordChangeVo) {
+    public ResponseEntity changePassword(@Valid PasswordChangeVo passwordChangeVo) {
 
         Assert.assertIsTrue(passwordChangeVo!=null&&
             checkPasswordLength(passwordChangeVo.getNewPassword()), "密码格式有误");
