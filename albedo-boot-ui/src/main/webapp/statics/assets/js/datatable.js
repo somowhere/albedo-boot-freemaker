@@ -57,7 +57,7 @@ var Datatable = function () {
                         {extend: 'csv', className: 'btn purple btn-outline '},
                         {extend: 'colvis', className: 'btn dark btn-outline', text: '列'}
                     ],
-                    order: [[1, 'asc']],
+                    order: [[0, 'asc']],
                     rowId: "id",
                     "language": albedo.language,
                     responsive: true,
