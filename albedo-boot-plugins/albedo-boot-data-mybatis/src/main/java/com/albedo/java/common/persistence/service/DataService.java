@@ -103,4 +103,11 @@ public abstract class DataService<Repository extends BaseRepository<T, PK>, T ex
     public List<ComboData> findJson(ComboSearch comboSearch) {
         return jpaCustomeRepository.findJson(comboSearch);
     }
+
+    public long findCount(SpecificationDetail<T> specificationDetail) {
+        return repository.selectCount(specificationDetail.toEntityWrapper());
+    }
+    public long findCount() {
+        return repository.selectCount(null);
+    }
 }
