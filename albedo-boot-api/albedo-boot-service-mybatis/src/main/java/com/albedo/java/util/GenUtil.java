@@ -281,8 +281,15 @@ public class GenUtil {
         Map<String, Object> model = Maps.newHashMap();
 
         String applicationId = SpringContextHolder.getApplicationContext().getId();
-        String applicationName = SpringContextHolder.getApplicationContext().getBean(applicationId.substring(0, applicationId.indexOf(":"))).getClass().getName();
-        model.put("applicationName", applicationName);
+        if(PublicUtil.isNotEmpty(applicationId)){
+            String substring = applicationId.substring(0, applicationId.indexOf(":"));
+            try{
+                String applicationName = SpringContextHolder.getApplicationContext().getBean(substring).getClass().getName();
+                model.put("applicationName", applicationName);
+            }catch (Exception e){
+                model.put("applicationName", substring);
+            }
+        }
         model.put("packageName", StringUtil.lowerCase(genSchemeVo.getPackageName()));
         model.put("lastPackageName", StringUtil.substringAfterLast((String) model.get("packageName"), "."));
         model.put("moduleName", StringUtil.lowerCase(genSchemeVo.getModuleName()));

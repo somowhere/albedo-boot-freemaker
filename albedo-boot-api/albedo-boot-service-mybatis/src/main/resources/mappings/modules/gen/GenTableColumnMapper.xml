@@ -4,7 +4,7 @@
 
 
     <!-- 建议字段，采用驼峰命名方法，不然很麻烦 -->
-    <!--<select id="selectListByUserId" resultType="Role">-->
+    <!--<select id="selectListByUserId" resultType="com.albedo.java.modules.sys.domain.Role">-->
         <!--select a.* from sys_role_t a LEFT JOIN sys_user_role_t b on a.id_=b.role_id where b.user_id=#{id}-->
     <!--</select>-->
 
