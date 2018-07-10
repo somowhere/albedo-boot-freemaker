@@ -64,7 +64,7 @@
                     <thead>
                     <tr ${className}="row" class="heading">
                     	<#list table.columnList as column><#if column.isList?? && column.isList == 1 && column.simpleJavaField!="parentId" && column.simpleJavaField!="parentIds" && column.simpleJavaField!="parent">
-                    	<th class="<#if column_index == 1>all<#elseif column_index gt 8>none</#if>"> ${column.comments} </th>
+                    	<th class="<#if column_index == 1>all<#elseif column_index gt 8>none</#if>"> ${column.title} </th>
                     </#if></#list>
                     <<@hash/>if SecurityUtil.hasPermission('${permissionPrefix}_edit,${permissionPrefix}_delete,${permissionPrefix}_lock')><th width="10%"> 操作 </th></<@hash/>if>
                     </tr>
