@@ -232,7 +232,8 @@ public class GenTableService extends DataVoService<GenTableRepository, GenTable,
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public Map<String, Object> findFormData(GenTableFormVo genTableFormVo) {
         Map<String, Object> map = Maps.newHashMap();
-        map.put("tableList", PublicUtil.convertComboDataList(findTableListFormDb(new GenTableVo()), GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
+        map.put("tableList", PublicUtil.convertComboDataListStr(findTableListFormDb(new GenTableVo()),
+            GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
         // 验证参数缺失
         if (StringUtil.isBlank(genTableFormVo.getId()) && StringUtil.isBlank(genTableFormVo.getName())) {
             throw new RuntimeMsgException(PublicUtil.toAppendStr("参数缺失！"));
@@ -251,7 +252,7 @@ public class GenTableService extends DataVoService<GenTableRepository, GenTable,
         }
         // 获取物理表字段
         genTableVo = getTableFormDb(genTableVo);
-        map.put("columnList", PublicUtil.convertComboDataList(genTableVo.getColumnList(),
+        map.put("columnList", PublicUtil.convertComboDataListStr(genTableVo.getColumnList(),
                 GenTable.F_NAME, GenTable.F_NAMESANDTITLE));
 
 
@@ -259,9 +260,9 @@ public class GenTableService extends DataVoService<GenTableRepository, GenTable,
         GenConfig config = GenUtil.getConfig();
         map.put("config", config);
 
-        map.put("queryTypeList", PublicUtil.convertComboDataList(config.getQueryTypeList(), Dict.F_VAL, Dict.F_NAME));
-        map.put("showTypeList", PublicUtil.convertComboDataList(config.getShowTypeList(), Dict.F_VAL, Dict.F_NAME));
-        map.put("javaTypeList", PublicUtil.convertComboDataList(config.getJavaTypeList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("queryTypeList", PublicUtil.convertComboDataListStr(config.getQueryTypeList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("showTypeList", PublicUtil.convertComboDataListStr(config.getShowTypeList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("javaTypeList", PublicUtil.convertComboDataListStr(config.getJavaTypeList(), Dict.F_VAL, Dict.F_NAME));
         if (PublicUtil.isNotEmpty(genTableVo.getId())) {
             Collections.sort(genTableVo.getColumnList());
         }

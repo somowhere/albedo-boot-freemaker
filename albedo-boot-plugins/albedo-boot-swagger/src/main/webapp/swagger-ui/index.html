@@ -85,8 +85,9 @@
                 function addApiKeyAuthorization() {
                     console.log(localStorage)
                     console.log(sessionStorage)
-                    var authToken = JSON.parse(localStorage.getItem("alb-authenticationtoken") || sessionStorage.getItem("alb-authenticationtoken"));
-                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
+                    var authToken = Cookies.get('Authorization') || JSON.parse(localStorage.getItem("alb-authenticationtoken")
+                        || sessionStorage.getItem("alb-authenticationtoken"));
+                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
                 }
 

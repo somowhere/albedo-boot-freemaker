@@ -19,18 +19,19 @@ public class CustomDateFormt extends DateFormat {
 
     @Override
     public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
-        return dateFormat.format(date, toAppendTo, fieldPosition);
+        try {
+            return new StringBuffer(DateUtil.formatDateTime(date));
+        }catch (Exception e){
+            return dateFormat.format(date, toAppendTo, fieldPosition);
+        }
     }
 
     @Override
     public Date parse(String source, ParsePosition pos) {
-
         Date date;
-
         try {
             date = DateUtil.parseDate(source);
         } catch (Exception e) {
-
             date = dateFormat.parse(source, pos);
         }
 
@@ -40,9 +41,7 @@ public class CustomDateFormt extends DateFormat {
     // 主要还是装饰这个方法
     @Override
     public Date parse(String source) throws ParseException {
-
         Date date;
-
         try {
             // 先按我的规则来
             date = DateUtil.parseDate(source);
@@ -50,7 +49,6 @@ public class CustomDateFormt extends DateFormat {
             // 不行，那就按原先的规则吧
             date = dateFormat.parse(source);
         }
-
         return date;
     }
 

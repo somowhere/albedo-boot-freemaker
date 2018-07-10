@@ -206,7 +206,7 @@ public class ${ClassName}ResourceIntTest {
         // An entity with an existing ID cannot be created, so this API call must fail
         rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(${className}Vo)))
+            .content(Json.toJSONString(${className}Vo)))
             .andExpect(status().isBadRequest());
 
         // Validate the ${ClassName} in the database
@@ -276,7 +276,7 @@ public class ${ClassName}ResourceIntTest {
         <#if column.pk>
             .andExpect(jsonPath("$.data.${column.simpleJavaField}").value(${className}.get${column.simpleJavaField?cap_first}()))
         <#elseif column.isEdit?? && column.isEdit == 1 && column.nullable && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'description')>
-            .andExpect(jsonPath("$.data.${column.simpleJavaField}").value(<#if column.simpleJavaType == "Date">DEFAULT_${column.constantJavaField}.getTime()<#else>DEFAULT_${column.constantJavaField}</#if>))
+            .andExpect(jsonPath("$.data.${column.simpleJavaField}").value(<#if column.simpleJavaType == "Date">PublicUtil.fmtDate(DEFAULT_${column.constantJavaField})<#else>DEFAULT_${column.constantJavaField}</#if>))
         </#if>
     </#list>;
     }

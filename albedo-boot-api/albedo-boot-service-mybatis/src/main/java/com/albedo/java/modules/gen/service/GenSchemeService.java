@@ -119,8 +119,8 @@ public class GenSchemeService extends DataVoService<GenSchemeRepository, GenSche
         GenConfig config = GenUtil.getConfig();
         map.put("config", config);
 
-        map.put("categoryList", PublicUtil.convertComboDataList(config.getCategoryList(), Dict.F_VAL, Dict.F_NAME));
-        map.put("viewTypeList", PublicUtil.convertComboDataList(config.getViewTypeList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("categoryList", PublicUtil.convertComboDataListStr(config.getCategoryList(), Dict.F_VAL, Dict.F_NAME));
+        map.put("viewTypeList", PublicUtil.convertComboDataListStr(config.getViewTypeList(), Dict.F_VAL, Dict.F_NAME));
 
         List<GenTable> tableList = genTableService.findAll(), list = Lists.newArrayList();
         List<GenScheme> schemeList = findAll(genSchemeVo.getId());
@@ -131,7 +131,7 @@ public class GenSchemeService extends DataVoService<GenSchemeRepository, GenSche
                 list.add(table);
             }
         }
-        map.put("tableList", PublicUtil.convertComboDataList(list, GenTable.F_ID, GenTable.F_NAMESANDTITLE));
+        map.put("tableList", PublicUtil.convertComboDataListStr(list, GenTable.F_ID, GenTable.F_NAMESANDTITLE));
         return map;
     }
 }
