@@ -108,7 +108,7 @@ public class GenSchemeResource extends DataVoResource<GenSchemeService, GenSchem
     public ResponseEntity save(@Valid @RequestBody GenSchemeVo genSchemeVo) {
         service.save(genSchemeVo);
         SecurityUtil.clearUserJedisCache();
-        if (genSchemeVo.getSyncModule()) {
+        if (genSchemeVo.getSyncModule()!=null && genSchemeVo.getSyncModule()) {
             GenTableVo genTableVo = genSchemeVo.getGenTable();
             if (genTableVo == null || PublicUtil.isEmpty(genTableVo.getClassName())) {
                 genTableVo = genTableService.findOneVo(genSchemeVo.getGenTableId());
