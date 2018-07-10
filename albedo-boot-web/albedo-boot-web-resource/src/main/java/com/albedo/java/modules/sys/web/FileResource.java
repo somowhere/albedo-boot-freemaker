@@ -54,7 +54,7 @@ public class FileResource extends BaseResource {
 
             fileList.add(fileName.replaceAll(directory, ""));
         }
-        return ResultBuilder.buildOk(StringUtils.join(fileList, ","), "上传成功");
+        return ResultBuilder.buildDataOk(StringUtils.join(fileList, ","));
 
     }
 
