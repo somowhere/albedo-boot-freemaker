@@ -5,6 +5,8 @@ import com.albedo.java.common.persistence.domain.TreeEntity;
 import com.albedo.java.common.persistence.repository.TreeRepository;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.base.Assert;
+import com.albedo.java.util.config.SystemConfig;
+import com.albedo.java.util.domain.Globals;
 import com.albedo.java.util.exception.RuntimeMsgException;
 import com.albedo.java.vo.sys.query.TreeQuery;
 import com.albedo.java.vo.sys.query.TreeResult;
@@ -111,7 +113,7 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
         if (entity.getParentId() != null) {
             T parent = repository.selectById(entity.getParentId());
             if (parent != null && PublicUtil.isNotEmpty(parent.getId())) {
-                parent.setLeaf(false);
+                parent.setIsLeaf(SystemConfig.NO);
                 insertOrUpdate(parent);
                 entity.setParentIds(PublicUtil.toAppendStr(parent.getParentIds(), parent.getId(), ","));
             }
@@ -119,9 +121,9 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
 
         if (PublicUtil.isNotEmpty(entity.getId())) {
             Integer count = countByParentId((String) entity.getId());
-            entity.setLeaf(count == null || count == 0 ? true : false);
+            entity.setIsLeaf(count == null || count == 0 ? SystemConfig.YES : SystemConfig.NO);
         } else {
-            entity.setLeaf(true);
+            entity.setIsLeaf(SystemConfig.YES);
         }
 //        checkSave(entity);
         insertOrUpdate(entity);

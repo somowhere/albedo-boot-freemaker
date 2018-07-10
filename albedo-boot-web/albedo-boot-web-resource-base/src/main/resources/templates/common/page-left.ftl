@@ -30,6 +30,7 @@
                     <#if module.show && (module.type)! == '1' && (module.parentId)! == moduleParent.id >
                         <#assign isChild=false />
                         <#list moduleList as temp><#if temp.show && temp.type == '1' && temp.parentId == module.id ><#assign isChild=true /><#break></#if></#list>
+                        ${module.leaf?string('yes', 'no')} ${isChild?string('yes', 'no')}
                         <#if module.leaf || !isChild>
                             <li class='nav-item ${(module_index == 0)!?string("start", "")}'>
                                 <a href="#${(module.hrefName)! }" data-url-name="${(module.hrefName)! }"

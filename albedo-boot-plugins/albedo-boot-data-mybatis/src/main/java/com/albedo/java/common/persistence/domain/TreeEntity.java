@@ -2,6 +2,7 @@ package com.albedo.java.common.persistence.domain;
 
 import com.albedo.java.common.persistence.annotation.ManyToOne;
 import com.albedo.java.util.annotation.SearchField;
+import com.albedo.java.util.config.SystemConfig;
 import com.albedo.java.util.domain.QueryCondition.Operator;
 import com.baomidou.mybatisplus.annotations.TableField;
 
@@ -49,7 +50,7 @@ public class TreeEntity<T extends TreeEntity> extends IdEntity<T, String> {
     protected String parentName;
     /*** 1 叶子节点 0非叶子节点 */
     @TableField(TreeEntity.F_SQL_ISLEAF)
-    private boolean isLeaf = false;
+    private Integer isLeaf = 0;
 
     public TreeEntity() {
         super();
@@ -108,11 +109,15 @@ public class TreeEntity<T extends TreeEntity> extends IdEntity<T, String> {
         this.parentName = parentName;
     }
 
-    public boolean isLeaf() {
+    public Integer getIsLeaf() {
         return isLeaf;
     }
 
-    public void setLeaf(boolean leaf) {
-        isLeaf = leaf;
+    public void setIsLeaf(Integer isLeaf) {
+        this.isLeaf = isLeaf;
+    }
+
+    public boolean isLeaf() {
+        return SystemConfig.YES.equals(this.isLeaf);
     }
 }
