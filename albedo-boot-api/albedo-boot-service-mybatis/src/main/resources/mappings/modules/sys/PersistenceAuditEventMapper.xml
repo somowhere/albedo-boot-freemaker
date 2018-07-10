@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.albedo.java.modules.sys.repository.PersistenceAuditEventRepository">
 
-    <select id="addAuditEventData" parameterType="PersistentAuditEvent">
+    <select id="addAuditEventData" parameterType="com.albedo.java.modules.sys.domain.PersistentAuditEvent">
         insert into jhi_persistent_audit_evt_data (event_id,name,value)
         values
         <foreach item="value" index="key" collection="data" separator=";">
