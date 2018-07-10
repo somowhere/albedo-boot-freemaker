@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>albedo-boot-service</module>
-        <module>albedo-boot-service-hibernate</module>
-        <!--<module>albedo-boot-service-mybatis</module>-->
+        <!--<module>albedo-boot-service-hibernate</module>-->
+        <module>albedo-boot-service-mybatis</module>
     </modules>
 </project>

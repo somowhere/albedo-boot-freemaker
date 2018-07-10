@@ -141,7 +141,7 @@ public class GenSchemeResource extends DataVoResource<GenSchemeService, GenSchem
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity delete(@PathVariable String ids) {
         log.debug("REST request to delete User: {}", ids);
-        service.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.deleteBatchIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
         return ResultBuilder.buildOk("删除成功");
     }
 

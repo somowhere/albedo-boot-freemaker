@@ -1,5 +1,6 @@
 package com.albedo.java.modules.sys.web;
 
+import com.albedo.java.common.security.SecurityUtil;
 import com.albedo.java.modules.sys.domain.Dict;
 import com.albedo.java.modules.sys.service.DictService;
 import com.albedo.java.util.DictUtil;
@@ -132,7 +133,7 @@ public class DictResource extends TreeVoResource<DictService, DictVo> {
     @Timed
     public ResponseEntity delete(@PathVariable String ids) {
         log.debug("REST request to delete Dict: {}", ids);
-        service.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.deleteByParentIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)), SecurityUtil.getCurrentUserId());
         DictUtil.clearCache();
         return ResultBuilder.buildOk("删除成功");
     }

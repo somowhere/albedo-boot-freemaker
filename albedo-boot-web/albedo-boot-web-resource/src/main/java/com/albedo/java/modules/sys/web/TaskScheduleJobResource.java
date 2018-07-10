@@ -88,7 +88,7 @@ public class TaskScheduleJobResource extends DataVoResource<TaskScheduleJobExcut
 
     public ResponseEntity delete(@PathVariable String ids) {
         log.debug("REST request to delete TaskScheduleJob: {}", ids);
-        service.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.deleteBatchIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
         return ResultBuilder.buildOk("删除任务调度成功");
     }
 

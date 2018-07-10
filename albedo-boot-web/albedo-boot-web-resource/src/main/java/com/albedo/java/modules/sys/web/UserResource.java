@@ -171,7 +171,7 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
     @Timed
     public ResponseEntity delete(@PathVariable String ids) {
         log.debug("REST request to delete User: {}", ids);
-        service.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.deleteBatchIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
         SecurityUtil.clearUserJedisCache();
         SecurityUtil.clearUserLocalCache();
         return ResultBuilder.buildOk("删除成功");

@@ -14,4 +14,5 @@ public interface ModuleRepository extends TreeRepository<Module, String> {
 
     List<Module> findAllAuthByUser(String userId);
 
+    List<Module> findAllByStatusOrderBySort(Integer flagNormal);
 }
