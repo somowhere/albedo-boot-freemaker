@@ -51,7 +51,7 @@ var ComponentsDateTimePickers = function () {
 
         $('#defaultrange').daterangepicker({
                 opens: (App.isRTL() ? 'left' : 'right'),
-                format: 'MM/DD/YYYY',
+                format: 'YYYY-MM-DD',
                 separator: ' to ',
                 startDate: moment().subtract('days', 29),
                 endDate: moment(),
@@ -73,7 +73,7 @@ var ComponentsDateTimePickers = function () {
 
         $('#defaultrange_modal').daterangepicker({
                 opens: (App.isRTL() ? 'left' : 'right'),
-                format: 'MM/DD/YYYY',
+                format: 'YYYY-MM-DD',
                 separator: ' to ',
                 startDate: moment().subtract('days', 29),
                 endDate: moment(),
@@ -118,7 +118,7 @@ var ComponentsDateTimePickers = function () {
                 buttonClasses: ['btn'],
                 applyClass: 'green',
                 cancelClass: 'default',
-                format: 'MM/DD/YYYY',
+                format: 'YYYY-MM-DD',
                 separator: ' to ',
                 locale: {
                     applyLabel: 'Apply',

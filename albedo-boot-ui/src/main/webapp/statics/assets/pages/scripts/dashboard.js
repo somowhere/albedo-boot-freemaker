@@ -625,7 +625,7 @@ var Dashboard = function () {
                     'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
                 },
                 "locale": {
-                    "format": "MM/DD/YYYY",
+                    "format": "YYYY-MM-DD",
                     "separator": " - ",
                     "applyLabel": "Apply",
                     "cancelLabel": "Cancel",
