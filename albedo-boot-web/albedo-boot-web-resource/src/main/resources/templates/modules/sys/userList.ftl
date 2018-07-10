@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group">
                         <label class="input-label">状态</label>
-                    <@albedo.form name="a.status_" analytiColumn="false" searchItem="searchItem" dictCode="sys_status" boxType="checkbox" operate="in" attrType="Integer"> </@albedo.form>
+                    <@albedo.form name="status_" analytiColumn="false" searchItem="searchItem" dictCode="sys_status" boxType="checkbox" operate="in" attrType="Integer"> </@albedo.form>
                     </div>
                     <div class="form-group form-btn">
                         <button class="btn btn-sm green btn-outline filter-submit-table-user margin-bottom"

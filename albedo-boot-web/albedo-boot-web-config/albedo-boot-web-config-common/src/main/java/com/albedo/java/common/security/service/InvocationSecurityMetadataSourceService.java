@@ -6,12 +6,14 @@ import com.albedo.java.common.config.AlbedoProperties;
 import com.albedo.java.modules.sys.domain.Dict;
 import com.albedo.java.modules.sys.domain.Module;
 import com.albedo.java.modules.sys.repository.ModuleRepository;
+import com.albedo.java.modules.sys.service.ModuleService;
 import com.albedo.java.util.DictUtil;
 import com.albedo.java.util.JedisUtil;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.StringUtil;
 import com.albedo.java.util.domain.GlobalJedis;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -36,18 +38,18 @@ public class InvocationSecurityMetadataSourceService
     AlbedoProperties albedoProperties;
     private Map<String, Collection<ConfigAttribute>> resourceMap = null;
     @Resource
-    private ModuleRepository moduleRepository;
+    private ModuleService moduleService;
 
     public Map<String, Collection<ConfigAttribute>> getResourceMap() {
         if (resourceMap == null) {
             resourceMap = (Map<String, Collection<ConfigAttribute>>) JedisUtil.getSys(GlobalJedis.RESOURCE_MODULE_DATA_MAP);
 
             if (resourceMap == null) {
-                resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
+                resourceMap = Maps.newHashMap();
             }
 
             if (PublicUtil.isEmpty(resourceMap)) {
-                List<Module> moduleList = moduleRepository.findAllByStatusOrderBySort(Module.FLAG_NORMAL);
+                List<Module> moduleList = moduleService.findAllByStatusOrderBySort(Module.FLAG_NORMAL);
                 List<Dict> dictRequestList = DictUtil.getDictList("sys_request_method");
                 moduleList.stream().forEach(item -> {
                     if (PublicUtil.isNotEmpty(item.getPermission())) {
@@ -102,7 +104,7 @@ public class InvocationSecurityMetadataSourceService
 
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        return moduleRepository.findAllByStatusOrderBySort(Module.FLAG_NORMAL).stream()
+        return moduleService.findAllByStatusOrderBySort(Module.FLAG_NORMAL).stream()
                 .map(item -> new SecurityConfig(item.getPermission())).collect(Collectors.toList());
     }
 

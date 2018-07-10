@@ -49,7 +49,7 @@ public class AccoutResourceIntTest {
     private HttpMessageConverter[] httpMessageConverters;
 
     @Mock
-    private UserService userService;
+    private UserService mockUserService;
 
     @Mock
     private MailService mockMailService;
@@ -95,7 +95,7 @@ public class AccoutResourceIntTest {
 
     @Test
     public void testGetUnknownAccount() throws Exception {
-        when(userService.getUserWithAuthorities(SecurityUtil.getCurrentUserId())).thenReturn(null);
+        when(mockUserService.getUserWithAuthorities(SecurityUtil.getCurrentUserId())).thenReturn(null);
 
         mockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
@@ -111,7 +111,7 @@ public class AccoutResourceIntTest {
         user.setEmail("user-jwt-controller@example.com");
         user.setPassword(passwordEncoder.encode("test11"));
 
-        userService.save(user);
+        userRepository.insert(user);
 
         LoginVo login = new LoginVo();
         login.setUsername("user-jwt-controller");
@@ -119,7 +119,9 @@ public class AccoutResourceIntTest {
         mockMvc.perform(post("/api/authenticate")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(login)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isString())
+                .andExpect(jsonPath("$.data").isNotEmpty());
     }
 
     @Test
@@ -131,7 +133,7 @@ public class AccoutResourceIntTest {
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test11"));
 
-        userService.save(user);
+        userRepository.insert(user);
 
         LoginVo login = new LoginVo();
         login.setUsername("user-jwt-controller-remember-me");
@@ -140,7 +142,8 @@ public class AccoutResourceIntTest {
         mockMvc.perform(post("/api/authenticate")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(login)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isNotEmpty());
     }
 
     @Test
@@ -152,7 +155,8 @@ public class AccoutResourceIntTest {
         mockMvc.perform(post("/api/authenticate")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(login)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 
 }

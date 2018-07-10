@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the ProfileInfoResource REST controller.
  *
- * @see com.albedo.java.modules.sys.web.ProfileInfoResource
+ * @see ProfileInfoResource
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AlbedoBootWebApp.class)

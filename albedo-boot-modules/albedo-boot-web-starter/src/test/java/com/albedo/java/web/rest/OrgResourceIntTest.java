@@ -33,10 +33,9 @@ import java.util.List;
 
 import static com.albedo.java.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -133,7 +132,7 @@ public class OrgResourceIntTest {
     @Test
     @Transactional
     public void createOrg() throws Exception {
-        long databaseSizeBeforeCreate = orgService.findCount();
+        long databaseSizeBeforeCreate = orgService.findAll().size();
         OrgVo orgVo = orgService.copyBeanToVo(org);
         // Create the Org
         restOrgMockMvc.perform(post(DEFAULT_API_URL+"edit")
@@ -141,7 +140,7 @@ public class OrgResourceIntTest {
             .content(TestUtil.convertObjectToJsonBytes(orgVo)))
             .andExpect(status().isOk());
         ;
-        long databaseSizeAfterCreate = orgService.findCount();
+        long databaseSizeAfterCreate = orgService.findAll().size();
         assertThat(databaseSizeBeforeCreate).isEqualTo(databaseSizeAfterCreate - 1);
         SpecificationDetail<Org> orgSpecificationDetail = new SpecificationDetail<>();
         orgSpecificationDetail.orderASC(Org.F_CREATEDDATE);
@@ -392,7 +391,7 @@ public class OrgResourceIntTest {
         // Initialize the database
         orgService.save(org);
         List<Org> all = orgService.findAll();
-        long databaseSizeBeforeUpdate = orgService.findCount();
+        long databaseSizeBeforeUpdate = orgService.findAll().size();
 
         // Update the org
         Org updatedOrg = orgService.findOne(org.getId());
@@ -410,7 +409,7 @@ public class OrgResourceIntTest {
 
         // Validate the Org in the database
         List<Org> orgList = orgService.findAll();
-        long databaseSizeAfterUpdate = orgService.findCount();
+        long databaseSizeAfterUpdate = orgService.findAll().size();
         assertThat(databaseSizeAfterUpdate).isEqualTo(databaseSizeBeforeUpdate);
 
 
@@ -434,7 +433,7 @@ public class OrgResourceIntTest {
         SpecificationDetail<Org> spec = DynamicSpecifications.bySearchQueryCondition(
             QueryCondition.ne(BaseEntity.F_STATUS, BaseEntity.FLAG_DELETE));
 //        spec.setPersistentClass(Org.class);
-        long databaseSizeBeforeDelete = orgService.findCount(spec);
+        long databaseSizeBeforeDelete = orgService.findAll(spec).size();
 
         // Get the org
         restOrgMockMvc.perform(post(DEFAULT_API_URL+"delete/{id}", org.getId())
@@ -442,7 +441,7 @@ public class OrgResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        long databaseSizeAfterDelete = orgService.findCount(spec);
+        long databaseSizeAfterDelete = orgService.findAll(spec).size();
         assertThat(databaseSizeBeforeDelete).isEqualTo(databaseSizeAfterDelete+1);
     }
 

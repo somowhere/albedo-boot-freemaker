@@ -136,26 +136,26 @@ public class UserResourceIntTest {
     @Test
     @Transactional
     public void createUser() throws Exception {
-        userService.deleteAll();
+        userService.delete(null);
         int databaseSizeBeforeCreate = userService.findAll().size();
 
         // Create the User
         UserVo managedUserVM = new UserVo(null,
-                DEFAULT_LOGIN,
-                DEFAULT_PASSWORD,
-                DEFAULT_PASSWORD,
-                orgs.get(0).getId(),
-                DEFAULT_NAME,
-                DEFAULT_PHONE,
-                DEFAULT_EMAIL,
-                true,
-                DEFAULT_LANGKEY,
-                null,
-                null,
-                null,
-                Collections3.extractToList(roles, Role.F_ID),
-                null,
-                null,null);
+            DEFAULT_LOGIN,
+            DEFAULT_PASSWORD,
+            DEFAULT_PASSWORD,
+            orgs.get(0).getId(),
+            DEFAULT_NAME,
+            DEFAULT_PHONE,
+            DEFAULT_EMAIL,
+            true,
+            DEFAULT_LANGKEY,
+            null,
+            null,
+            null,
+            Collections3.extractToList(roles, Role.F_ID),
+            null,
+            null,null);
 
         restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -179,29 +179,29 @@ public class UserResourceIntTest {
 
         // Create the User
         UserVo managedUserVM = new UserVo(null,
-                DEFAULT_ANOTHER_LOGIN,
-                DEFAULT_PASSWORD,
-                DEFAULT_PASSWORD,
-                orgs.get(0).getId(),
-                DEFAULT_NAME,
-                DEFAULT_PHONE,
-                DEFAULT_EMAIL,
-                true,
-                DEFAULT_LANGKEY,
-                null,
-                null,
-                null,
-                Collections3.extractToList(roles, Role.F_ID),
-                null,
-                null,null);
+            DEFAULT_ANOTHER_LOGIN,
+            DEFAULT_PASSWORD,
+            DEFAULT_PASSWORD,
+            orgs.get(0).getId(),
+            DEFAULT_NAME,
+            DEFAULT_PHONE,
+            DEFAULT_EMAIL,
+            true,
+            DEFAULT_LANGKEY,
+            null,
+            null,
+            null,
+            Collections3.extractToList(roles, Role.F_ID),
+            null,
+            null,null);
 
         // Create the User
         restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_WARNING))
-                .andExpect(jsonPath("$.message").isNotEmpty());
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_WARNING))
+            .andExpect(jsonPath("$.message").isNotEmpty());
 
         // Validate the User in the database
         List<User> userList = userService.findAll();
@@ -215,14 +215,14 @@ public class UserResourceIntTest {
         userService.save(user);
         // Get all the users
         restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/page"))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.data.[*].loginId").value(hasItem(DEFAULT_LOGIN)))
-                .andExpect(jsonPath("$.data.[*].name").value(hasItem(DEFAULT_NAME)))
-                .andExpect(jsonPath("$.data.[*].phone").value(hasItem(DEFAULT_PHONE)))
-                .andExpect(jsonPath("$.data.[*].email").value(hasItem(DEFAULT_EMAIL)))
-                .andExpect(jsonPath("$.data.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.data.[*].loginId").value(hasItem(DEFAULT_LOGIN)))
+            .andExpect(jsonPath("$.data.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.data.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.data.[*].email").value(hasItem(DEFAULT_EMAIL)))
+            .andExpect(jsonPath("$.data.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
     }
 
     @Test
@@ -233,19 +233,19 @@ public class UserResourceIntTest {
 
         // Get the user
         restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/{id}"), user.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.loginId").value(user.getLoginId()))
-                .andExpect(jsonPath("$.data.name").value(DEFAULT_NAME))
-                .andExpect(jsonPath("$.data.phone").value(DEFAULT_PHONE))
-                .andExpect(jsonPath("$.data.email").value(DEFAULT_EMAIL))
-                .andExpect(jsonPath("$.data.langKey").value(DEFAULT_LANGKEY));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.loginId").value(user.getLoginId()))
+            .andExpect(jsonPath("$.data.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.data.phone").value(DEFAULT_PHONE))
+            .andExpect(jsonPath("$.data.email").value(DEFAULT_EMAIL))
+            .andExpect(jsonPath("$.data.langKey").value(DEFAULT_LANGKEY));
     }
 
     @Test
     @Transactional
     public void getNonExistingUser() throws Exception {
         restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/ddd/unknown")))
-                .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -259,27 +259,27 @@ public class UserResourceIntTest {
         User updatedUser = userService.findOne(user.getId());
 
         UserVo managedUserVM = new UserVo(null,
-                UPDATED_LOGIN,
-                UPDATED_PASSWORD,
-                UPDATED_PASSWORD,
-                orgs.get(0).getId(),
-                UPDATED_NAME,
-                UPDATED_PHONE,
-                UPDATED_EMAIL,
-                true,
-                UPDATED_LANGKEY,
-                null,
-                null,
-                null,
-                Collections3.extractToList(roles, Role.F_ID),
-                null,
-                null,null);
+            UPDATED_LOGIN,
+            UPDATED_PASSWORD,
+            UPDATED_PASSWORD,
+            orgs.get(0).getId(),
+            UPDATED_NAME,
+            UPDATED_PHONE,
+            UPDATED_EMAIL,
+            true,
+            UPDATED_LANGKEY,
+            null,
+            null,
+            null,
+            Collections3.extractToList(roles, Role.F_ID),
+            null,
+            null,null);
         managedUserVM.setId(updatedUser.getId());
         restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_SUCCESS));
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_SUCCESS));
 
         // Validate the User in the database
         List<User> userList = userService.findAll();
@@ -303,28 +303,28 @@ public class UserResourceIntTest {
 
 
         UserVo managedUserVM = new UserVo(null,
-                UPDATED_LOGIN,
-                UPDATED_PASSWORD,
-                UPDATED_PASSWORD,
-                orgs.get(0).getId(),
-                UPDATED_NAME,
-                UPDATED_PHONE,
-                DEFAULT_ANOTHER_EMAIL,
-                true,
-                UPDATED_LANGKEY,
-                null,
-                null,
-                null,
-                Collections3.extractToList(roles, Role.F_ID),
-                null,
-                null,null);
+            UPDATED_LOGIN,
+            UPDATED_PASSWORD,
+            UPDATED_PASSWORD,
+            orgs.get(0).getId(),
+            UPDATED_NAME,
+            UPDATED_PHONE,
+            DEFAULT_ANOTHER_EMAIL,
+            true,
+            UPDATED_LANGKEY,
+            null,
+            null,
+            null,
+            Collections3.extractToList(roles, Role.F_ID),
+            null,
+            null,null);
         managedUserVM.setId(updatedUser.getId());
         restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_WARNING))
-                .andExpect(jsonPath("$.message").isNotEmpty());
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_WARNING))
+            .andExpect(jsonPath("$.message").isNotEmpty());
 
     }
 
@@ -337,28 +337,28 @@ public class UserResourceIntTest {
         User updatedUser = userService.findOne(user.getId());
 
         UserVo managedUserVM = new UserVo(null,
-                DEFAULT_ANOTHER_LOGIN,
-                UPDATED_PASSWORD,
-                UPDATED_PASSWORD,
-                orgs.get(0).getId(),
-                UPDATED_NAME,
-                UPDATED_PHONE,
-                UPDATED_EMAIL,
-                true,
-                UPDATED_LANGKEY,
-                null,
-                null,
-                null,
-                Collections3.extractToList(roles, Role.F_ID),
-                null,null,null
-                );
+            DEFAULT_ANOTHER_LOGIN,
+            UPDATED_PASSWORD,
+            UPDATED_PASSWORD,
+            orgs.get(0).getId(),
+            UPDATED_NAME,
+            UPDATED_PHONE,
+            UPDATED_EMAIL,
+            true,
+            UPDATED_LANGKEY,
+            null,
+            null,
+            null,
+            Collections3.extractToList(roles, Role.F_ID),
+            null,null,null
+        );
         managedUserVM.setId(updatedUser.getId());
         restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_WARNING))
-                .andExpect(jsonPath("$.message").isNotEmpty());
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(Globals.MSG_TYPE_WARNING))
+            .andExpect(jsonPath("$.message").isNotEmpty());
     }
     @Test
     @Transactional
@@ -367,7 +367,7 @@ public class UserResourceIntTest {
         userService.save(user);
         SpecificationDetail<User> specificationDetail =
             DynamicSpecifications.bySearchQueryCondition(QueryCondition.eq(DataEntity.F_STATUS, DataEntity.FLAG_NORMAL));
-        long databaseSizeBeforeLock = userService.findCount(specificationDetail);
+        long databaseSizeBeforeLock = userService.findAll(specificationDetail).size();
 
         // Delete the user
         restUserMockMvc.perform(put(albedoProperties.getAdminPath("/sys/user/{id}"), user.getId())
@@ -375,7 +375,7 @@ public class UserResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        long databaseSizeAfterLock = userService.findCount(specificationDetail);
+        long databaseSizeAfterLock = userService.findAll(specificationDetail).size();
         assertThat(databaseSizeAfterLock == databaseSizeBeforeLock - 1);
     }
     @Test
@@ -385,15 +385,15 @@ public class UserResourceIntTest {
         userService.save(user);
         SpecificationDetail<User> specificationDetail =
             DynamicSpecifications.bySearchQueryCondition(QueryCondition.eq(DataEntity.F_STATUS, DataEntity.FLAG_NORMAL));
-        long databaseSizeBeforeDelete = userService.findCount(specificationDetail);
+        long databaseSizeBeforeDelete = userService.findAll(specificationDetail).size();
 
         // Delete the user
         restUserMockMvc.perform(delete(albedoProperties.getAdminPath("/sys/user/{id}"), user.getId())
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
 
         // Validate the database is empty
-        long databaseSizeAfterDelete = userService.findCount(specificationDetail);
+        long databaseSizeAfterDelete = userService.findAll(specificationDetail).size();
         assertThat(databaseSizeAfterDelete == databaseSizeBeforeDelete - 1);
     }
 
@@ -401,11 +401,11 @@ public class UserResourceIntTest {
     @Transactional
     public void getAllAuthorities() throws Exception {
         restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/authorities"))
-                .accept(TestUtil.APPLICATION_JSON_UTF8)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.data").isArray());
+            .accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.data").isArray());
     }
 
     @Test

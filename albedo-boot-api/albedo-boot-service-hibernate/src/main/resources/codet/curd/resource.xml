@@ -102,7 +102,7 @@ public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${
 	@Timed
 	public ResponseEntity delete(@PathVariable String ids) {
 		log.debug("REST request to delete ${ClassName}: {}", ids);
-		service.delete(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+		service.deleteBatchIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
 		return ResultBuilder.buildOk("删除${functionNameSimple}成功");
 	}
 	/**

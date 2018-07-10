@@ -80,7 +80,8 @@ public class AuditResourceIntTest {
 
     @Before
     public void initTest() {
-        persistenceAuditEventService.deleteAll();
+        persistenceAuditEventRepository.deleteAuditEventData(null);
+        persistenceAuditEventService.delete(null);
         auditEvent = new PersistentAuditEvent();
         auditEvent.setAuditEventType(SAMPLE_TYPE);
         auditEvent.setPrincipal(SAMPLE_PRINCIPAL);
@@ -90,7 +91,7 @@ public class AuditResourceIntTest {
     @Test
     public void getAllAudits() throws Exception {
         // Initialize the database
-        persistenceAuditEventService.save(auditEvent);
+        persistenceAuditEventService.insert(auditEvent);
 
         // Get all the audits
         restAuditMockMvc.perform(get("/management/audits"))
@@ -102,7 +103,7 @@ public class AuditResourceIntTest {
     @Test
     public void getAudit() throws Exception {
         // Initialize the database
-        persistenceAuditEventService.save(auditEvent);
+        persistenceAuditEventService.insert(auditEvent);
 
         // Get the audit
         restAuditMockMvc.perform(get("/management/audits/{id}", auditEvent.getId()))
@@ -114,7 +115,7 @@ public class AuditResourceIntTest {
     @Test
     public void getAuditsByDate() throws Exception {
         // Initialize the database
-        persistenceAuditEventService.save(auditEvent);
+        persistenceAuditEventService.insert(auditEvent);
 
         // Generate dates for selecting audits by date, making sure the period will contain the audit
         String fromDate  = DateUtil.formatDate(DateUtil.addDays(SAMPLE_TIMESTAMP, -1), PublicUtil.TIME_FORMAT);
@@ -130,7 +131,7 @@ public class AuditResourceIntTest {
     @Test
     public void getNonExistingAuditsByDate() throws Exception {
         // Initialize the database
-        persistenceAuditEventService.save(auditEvent);
+        persistenceAuditEventService.insert(auditEvent);
 
         // Generate dates for selecting audits by date, making sure the period will contain the audit
         String fromDate  = DateUtil.formatDate(DateUtil.addDays(SAMPLE_TIMESTAMP, -2), PublicUtil.TIME_FORMAT);

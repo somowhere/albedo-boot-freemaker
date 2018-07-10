@@ -53,6 +53,8 @@ import java.util.List;
 import static com.albedo.java.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -67,8 +69,8 @@ public class ${ClassName}ResourceIntTest {
 
     private String DEFAULT_API_URL;
     <#list table.columnList as column>
-		<#if column.isEdit?? && column.isEdit == 1 && (column.isNotBaseField || column.simpleJavaField == 'description')>
-		<#if column.simpleJavaType == "Integer">
+		<#if column.isEdit?? && column.isEdit == 1 && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
+		<#if column.simpleJavaType == "Integer" || column.simpleJavaField == 'sort'>
 	/** DEFAULT_${column.constantJavaField} ${column.nameAndTitle} */
 	private static final int DEFAULT_${column.constantJavaField} = 0;
 	/** UPDATED_${column.constantJavaField} ${column.nameAndTitle} */
@@ -83,6 +85,11 @@ public class ${ClassName}ResourceIntTest {
 	private static final float DEFAULT_${column.constantJavaField} = 0;
 	/** UPDATED_${column.constantJavaField} ${column.nameAndTitle} */
     private static final float UPDATED_${column.constantJavaField} = 1;
+		<#elseif column.simpleJavaType == "Long">
+	/** DEFAULT_${column.constantJavaField} ${column.nameAndTitle} */
+	private static final long DEFAULT_${column.constantJavaField} = 0;
+	/** UPDATED_${column.constantJavaField} ${column.nameAndTitle} */
+    private static final long UPDATED_${column.constantJavaField} = 1;
 		<#elseif column.simpleJavaType == "Date">
 	/** DEFAULT_${column.constantJavaField} ${column.nameAndTitle} */
 	private static final ${column.simpleJavaType} DEFAULT_${column.constantJavaField} = PublicUtil.parseDate(PublicUtil.fmtDate(PublicUtil.getCurrentDate()));
@@ -143,12 +150,12 @@ public class ${ClassName}ResourceIntTest {
         ${ClassName} ${className} = Reflections.createObj(${ClassName}.class, Lists.newArrayList(
     <#assign firstListField = true>
     <#list table.columnList as column>
-		<#if column.isEdit?? && column.isEdit == 1 && (column.isNotBaseField || column.simpleJavaField == 'description')>
+		<#if column.isEdit?? && column.isEdit == 1 && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
 		<#if firstListField> <#assign firstListField = false><#else>,</#if>${ClassName}.F_${column.constantJavaField}
 		</#if>
 	</#list>
         ), <#assign firstListField = true><#list table.columnList as column>
-		<#if column.isEdit?? && column.isEdit == 1 && (column.isNotBaseField || column.simpleJavaField == 'description')>
+		<#if column.isEdit?? && column.isEdit == 1 && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
 		<#if firstListField> <#assign firstListField = false><#else>,</#if>DEFAULT_${column.constantJavaField}
 		</#if>
 	</#list>);
@@ -166,7 +173,7 @@ public class ${ClassName}ResourceIntTest {
         int databaseSizeBeforeCreate = ${className}Service.findAll().size();
         ${ClassName}Vo ${className}Vo = ${className}Service.copyBeanToVo(${className});
         // Create the ${ClassName}
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className}Vo)))
             .andExpect(status().isOk());
@@ -174,17 +181,18 @@ public class ${ClassName}ResourceIntTest {
         // Validate the ${ClassName} in the database
         List<${ClassName}> ${className}List = ${className}Service.findAll(
             Condition.create().orderBy(${ClassName}.F_CREATEDDATE, true)
+
         );
         assertThat(${className}List).hasSize(databaseSizeBeforeCreate + 1);
         ${ClassName} test${ClassName} = ${className}List.get(${className}List.size() - 1);
     <#list table.columnList as column>
-		<#if column.isEdit?? && column.isEdit == 1 && (column.isNotBaseField || column.simpleJavaField == 'description')>
+		<#if column.isEdit?? && column.isEdit == 1 && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
 		assertThat(test${ClassName}.get${column.simpleJavaField?cap_first}()).isEqualTo(DEFAULT_${column.constantJavaField});
 		</#if>
 	</#list>
     }
 <#list table.columnList as column>
-    <#if column.isEdit?? && column.isEdit == 1 && column.unique && (column.isNotBaseField || column.simpleJavaField == 'description')>
+    <#if column.isEdit?? && column.isEdit == 1 && column.unique && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
     @Test
     @Transactional
     public void create${ClassName}WithExisting${column.simpleJavaField?cap_first}() throws Exception {
@@ -196,7 +204,7 @@ public class ${ClassName}ResourceIntTest {
             null, ${className}.get${column.simpleJavaField?cap_first}());
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className}Vo)))
             .andExpect(status().isBadRequest());
@@ -209,7 +217,7 @@ public class ${ClassName}ResourceIntTest {
 </#list>
 
 <#list table.columnList as column>
-    <#if column.isEdit?? && column.isEdit == 1 && !column.nullable && (column.isNotBaseField || column.simpleJavaField == 'description')>
+    <#if column.isEdit?? && column.isEdit == 1 && !column.nullable && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'description')>
     @Test
     @Transactional
     public void check${column.simpleJavaField?cap_first}IsRequired() throws Exception {
@@ -219,13 +227,14 @@ public class ${ClassName}ResourceIntTest {
 
         // Create the ${ClassName}, which fails.
 
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className})))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.status").value(equalTo(2)))
             .andExpect(jsonPath("$.statusName").value(equalToIgnoringCase("MSG_TYPE_WARNING")));
+
 
         List<${ClassName}> ${className}List = ${className}Service.findAll();
         assertThat(${className}List).hasSize(databaseSizeBeforeTest);
@@ -241,13 +250,13 @@ public class ${ClassName}ResourceIntTest {
         ${className}Repository.insert(${className});
 
         // Get all the ${className}List
-        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL))
+        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL+"page"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
     <#list table.columnList as column>
         <#if column.pk>
             .andExpect(jsonPath("$.data.[*].${column.simpleJavaField}").value(hasItem(${className}.get${column.simpleJavaField?cap_first}())))
-        <#elseif column.isEdit?? && column.isEdit == 1 && column.nullable && (column.isNotBaseField || column.simpleJavaField == 'description')>
+        <#elseif column.isEdit?? && column.isEdit == 1 && column.nullable && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'description')>
             .andExpect(jsonPath("$.data.[*].${column.simpleJavaField}").value(hasItem(<#if column.simpleJavaType == "Date">PublicUtil.fmtDate(DEFAULT_${column.constantJavaField})<#else>DEFAULT_${column.constantJavaField}</#if>)))
         </#if>
     </#list>;
@@ -266,13 +275,13 @@ public class ${ClassName}ResourceIntTest {
     <#list table.columnList as column>
         <#if column.pk>
             .andExpect(jsonPath("$.data.${column.simpleJavaField}").value(${className}.get${column.simpleJavaField?cap_first}()))
-        <#elseif column.isEdit?? && column.isEdit == 1 && column.nullable && (column.isNotBaseField || column.simpleJavaField == 'description')>
+        <#elseif column.isEdit?? && column.isEdit == 1 && column.nullable && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'description')>
             .andExpect(jsonPath("$.data.${column.simpleJavaField}").value(<#if column.simpleJavaType == "Date">DEFAULT_${column.constantJavaField}.getTime()<#else>DEFAULT_${column.constantJavaField}</#if>))
         </#if>
     </#list>;
     }
 <#list table.columnList as column>
-    <#if column.isEdit?? && column.isEdit == 1 && column.nullable && (column.isNotBaseField || column.simpleJavaField == 'description')>
+    <#if column.isEdit?? && column.isEdit == 1 && column.nullable && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
     @Test
     @Transactional
     public void getAll${ClassName}sBy${column.simpleJavaField?cap_first}IsEqualToSomething() throws Exception {
@@ -385,14 +394,14 @@ public class ${ClassName}ResourceIntTest {
      * Executes the search, and checks that the default entity is returned
      */
     private void default${ClassName}ShouldBeFound(QueryCondition... queryCondition) throws Exception {
-        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL).param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
+        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL+"page").param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data").isArray())
     <#list table.columnList as column>
         <#if column.pk>
             .andExpect(jsonPath("$.data.[*].${column.simpleJavaField}").value(hasItem(${className}.get${column.simpleJavaField?cap_first}())))
-        <#elseif column.isEdit?? && column.isEdit == 1 && column.nullable && (column.isNotBaseField || column.simpleJavaField == 'description')>
+        <#elseif column.isEdit?? && column.isEdit == 1 && column.nullable && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'description')>
             .andExpect(jsonPath("$.data.[*].${column.simpleJavaField}").value(hasItem(<#if column.simpleJavaType == "Date">PublicUtil.fmtDate(DEFAULT_${column.constantJavaField})<#else>DEFAULT_${column.constantJavaField}</#if>)))
         </#if>
     </#list>;
@@ -402,7 +411,7 @@ public class ${ClassName}ResourceIntTest {
      * Executes the search, and checks that the default entity is not returned
      */
     private void default${ClassName}ShouldNotBeFound(QueryCondition... queryCondition) throws Exception {
-        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL).param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
+        rest${ClassName}MockMvc.perform(get(DEFAULT_API_URL+"page").param("queryConditionJson", Json.toJSONString(Lists.newArrayList(queryCondition))))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data").isArray())
@@ -432,18 +441,18 @@ public class ${ClassName}ResourceIntTest {
         Reflections.updateObj(updated${ClassName}, Lists.newArrayList(
     <#assign firstListField = true>
     <#list table.columnList as column>
-		<#if column.isEdit?? && column.isEdit == 1 && (column.isNotBaseField || column.simpleJavaField == 'description')>
+		<#if column.isEdit?? && column.isEdit == 1 && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
 		<#if firstListField> <#assign firstListField = false><#else>,</#if>${ClassName}.F_${column.constantJavaField}
 		</#if>
 	</#list>
         ), <#assign firstListField = true><#list table.columnList as column>
-		<#if column.isEdit?? && column.isEdit == 1 && (column.isNotBaseField || column.simpleJavaField == 'description')>
+		<#if column.isEdit?? && column.isEdit == 1 && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
 		<#if firstListField> <#assign firstListField = false><#else>,</#if>UPDATED_${column.constantJavaField}
 		</#if>
 	</#list>);
 
         ${ClassName}Vo ${className}Vo = ${className}Service.copyBeanToVo(updated${ClassName});
-        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL)
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"edit")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(${className}Vo)))
             .andExpect(status().isOk());
@@ -454,7 +463,7 @@ public class ${ClassName}ResourceIntTest {
 
         ${ClassName} test${ClassName} = ${className}List.stream().filter(item->${className}.getId().equals(item.getId())).findAny().get();
     <#list table.columnList as column>
-		<#if column.isEdit?? && column.isEdit == 1 && (column.isNotBaseField || column.simpleJavaField == 'description')>
+		<#if column.isEdit?? && column.isEdit == 1 && ((column.isNotBaseField && column.isNotBaseTreeField) || column.simpleJavaField == 'name' || column.simpleJavaField == 'sort' || column.simpleJavaField == 'parentId' || column.simpleJavaField == 'description')>
 		assertThat(test${ClassName}.get${column.simpleJavaField?cap_first}()).isEqualTo(UPDATED_${column.constantJavaField});
 		</#if>
 	</#list>
@@ -471,7 +480,7 @@ public class ${ClassName}ResourceIntTest {
         int databaseSizeBeforeDelete = ${className}Service.findAll(spec).size();
 
         // Get the ${className}
-        rest${ClassName}MockMvc.perform(delete(DEFAULT_API_URL+"{id}", ${className}.getId())
+        rest${ClassName}MockMvc.perform(post(DEFAULT_API_URL+"delete/{id}", ${className}.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 

@@ -38,9 +38,14 @@ import javax.validation.Valid;
 @RequestMapping(value = "${r"${albedo.adminPath}"}/${urlPrefix}")
 public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${ClassName}Vo> {
 
-    public ${ClassName}Resource(${ClassName}Service service) {
-        super(service);
+   public ${ClassName}Resource(${ClassName}Service ${className}Service) {
+        super(${className}Service);
     }
+	@GetMapping(value = "/")
+	@Timed
+	public String list() {
+		return "${lastPackageName}/${viewPrefix}List";
+	}
 
 	/**
 	 * GET / : get all ${className}.
@@ -49,7 +54,7 @@ public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${
 	 *            the pagination information
 	 * @return the ResponseEntity with status 200 (OK) and with body all ${className}
 	 */
-	@GetMapping(value = "/")
+	@GetMapping(value = "/page")
 	@Timed
 	public ResponseEntity getPage(PageModel pm) {
 	    service.findPage(pm, SecurityUtil.dataScopeFilter());
@@ -57,21 +62,30 @@ public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${
 		return ResultBuilder.buildObject(json);
 	}
 
+	@GetMapping(value = "/edit")
+	@Timed
+	public String form(${ClassName}Vo ${className}Vo) {
+		if(${className}Vo == null){
+			throw new RuntimeMsgException(PublicUtil.toAppendStr("查询${functionNameSimple}失败，原因：无法查找到编号为[", request().getParameter("id"), "]的${functionNameSimple}"));
+		}
+		return "${lastPackageName}/${viewPrefix}Form";
+	}
+
 	/**
 	 * POST / : Save a ${className}Vo.
 	 *
 	 * @param ${className}Vo the HTTP ${className}
 	 */
-	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/edit", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity save(@Valid @RequestBody ${ClassName}Vo ${className}Vo) {
 		log.debug("REST request to save ${ClassName}Form : {}", ${className}Vo);
 		<#assign firstListField = true><#list table.columnList as column>
 			<#if column.unique && !column.pk>
-		<#if firstListField><#assign firstListField = false>${ClassName}Vo </#if>${className}Validate = new ${ClassName}Vo(${className}Vo.getId());
+		<#if firstListField><#assign firstListField = false>${ClassName} </#if>${className}Validate = new ${ClassName}(${className}Vo.getId());
 		${className}Validate.set${column.simpleJavaField?cap_first}(${className}Vo.get${column.simpleJavaField?cap_first}());
 		if (<#if column.nullable>PublicUtil.isNotEmpty(${className}Vo.get${column.simpleJavaField?cap_first}()) && </#if>!checkByProperty(${className}Validate)) {
-			throw new RuntimeMsgException(PublicUtil.toAppendStr("保存${functionNameSimple}'", ${className}Vo.get${column.simpleJavaField?cap_first}(),"'失败，${column.title }已存在"));
+			throw new RuntimeMsgException(PublicUtil.toAppendStr("保存${functionNameSimple}'", ${className}Vo.get${column.simpleJavaField?cap_first}(),"'失败，${column.comments }已存在"));
 		}
 			</#if>
 		</#list>
@@ -86,8 +100,8 @@ public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${
 	 * @param ids the id of the ${className} to delete
 	 * @return the ResponseEntity with status 200 (OK)
 	 */
-	@DeleteMapping(value = "/{ids:" + Globals.LOGIN_REGEX
-			+ "}")
+	@PostMapping(value = "/delete/{ids:" + Globals.LOGIN_REGEX
+			+ "}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity delete(@PathVariable String ids) {
 		log.debug("REST request to delete ${ClassName}: {}", ids);
@@ -100,8 +114,8 @@ public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${
 	 * @param ids the id of the ${className} to lock
 	 * @return the ResponseEntity with status 200 (OK)
 	 */
-	@PutMapping(value = "/{ids:" + Globals.LOGIN_REGEX
-			+ "}")
+	@PostMapping(value = "/lock/{ids:" + Globals.LOGIN_REGEX
+			+ "}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity lockOrUnLock(@PathVariable String ids) {
 		log.debug("REST request to lockOrUnLock ${ClassName}: {}", ids);
