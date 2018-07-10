@@ -72,7 +72,9 @@ public class OrgResource extends TreeVoResource<OrgService, OrgVo> {
             throw new RuntimeMsgException(PublicUtil.toAppendStr("查询模块管理失败，原因：无法查找到编号区域"));
         }
         if (PublicUtil.isNotEmpty(orgVo.getParentId())) {
-            service.findOptionalTopByParentId(orgVo.getParentId()).ifPresent(item -> orgVo.setSort(item.getSort() + 30));
+            service.findOptionalTopByParentId(orgVo.getParentId()).ifPresent(item -> {
+                if(orgVo.getSort() == null)orgVo.setSort(item.getSort() + 30);
+            });
             service.findOneById(orgVo.getParentId()).ifPresent(item -> orgVo.setParentName(item.getName()));
         }
         if (orgVo.getSort() == null) {

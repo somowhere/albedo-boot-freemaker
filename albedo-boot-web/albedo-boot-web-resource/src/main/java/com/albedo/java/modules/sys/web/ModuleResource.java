@@ -86,7 +86,9 @@ public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
         }
         if (PublicUtil.isNotEmpty(moduleVo.getParentId())) {
             service.findOneById(moduleVo.getParentId()).ifPresent(item -> moduleVo.setParentName(item.getName()));
-            service.findOptionalTopByParentId(moduleVo.getParentId()).ifPresent(item -> moduleVo.setSort(item.getSort() + 30));
+            service.findOptionalTopByParentId(moduleVo.getParentId()).ifPresent(item -> {
+                if(moduleVo.getSort() == null)moduleVo.setSort(item.getSort() + 30);
+            });
         }
         if (moduleVo.getSort() == null) {
             moduleVo.setSort(30);

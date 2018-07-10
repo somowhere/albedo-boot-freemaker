@@ -95,7 +95,10 @@ public class DictResource extends TreeVoResource<DictService, DictVo> {
             throw new RuntimeMsgException("无法获取字典数据");
         }
         if (PublicUtil.isNotEmpty(dictVo.getParentId())) {
-            service.findOptionalTopByParentId(dictVo.getParentId()).ifPresent(item -> dictVo.setSort(item.getSort() + 30));
+            service.findOptionalTopByParentId(dictVo.getParentId()).ifPresent(item ->
+            {
+                if(dictVo.getSort() == null)dictVo.setSort(item.getSort() + 30);
+            });
             service.findOneById(dictVo.getParentId()).ifPresent(item -> dictVo.setParentName(item.getName()));
         }
         if (dictVo.getSort() == null) {

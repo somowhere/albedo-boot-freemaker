@@ -86,7 +86,10 @@ public class AreaResource extends TreeVoResource<AreaService, AreaVo> {
             throw new RuntimeMsgException(PublicUtil.toAppendStr("查询模块管理失败，原因：无法查找到编号区域"));
         }
         if (PublicUtil.isNotEmpty(areaVo.getParentId())) {
-            service.findOptionalTopByParentId(areaVo.getParentId()).ifPresent(item -> areaVo.setSort(item.getSort() + 30));
+            service.findOptionalTopByParentId(areaVo.getParentId()).ifPresent(item ->
+                {
+                    if(areaVo.getSort() == null)areaVo.setSort(item.getSort() + 30);
+                });
             service.findOneById(areaVo.getParentId()).ifPresent(item -> areaVo.setParentName(item.getName()));
         }
         if (areaVo.getSort() == null) {
