@@ -110,4 +110,8 @@ public abstract class DataService<Repository extends BaseRepository<T, PK>, T ex
     public long findCount() {
         return repository.selectCount(null);
     }
+
+    public void deleteAll(){
+        repository.delete(null);
+    }
 }
