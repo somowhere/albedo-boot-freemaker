@@ -50,23 +50,23 @@
     <select id="addRoleOrgs" parameterType="com.albedo.java.modules.sys.domain.Role">
         insert into sys_role_org_t (role_id, org_id)
         values
-        <foreach collection="role.orgIdList" item="item" separator=",">
-            (#{role.id},#{item})
+        <foreach collection="orgIdList" item="item" separator=",">
+            (#{id},#{item})
         </foreach>
     </select>
 
-    <select id="deleteRoleOrgs" parameterType="com.albedo.java.modules.sys.domain.Role">
-        DELETE FROM sys_role_org_t where role_id=#{role.id}
+    <select id="deleteRoleOrgs">
+        DELETE FROM sys_role_org_t where role_id=#{roleId}
     </select>
 
     <select id="addRoleModules" parameterType="com.albedo.java.modules.sys.domain.Role">
         insert into sys_role_module_t (role_id, module_id)
         values
-        <foreach collection="role.moduleIdList" item="item" separator=",">
-            (#{role.id},#{item})
+        <foreach collection="moduleIdList" item="item" separator=",">
+            (#{id},#{item})
         </foreach>
     </select>
-    <select id="deleteRoleModules" parameterType="com.albedo.java.modules.sys.domain.Role">
-        DELETE FROM sys_role_module_t where role_id=#{role.id}
+    <select id="deleteRoleModules">
+        DELETE FROM sys_role_module_t where role_id=#{roleId}
     </select>
 </mapper>

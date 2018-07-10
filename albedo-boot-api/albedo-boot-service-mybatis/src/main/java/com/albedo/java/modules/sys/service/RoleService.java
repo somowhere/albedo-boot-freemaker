@@ -4,11 +4,15 @@ import com.albedo.java.common.persistence.DynamicSpecifications;
 import com.albedo.java.common.persistence.SpecificationDetail;
 import com.albedo.java.common.persistence.domain.BaseEntity;
 import com.albedo.java.common.persistence.service.DataVoService;
+import com.albedo.java.modules.sys.domain.Module;
+import com.albedo.java.modules.sys.domain.Org;
 import com.albedo.java.modules.sys.domain.Role;
 import com.albedo.java.modules.sys.domain.User;
+import com.albedo.java.modules.sys.repository.ModuleRepository;
 import com.albedo.java.modules.sys.repository.OrgRepository;
 import com.albedo.java.modules.sys.repository.RoleRepository;
 import com.albedo.java.util.PublicUtil;
+import com.albedo.java.util.base.Collections3;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.vo.sys.RoleVo;
@@ -29,6 +33,8 @@ public class RoleService extends DataVoService<RoleRepository, Role, String, Rol
 
     @Resource
     OrgRepository orgRepository;
+    @Resource
+    ModuleRepository moduleRepository;
 
     @Override
     public RoleVo copyBeanToVo(Role role) {
@@ -43,10 +49,16 @@ public class RoleService extends DataVoService<RoleRepository, Role, String, Rol
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
     public RoleVo findOneVo(String id) {
-        Role role = findOne(id);
+        Role role = findRelationOne(id);
         if(role!=null){
             role.setOrg(orgRepository.selectById(role.getOrgId()));
         }
+        role.setModuleIdList(
+                Collections3.extractToList(moduleRepository.selectListByRoleId(role.getId()),
+                        Module.F_ID));
+        role.setOrgIdList(
+                Collections3.extractToList(orgRepository.selectListByRoleId(role.getId()),
+                        Org.F_ID));
         return copyBeanToVo(role);
     }
     @Transactional(readOnly = true, rollbackFor = Exception.class)
@@ -76,12 +88,12 @@ public class RoleService extends DataVoService<RoleRepository, Role, String, Rol
         copyVoToBean(roleVo, role);
         role = super.save(role);
         if (PublicUtil.isNotEmpty(role.getModuleIdList())) {
-            repository.deleteRoleModules(role);
+            repository.deleteRoleModules(role.getId());
             repository.addRoleModules(role);
         }
 
         if (PublicUtil.isNotEmpty(role.getOrgIdList())) {
-            repository.deleteRoleOrgs(role);
+            repository.deleteRoleOrgs(role.getId());
             repository.addRoleOrgs(role);
         }
     }

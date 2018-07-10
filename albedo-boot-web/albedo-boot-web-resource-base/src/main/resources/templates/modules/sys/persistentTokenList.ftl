@@ -66,7 +66,7 @@
                     },
                     "columns": [
                         {
-                            data: 'userLoginId'
+                            data: 'userLoginId',name:"user.loginId"
                         }
                         , {
                             data: 'ipAddress'

@@ -98,6 +98,8 @@ public class QueryWrapperUtil {
 
                 }
             }
+        }else{
+            entityWrapper.where("1=1");
         }
         List<Order> orders = specificationDetail.getOrders();
         if(PublicUtil.isNotEmpty(orders)){
@@ -107,6 +109,7 @@ public class QueryWrapperUtil {
                 entityWrapper.orderBy(fieldName, Order.Direction.asc.equals(order.getDirection()));
             }
         }
+
         return entityWrapper;
     }
 }

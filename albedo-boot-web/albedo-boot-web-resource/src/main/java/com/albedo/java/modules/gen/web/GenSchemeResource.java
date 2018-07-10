@@ -119,7 +119,7 @@ public class GenSchemeResource extends DataVoResource<GenSchemeService, GenSchem
             SecurityUtil.clearUserJedisCache();
         }
         // 生成代码
-        if (genSchemeVo.getGenCode()) {
+        if (genSchemeVo.getGenCode()!=null && genSchemeVo.getGenCode()) {
             service.generateCode(genSchemeVo);
         }
         return ResultBuilder.buildOk("保存", genSchemeVo.getName(), "成功");

@@ -40,4 +40,7 @@
         ORDER BY a.sort_
     </select>
 
+    <select id="selectListByRoleId" resultType="com.albedo.java.modules.sys.domain.Module">
+        select <include refid="moduleColumns"/> from sys_module_t a LEFT JOIN sys_module_t p on p.id_=a.parent_id LEFT JOIN sys_role_module_t b on a.id_=b.module_id where b.role_id=#{id}
+    </select>
 </mapper>

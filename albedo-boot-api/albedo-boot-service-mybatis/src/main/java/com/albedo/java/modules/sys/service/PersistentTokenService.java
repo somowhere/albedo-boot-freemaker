@@ -38,11 +38,10 @@ public class PersistentTokenService extends BaseService<PersistentTokenRepositor
     }
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
-    public PageModel<PersistentToken>  findPage(PageModel<PersistentToken> pm, List<QueryCondition> authQueryConditions) {
+    public PageModel<PersistentToken>  findPage(PageModel<PersistentToken> pm) {
         //拼接查询动态对象
         SpecificationDetail<PersistentToken> spec = DynamicSpecifications.
             buildSpecification(pm.getQueryConditionJson());
-        spec.setPersistentClass(getPersistentClass()).orAll(authQueryConditions);
         //动态生成sql分页查询
         findRelationPage(pm, spec);
         return pm;

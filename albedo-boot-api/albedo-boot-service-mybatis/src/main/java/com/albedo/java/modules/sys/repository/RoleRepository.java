@@ -13,13 +13,13 @@ import java.util.Set;
  */
 public interface RoleRepository extends BaseRepository<Role, String> {
 
-    void deleteRoleOrgs(@Param("role") Role role);
+    void deleteRoleOrgs(String roleId);
 
-    void addRoleOrgs(@Param("role") Role role);
+    void addRoleOrgs(Role role);
 
-    void deleteRoleModules(@Param("role") Role role);
+    void deleteRoleModules(String roleId);
 
-    void addRoleModules(@Param("role") Role role);
+    void addRoleModules(Role role);
 
     List<Role> selectListByUserId(String userId);
 

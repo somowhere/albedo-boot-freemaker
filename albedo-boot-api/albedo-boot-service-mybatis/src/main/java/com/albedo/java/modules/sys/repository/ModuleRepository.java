@@ -2,6 +2,7 @@ package com.albedo.java.modules.sys.repository;
 
 import com.albedo.java.common.persistence.repository.TreeRepository;
 import com.albedo.java.modules.sys.domain.Module;
+import com.albedo.java.modules.sys.domain.Role;
 import com.albedo.java.modules.sys.domain.User;
 import org.springframework.data.repository.query.Param;
 
@@ -13,5 +14,8 @@ import java.util.List;
 public interface ModuleRepository extends TreeRepository<Module, String> {
 
     List<Module> findAllAuthByUser(String userId);
+
+
+    List<Module> selectListByRoleId(String roleId);
 
 }

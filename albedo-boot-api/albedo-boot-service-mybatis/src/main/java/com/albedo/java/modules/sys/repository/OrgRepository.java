@@ -1,6 +1,7 @@
 package com.albedo.java.modules.sys.repository;
 
 import com.albedo.java.common.persistence.repository.TreeRepository;
+import com.albedo.java.modules.sys.domain.Module;
 import com.albedo.java.modules.sys.domain.Org;
 
 import java.util.List;
@@ -11,4 +12,5 @@ import java.util.List;
 public interface OrgRepository extends TreeRepository<Org, String> {
 
 
+    List<Org> selectListByRoleId(String roleId);
 }

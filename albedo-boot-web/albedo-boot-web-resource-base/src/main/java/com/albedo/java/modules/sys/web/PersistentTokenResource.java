@@ -44,7 +44,7 @@ public class PersistentTokenResource extends BaseResource {
      */
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public ResponseEntity getPage(PageModel pm) {
-        persistentTokenService.findPage(pm, SecurityUtil.dataScopeFilter());
+        persistentTokenService.findPage(pm);
         JSON rs = JsonUtil.getInstance().setRecurrenceStr("user_loginId").toJsonObject(pm);
         return ResultBuilder.buildObject(rs);
     }

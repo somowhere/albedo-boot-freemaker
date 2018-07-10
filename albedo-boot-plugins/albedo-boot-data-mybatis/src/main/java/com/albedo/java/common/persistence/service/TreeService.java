@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.baomidou.mybatisplus.enums.SqlLike.CUSTOM;
+
 
 @Transactional
 public abstract class TreeService<Repository extends TreeRepository<T, PK>, T extends TreeEntity, PK extends Serializable>
@@ -74,7 +76,7 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
     }
     public List<T> findAllByIdOrParentIdsLike(PK id, String likeParentIds){
         return repository.findRelationList(
-            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_PARENTIDS, likeParentIds).or()
+            Condition.create().like(getClassNameProfix()+TreeEntity.F_SQL_PARENTIDS, likeParentIds, CUSTOM).or()
                 .eq(getClassNameProfix()+TreeEntity.F_SQL_ID, id)
         );
     }
@@ -93,7 +95,8 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
     }
 
     public int operateStatusById(PK id, String likeParentIds, Integer status, String lastModifiedBy) {
-        List<T> entityList = findAllByIdOrParentIdsLike(id, PublicUtil.toAppendStr(likeParentIds, id, ",", "%"));
+        List<T> entityList = findAllByIdOrParentIdsLike(id,
+                PublicUtil.toAppendStr(likeParentIds, id, ",", "%"));
 //        Assert.assertNotNull(entityList, "无法查询到对象信息");
         Assert.assertNotNull(id, "id 信息为空，操作失败");
         Assert.assertNotNull(likeParentIds, "likeParentIds 信息为空，操作失败");
@@ -197,7 +200,7 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
         Assert.assertNotNull(id, "id 信息为空，操作失败");
         Assert.assertNotNull(lastModifiedBy, "lastModifiedBy 信息为空，操作失败");
         T entity = repository.selectById(id);
-        operateStatusById(id, PublicUtil.toAppendStr(entity.getParentIds(), entity.getId(),","), BaseEntity.FLAG_DELETE, lastModifiedBy);
+        operateStatusById(id, entity.getParentIds(), BaseEntity.FLAG_DELETE, lastModifiedBy);
     }
     /**
      * 锁定/启用，更新子节点
@@ -211,7 +214,7 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
         Assert.assertNotNull(lastModifiedBy, "lastModifiedBy 信息为空，操作失败");
         T entity = repository.selectById(id);
         Assert.assertNotNull(entity, "对象 " + id + " 信息为空，操作失败");
-        operateStatusById(id, PublicUtil.toAppendStr(entity.getParentIds(), entity.getId(),","), BaseEntity.FLAG_NORMAL.equals(entity.getStatus()) ? BaseEntity.FLAG_UNABLE : BaseEntity.FLAG_NORMAL, lastModifiedBy);
+        operateStatusById(id, entity.getParentIds(), BaseEntity.FLAG_NORMAL.equals(entity.getStatus()) ? BaseEntity.FLAG_UNABLE : BaseEntity.FLAG_NORMAL, lastModifiedBy);
         log.debug("LockOrUnLock Entity: {}", entity);
     }
     /**

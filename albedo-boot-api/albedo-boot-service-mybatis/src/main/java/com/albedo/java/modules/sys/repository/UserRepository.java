@@ -15,7 +15,7 @@ public interface UserRepository extends BaseRepository<User, String> {
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     User selectUserByLoginId(String loginId);
 
-    void deleteUserRoles(@Param("userId") String userId);
+    void deleteUserRoles(String userId);
 
     void addUserRoles(User user);
 
