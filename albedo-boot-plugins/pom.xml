@@ -15,7 +15,7 @@
         <module>albedo-boot-swagger</module>
         <module>albedo-boot-quartz</module>
         <module>albedo-boot-data-mybatis</module>
-        <module>albedo-boot-data-hibernate</module>
+        <!--<module>albedo-boot-data-hibernate</module>-->
     </modules>
 
 </project>

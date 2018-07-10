@@ -112,7 +112,7 @@ public class DataService<Repository extends DataRepository<T, PK>, T extends Dat
     public long findCount(SpecificationDetail<T> specificationDetail) {
         return repository.count(specificationDetail);
     }
-    public long findAll().size() {
+    public long findCount() {
         return repository.count();
     }
 }
