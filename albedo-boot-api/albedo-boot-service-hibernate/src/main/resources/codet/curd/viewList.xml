@@ -36,9 +36,9 @@
 						<#elseif c.showType == "dateselect">
 							<#if c.queryType == "between">
 						    <div class="input-group input-medium date-picker input-daterange">
-                                <input type="text" class="form-control" name="${c.javaFieldId}" searchItem="searchItem" operate="${c.queryType}" attrType="Date">
+                                <input type="text" class="form-control" name="${c.javaFieldId}" searchItem="searchItem" operate="${c.queryType}" attrType="Date" />
                                 <span class="input-group-addon"> 到 </span>
-                                <input type="text" for-date="${c.javaFieldId}" class="form-control" name="${c.javaFieldId}End">
+                                <input type="text" for-date="${c.javaFieldId}" class="form-control"name="${c.javaFieldId}End" />
                             </div>
                             <#else>
                             <div class="input-group date date-time-picker"><input type="text" name="${c.javaFieldId}" searchItem="searchItem" operate="${c.queryType}" attrType="${c.javaType}" readonly class="form-control" value="${"$"}{(${className}.${c.javaFieldId})!}"><span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span></div>
