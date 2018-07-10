@@ -64,7 +64,7 @@ public class ${ClassName} extends IdEntity<${ClassName}, ${table.pkJavaType}> {
     @ManyToOne(name = ${ClassName}.F_SQL_${column.constantJavaField})
 	@TableField(exist = false)
 	private ${column.simpleJavaType} ${column.simpleJavaField};
-	<#else>${column.hibernateValidatorExprssion}@TableField("${column.name}")<#if column.unique>@SearchField</#if><#if column.dictType?? && column.dictType != "">@DictType(name="${column.dictType}")</#if>
+	<#else>${column.hibernateValidatorExprssion}@TableField(${ClassName}.F_SQL_${column.constantJavaField})<#if column.unique>@SearchField</#if><#if column.dictType?? && column.dictType != "">@DictType(name="${column.dictType}")</#if>
 	private ${column.simpleJavaType} ${column.simpleJavaField};
 			</#if>
 		</#if>
