@@ -62,8 +62,7 @@ public class TaskScheduleJobService extends DataService<TaskScheduleJobRepositor
     public PageModel<TaskScheduleJob> findAll(PageModel<TaskScheduleJob> pm, List<QueryCondition> queryConditions) {
         SpecificationDetail<TaskScheduleJob> spec = DynamicSpecifications.
                 buildSpecification(TaskScheduleJob.class, pm.getQueryConditionJson(),
-                        queryConditions,
-                        QueryCondition.ne(TaskScheduleJob.F_STATUS, TaskScheduleJob.FLAG_DELETE));
+                        queryConditions);
         return findPage(pm, spec);
     }
 
