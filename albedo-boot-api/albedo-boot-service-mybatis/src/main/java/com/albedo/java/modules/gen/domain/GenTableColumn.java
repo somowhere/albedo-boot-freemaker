@@ -29,6 +29,7 @@ public class GenTableColumn extends IdEntity<GenTableColumn, String> implements 
 
     public static final String F_GENTABLEID = "genTableId";
     public static final String F_SORT = "sort";
+    public static final String F_SQL_SORT = "sort_";
 
     public static final String F_SQL_GENTABLEID = "gen_table_id";
     @TableField(F_SQL_GENTABLEID)
@@ -70,7 +71,7 @@ public class GenTableColumn extends IdEntity<GenTableColumn, String> implements 
     private String showType; // 字段生成方案（文本框、文本域、下拉框、复选框、单选框、字典选择、人员选择、部门选择、区域选择）
     @TableField("dict_type")
     private String dictType; // 字典类型
-    @TableField("sort_")
+    @TableField(F_SQL_SORT)
     private Integer sort; // 排序（升序）
 
     @TableField(exist = false)

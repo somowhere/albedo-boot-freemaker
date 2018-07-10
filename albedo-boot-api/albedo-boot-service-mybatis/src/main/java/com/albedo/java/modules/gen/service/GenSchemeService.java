@@ -13,6 +13,7 @@ import com.albedo.java.modules.sys.domain.Dict;
 import com.albedo.java.util.GenUtil;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.StringUtil;
+import com.albedo.java.util.base.Assert;
 import com.albedo.java.util.base.Collections3;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.vo.gen.GenSchemeVo;
@@ -67,6 +68,8 @@ public class GenSchemeService extends DataVoService<GenSchemeRepository, GenSche
                 genTableVo.getId()))
                 .stream().map(item->genTableColumnService.copyBeanToVo((GenTableColumn) item)).collect(Collectors.toList())
         );
+        Assert.assertIsTrue(PublicUtil.isNotEmpty(genTableVo.getColumnList()), genTableVo.getName()+"列为空");
+        Assert.assertIsTrue(PublicUtil.isNotEmpty(genTableVo.getPkList()), genTableVo.getName()+"主键为空");
         Collections.sort(genTableVo.getColumnList());
 
         // 获取所有代码模板
