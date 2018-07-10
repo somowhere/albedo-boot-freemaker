@@ -39,7 +39,15 @@
 						<#elseif c.showType == "select" || c.showType == "checkbox" || c.showType == "radio">
 							<<@at/>albedo.form name="${c.javaFieldId}" searchItem="searchItem" dictCode="${c.dictType}" boxType="${c.showType}" value="${"$"}{(${className}.${c.javaFieldId})!}" operate="${c.queryType}" attrType="${c.javaType}"> </<@at/>albedo.form></div>
 						<#elseif c.showType == "dateselect">
-							<div class="input-group date date-time-picker"><input type="text" name="${c.javaFieldId}" searchItem="searchItem" operate="${c.queryType}" attrType="${c.javaType}" readonly class="form-control" value="${"$"}{(${className}.${c.javaFieldId})!}"><span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span></div>
+							<#if c.queryType == "between">
+						    <div class="input-group input-medium date-picker input-daterange">
+                                <input type="text" class="form-control" name="${c.javaFieldId}" searchItem="searchItem" operate="${c.queryType}" attrType="Date">
+                                <span class="input-group-addon"> 到 </span>
+                                <input type="text" for-date="${c.javaFieldId}" class="form-control" name="${c.javaFieldId}End">
+                            </div>
+                            <#else>
+                            <div class="input-group date date-time-picker"><input type="text" name="${c.javaFieldId}" searchItem="searchItem" operate="${c.queryType}" attrType="${c.javaType}" readonly class="form-control" value="${"$"}{(${className}.${c.javaFieldId})!}"><span class="input-group-btn"><button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button></span></div>
+                            </#if>
 						<#elseif c.showType == "userselect">
 							<<@at/>albedo.treeSelect searchItem="searchItem" operate="${c.queryType}" name="${c.simpleJavaField}Id" allowClear="true" labelName="${c.javaFieldShowName}" value="<@jspEl />{(${className}.${c.simpleJavaField}Id)!}" labelValue="<@jspEl />{(${className}.${c.javaFieldName})!}"
 							title="选择用户" url="<@jspEl/>{ctx}/sys/org/findTreeData?showType=3" notAllowSelectParent="true"> </<@at/>albedo.treeSelect>
