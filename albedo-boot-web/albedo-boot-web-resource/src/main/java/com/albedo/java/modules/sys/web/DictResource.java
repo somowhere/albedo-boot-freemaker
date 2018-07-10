@@ -144,7 +144,7 @@ public class DictResource extends TreeVoResource<DictService, DictVo> {
     @Timed
     public ResponseEntity lockOrUnLock(@PathVariable String ids) {
         log.debug("REST request to lockOrUnLock User: {}", ids);
-        service.lockOrUnLock(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.lockOrUnLockByParentIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)), SecurityUtil.getCurrentUserId());
         DictUtil.clearCache();
         return ResultBuilder.buildOk("操作成功");
     }

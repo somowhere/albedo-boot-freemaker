@@ -134,7 +134,7 @@ public class AreaResource extends TreeVoResource<AreaService, AreaVo> {
     @Timed
     public ResponseEntity lockOrUnLock(@PathVariable String ids) {
         log.debug("REST request to lockOrUnLock Area: {}", ids);
-        service.lockOrUnLock(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)));
+        service.lockOrUnLockByParentIds(Lists.newArrayList(ids.split(StringUtil.SPLIT_DEFAULT)), SecurityUtil.getCurrentUserId());
         return ResultBuilder.buildOk("操作区域成功");
     }
 
