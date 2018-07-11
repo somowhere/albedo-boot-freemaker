@@ -75,6 +75,9 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
         return classNameProfix;
     }
 
+    public String getClassNameProfix(String property){
+        return classNameProfix+property;
+    }
 
     public EntityWrapper createEntityWrapper(List<Order> orders,QueryCondition... queryConditions){
         return DynamicSpecifications.

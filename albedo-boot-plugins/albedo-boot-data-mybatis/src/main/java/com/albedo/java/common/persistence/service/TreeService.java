@@ -47,39 +47,40 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
 
     public List<T> findAllByParentIdsLike(String parentIds){
         return repository.findRelationList(
-            Condition.create().like(getClassNameProfix()+TreeEntity.F_SQL_PARENTIDS, parentIds));
+            Condition.create().like(getClassNameProfix(TreeEntity.F_SQL_PARENTIDS), parentIds));
     }
 
     public List<T> findAllByParentIdAndStatusNot(String parentId, Integer status){
         return repository.findRelationList(
-            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_PARENTID, parentId).ne(getClassNameProfix()+TreeEntity.F_STATUS, status)
+            Condition.create().eq(getClassNameProfix(TreeEntity.F_SQL_PARENTID), parentId)
+                .ne(getClassNameProfix(TreeEntity.F_STATUS), status)
         );
 
     }
 
     public List<T> findAllByStatusNot(Integer status){
-        return repository.findRelationList(Condition.create().ne(getClassNameProfix()+TreeEntity.F_SQL_STATUS, status));
+        return repository.findRelationList(Condition.create().ne(getClassNameProfix(TreeEntity.F_SQL_STATUS), status));
 
     }
 
     public List<T> findTop1ByParentIdAndStatusNotOrderBySortDesc(String parentId, Integer status){
 
         return repository.findRelationList(
-            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_PARENTID, parentId)
-                .ne(getClassNameProfix()+TreeEntity.F_SQL_STATUS, status).orderBy(getClassNameProfix()+TreeEntity.F_SQL_SORT, false)
+            Condition.create().eq(getClassNameProfix(TreeEntity.F_SQL_PARENTID), parentId)
+                .ne(getClassNameProfix(TreeEntity.F_SQL_STATUS), status).orderBy(getClassNameProfix(TreeEntity.F_SQL_SORT), false)
         );
 
     }
     public List<T> findAllByStatusOrderBySort(Integer status) {
         return repository.findRelationList(
-            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_STATUS, status)
-                .orderBy(getClassNameProfix()+TreeEntity.F_SQL_SORT, true)
+            Condition.create().eq(getClassNameProfix(TreeEntity.F_SQL_STATUS), status)
+                .orderBy(getClassNameProfix(TreeEntity.F_SQL_SORT), true)
         );
     }
     public List<T> findAllByIdOrParentIdsLike(PK id, String likeParentIds){
         return repository.findRelationList(
-            Condition.create().like(getClassNameProfix()+TreeEntity.F_SQL_PARENTIDS, likeParentIds, CUSTOM).or()
-                .eq(getClassNameProfix()+TreeEntity.F_SQL_ID, id)
+            Condition.create().like(getClassNameProfix(TreeEntity.F_SQL_PARENTIDS), likeParentIds, CUSTOM).or()
+                .eq(getClassNameProfix(TreeEntity.F_SQL_ID), id)
         );
     }
     /**
