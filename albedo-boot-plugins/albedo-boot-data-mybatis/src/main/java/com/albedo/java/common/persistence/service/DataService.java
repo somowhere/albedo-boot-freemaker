@@ -97,7 +97,7 @@ public abstract class DataService<Repository extends BaseRepository<T, PK>, T ex
         if (PublicUtil.isNotEmpty(authQueryConditions)) {
             specificationDetail.orAll(authQueryConditions);
         }
-        return findPage(pm, specificationDetail);
+        return findRelationPage(pm, specificationDetail);
     }
 
     public List<ComboData> findJson(ComboSearch comboSearch) {
