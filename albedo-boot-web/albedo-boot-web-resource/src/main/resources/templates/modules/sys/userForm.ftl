@@ -60,6 +60,14 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label col-md-3">姓名<span class="required">*</span>
+                    </label>
+                    <div class="col-md-5">
+                        <input type="text" name="name" value="${(userVo.name)! }"
+                               maxlength="64" data-required="1" class="form-control required"/>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-md-3 control-label">联系电话</label>
                     <div class="col-md-5">
                         <input name="phone" value="${(userVo.phone)! }" htmlEscape="false"
