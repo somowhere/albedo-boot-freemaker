@@ -2,8 +2,12 @@ package com.albedo.java.modules.sys.repository;
 
 import com.albedo.java.common.persistence.repository.BaseRepository;
 import com.albedo.java.modules.sys.domain.User;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.query.Param;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Spring Data JPA repository for the User entity.
@@ -18,5 +22,7 @@ public interface UserRepository extends BaseRepository<User, String> {
     void deleteUserRoles(String userId);
 
     void addUserRoles(User user);
+
+    List<User> selectRelationPage(RowBounds rowBounds, @Param("ew") Wrapper<User> wrapper);
 
 }

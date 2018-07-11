@@ -10,7 +10,6 @@ import com.albedo.java.web.listener.ContextInitListener;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-import io.undertow.UndertowOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,13 +103,13 @@ public class WebConfigurer extends WebMvcConfigurerAdapter implements ServletCon
          * See the AlbedoProperties class and your application-*.yml configuration files
          * for more information.
          */
-        if (albedoProperties.getHttp().getVersion().equals(AlbedoProperties.Http.Version.V_2_0) &&
-                container instanceof UndertowEmbeddedServletContainerFactory) {
-
-            ((UndertowEmbeddedServletContainerFactory) container)
-                    .addBuilderCustomizers(builder ->
-                            builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
-        }
+//        if (albedoProperties.getHttp().getVersion().equals(AlbedoProperties.Http.Version.V_2_0) &&
+//                container instanceof UndertowEmbeddedServletContainerFactory) {
+//
+//            ((UndertowEmbeddedServletContainerFactory) container)
+//                    .addBuilderCustomizers(builder ->
+//                            builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
+//        }
 
     }
 

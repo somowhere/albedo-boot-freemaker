@@ -23,13 +23,13 @@
                     <div class="form-group">
                         <label class="input-label" for="loginId">登录Id </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="loginId" name="loginId"
-                               analytiColumnPrefix="a"
-                               placeholder="..."></div>
+                               realName="a.login_id"
+                               placeholder="..." /></div>
                     <div class="form-group">
                         <label class="input-label" for="email">邮箱</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="email" name="email"
-                               analytiColumnPrefix="a"
-                               placeholder="...">
+                               realName="a.email_"
+                               placeholder="..." />
                     </div>
                     <div class="form-group">
                         <label class="input-label">状态</label>
@@ -53,7 +53,7 @@
                         <th width="10%" colspan="1"> 所属组织</th>
                         <th width="10%" colspan="1"> 登录Id</th>
                         <th width="10%"> 邮箱</th>
-                    <#--<th width="20%"> 拥有角色</th>-->
+                        <th width="20%"> 拥有角色</th>
                         <th width="10%"> 状态</th>
                         <th width="10%"> 修改时间</th>
                         <th width="10%"> 操作</th>
@@ -76,11 +76,10 @@
                         url: "${ctx}/sys/user/page"
                     },
                     "columns": [
-                        {data: "orgName", name: "org.name"}, {data: "loginId"},
+                        {data: "orgName"}, {data: "loginId"},
                         {data: "email"},
-//                        {data: "roleNames", orderable: false},
-                        {
-                            data: "status", render: function (data, type, row) {
+                        {data: "roleNames", orderable: false},
+                        {data: "status", render: function (data, type, row) {
                             var cssClass = (data == "正常" ? "info" : "warning");
                             return '<span class="label label-sm label-' + cssClass + '">' + data + '</span>';
                         }

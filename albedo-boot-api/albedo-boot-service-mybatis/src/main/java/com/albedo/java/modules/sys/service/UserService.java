@@ -1,6 +1,7 @@
 package com.albedo.java.modules.sys.service;
 
 import com.albedo.java.common.persistence.DynamicSpecifications;
+import com.albedo.java.common.persistence.PageQuery;
 import com.albedo.java.common.persistence.SpecificationDetail;
 import com.albedo.java.common.persistence.service.DataVoService;
 import com.albedo.java.modules.sys.domain.User;
@@ -13,6 +14,8 @@ import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.vo.sys.UserVo;
 import com.baomidou.mybatisplus.mapper.Condition;
+import com.baomidou.mybatisplus.mapper.SqlHelper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,12 +133,14 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         //拼接查询动态对象
         SpecificationDetail<User> spec = DynamicSpecifications.
                 buildSpecification(pm.getQueryConditionJson(),
-//                        QueryCondition.ne(User.F_STATUS, User.FLAG_DELETE),
-                        QueryCondition.ne(User.F_ID,  "1"));
-        spec.setPersistentClass(getPersistentClass()).orAll(authQueryConditions);
+                        QueryCondition.ne("a.status_", User.FLAG_DELETE),
+                        QueryCondition.ne("a.id_",  "1"));
+        spec.orAll(authQueryConditions);
         //动态生成sql分页查询
-        findRelationPage(pm, spec);
-
+//        findRelationPage(pm, spec);
+        PageQuery<User> page = new PageQuery(pm, null);
+        pm.setData(repository.selectRelationPage(page, (Wrapper<User>) SqlHelper.fillWrapper(page, spec.toEntityWrapper())));
+        pm.setRecordsTotal(page.getTotal());
         return pm;
     }
 

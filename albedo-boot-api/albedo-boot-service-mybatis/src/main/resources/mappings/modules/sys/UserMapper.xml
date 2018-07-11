@@ -23,6 +23,7 @@
         a.status_ AS `status`,
         a.version_ AS `version`
     </sql>
+
     <!-- userVo结果集 -->
     <resultMap id="userRelationResultMap" type="com.albedo.java.modules.sys.domain.User">
         <id property="id" column="id" javaType="java.lang.String" jdbcType="VARCHAR"/>
@@ -57,6 +58,27 @@
     </sql>
     <select id="selectUserByLoginId" resultMap="userRelationResultMap">
         <include refid="selectUserRelation"/> where a.login_id=#{loginId}
+    </select>
+    <select id="selectRelationPage" resultType="com.albedo.java.vo.sys.UserTableVo">
+        SELECT
+        a.id_ as id,
+        b.name_ AS orgName,
+        a.login_id AS loginId,
+        a.email_ AS email,
+        c.roleNames AS roleNames,
+        a.status_ AS STATUS,
+        a.last_modified_date AS lastModifiedDate
+        FROM
+        sys_user_t a
+        LEFT JOIN sys_org_t b ON a.org_id = b.id_
+        LEFT JOIN ( select c.user_id as userId,group_concat( d.name_ ) as roleNames from
+        sys_user_role_t c LEFT JOIN sys_role_t d ON c.role_id = d.id_
+        GROUP BY
+        c.user_id
+        ) c on a.id_=c.userId
+        <where>
+            ${ew.sqlSegment}
+        </where>
     </select>
     <select id="addUserRoles" parameterType="com.albedo.java.modules.sys.domain.User">
         insert into sys_user_role_t (user_id,role_id)
