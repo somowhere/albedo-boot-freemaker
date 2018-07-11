@@ -65,6 +65,7 @@
         b.name_ AS orgName,
         a.login_id AS loginId,
         a.email_ AS email,
+        a.phone_ AS email,
         c.roleNames AS roleNames,
         a.status_ AS STATUS,
         a.last_modified_date AS lastModifiedDate

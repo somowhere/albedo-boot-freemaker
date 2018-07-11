@@ -52,6 +52,7 @@
                     <tr role="row" class="heading">
                         <th width="10%" colspan="1"> 所属组织</th>
                         <th width="10%" colspan="1"> 登录Id</th>
+                        <th width="10%"> 手机</th>
                         <th width="10%"> 邮箱</th>
                         <th width="20%"> 拥有角色</th>
                         <th width="10%"> 状态</th>
@@ -77,6 +78,7 @@
                     },
                     "columns": [
                         {data: "orgName"}, {data: "loginId"},
+                        {data: "phone"},
                         {data: "email"},
                         {data: "roleNames", orderable: false},
                         {data: "status", render: function (data, type, row) {
