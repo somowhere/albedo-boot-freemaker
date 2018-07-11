@@ -80,7 +80,7 @@ public class FormDirective implements TemplateDirectiveModel {
                 log.warn("combo error {}", e.getMessage());
             }
         }
-
+        if(sb == null) sb = "";
         out.write(sb);
         if (body != null) {
             body.render(env.getOut());
