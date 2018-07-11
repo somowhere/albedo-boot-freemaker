@@ -1,6 +1,9 @@
 package com.albedo.java.common.config;
 
 import com.albedo.java.common.config.formart.CustomDateFormt;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +24,7 @@ public class JacksonHttpMessageConvertersConfiguration {
 
         ObjectMapper mapper = jackson2ObjectMapperBuilder.build();
 
+        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         // ObjectMapper为了保障线程安全性，里面的配置类都是一个不可变的对象
         // 所以这里的setDateFormat的内部原理其实是创建了一个新的配置类
         DateFormat dateFormat = mapper.getDateFormat();

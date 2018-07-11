@@ -39,7 +39,7 @@ $.fn.serializeObject = function () {
             var prefix = name.substr(0, startIndex);
             tempObj = o[prefix];
             if (!tempObj) {
-                tempObj = []
+                tempObj = [];
             }
             var subName = name.substring(endIndex+2),index = name.substring(startIndex+1,endIndex);
             if(tempObj[index]){
