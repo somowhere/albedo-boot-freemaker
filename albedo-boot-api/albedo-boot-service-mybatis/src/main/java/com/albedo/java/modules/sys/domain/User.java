@@ -53,7 +53,7 @@ public class User extends IdEntity<User, String> {
     private String password;
 
     @Size(max = 32)
-    @TableField(exist = false)
+    @TableField("org_id")
     private String orgId;
 
     @ManyToOne(name = "org_id")

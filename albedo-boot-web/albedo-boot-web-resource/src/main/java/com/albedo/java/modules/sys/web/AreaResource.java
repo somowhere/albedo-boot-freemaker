@@ -88,7 +88,7 @@ public class AreaResource extends TreeVoResource<AreaService, AreaVo> {
         if (PublicUtil.isNotEmpty(areaVo.getParentId())) {
             service.findOptionalTopByParentId(areaVo.getParentId()).ifPresent(item ->
                 {
-                    if(areaVo.getSort() == null)areaVo.setSort(item.getSort() + 30);
+                    if(PublicUtil.isEmpty(areaVo.getId()))areaVo.setSort(item.getSort() + 30);
                 });
             service.findOneById(areaVo.getParentId()).ifPresent(item -> areaVo.setParentName(item.getName()));
         }

@@ -87,7 +87,7 @@ public class ${ClassName}Resource extends TreeVoResource<${ClassName}Service, ${
         }
         if (PublicUtil.isNotEmpty(${className}Vo.getParentId())) {
             service.findOptionalTopByParentId(${className}Vo.getParentId()).ifPresent(item ->{
-                if(${className}Vo.getSort() == null)${className}Vo.setSort(item.getSort() + 30);
+                if(PublicUtil.isEmpty(${className}Vo.getId()))${className}Vo.setSort(item.getSort() + 30);
             });
             service.findOneById(${className}Vo.getParentId()).ifPresent(item -> ${className}Vo.setParentName(item.getName()));
         }

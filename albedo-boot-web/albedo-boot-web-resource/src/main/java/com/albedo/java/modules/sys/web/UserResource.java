@@ -146,8 +146,12 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
                 userVo.getId(), userVo.getLoginId()))) {
             throw new RuntimeMsgException("登录Id已存在");
         }
+        if (PublicUtil.isNotEmpty(userVo.getPhone()) && !checkByProperty(Reflections.createObj(UserVo.class,
+            Lists.newArrayList(UserVo.F_ID, UserVo.F_PHONE), userVo.getId(), userVo.getPhone()))) {
+            throw new RuntimeMsgException("手机已存在");
+        }
         if (PublicUtil.isNotEmpty(userVo.getEmail()) && !checkByProperty(Reflections.createObj(UserVo.class,
-                Lists.newArrayList(UserVo.F_ID, UserVo.F_EMAIL), userVo.getId(), userVo.getEmail()))) {
+            Lists.newArrayList(UserVo.F_ID, UserVo.F_EMAIL), userVo.getId(), userVo.getEmail()))) {
             throw new RuntimeMsgException("邮箱已存在");
         }
         if (PublicUtil.isNotEmpty(userVo.getId())) {

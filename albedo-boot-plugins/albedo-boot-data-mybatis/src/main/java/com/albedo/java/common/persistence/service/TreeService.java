@@ -65,13 +65,15 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
     public List<T> findTop1ByParentIdAndStatusNotOrderBySortDesc(String parentId, Integer status){
 
         return repository.findRelationList(
-            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_PARENTID, parentId).ne(getClassNameProfix()+TreeEntity.F_SQL_STATUS, status)
+            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_PARENTID, parentId)
+                .ne(getClassNameProfix()+TreeEntity.F_SQL_STATUS, status).orderBy(getClassNameProfix()+TreeEntity.F_SQL_SORT, false)
         );
 
     }
     public List<T> findAllByStatusOrderBySort(Integer status) {
         return repository.findRelationList(
-            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_STATUS, status).orderBy(getClassNameProfix()+TreeEntity.F_SQL_SORT, true)
+            Condition.create().eq(getClassNameProfix()+TreeEntity.F_SQL_STATUS, status)
+                .orderBy(getClassNameProfix()+TreeEntity.F_SQL_SORT, true)
         );
     }
     public List<T> findAllByIdOrParentIdsLike(PK id, String likeParentIds){

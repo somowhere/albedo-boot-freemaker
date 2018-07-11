@@ -73,7 +73,7 @@ public class OrgResource extends TreeVoResource<OrgService, OrgVo> {
         }
         if (PublicUtil.isNotEmpty(orgVo.getParentId())) {
             service.findOptionalTopByParentId(orgVo.getParentId()).ifPresent(item -> {
-                if(orgVo.getSort() == null)orgVo.setSort(item.getSort() + 30);
+                if(PublicUtil.isEmpty(orgVo.getId()))orgVo.setSort(item.getSort() + 30);
             });
             service.findOneById(orgVo.getParentId()).ifPresent(item -> orgVo.setParentName(item.getName()));
         }

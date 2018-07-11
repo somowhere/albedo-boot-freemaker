@@ -97,7 +97,7 @@ public class DictResource extends TreeVoResource<DictService, DictVo> {
         if (PublicUtil.isNotEmpty(dictVo.getParentId())) {
             service.findOptionalTopByParentId(dictVo.getParentId()).ifPresent(item ->
             {
-                if(dictVo.getSort() == null)dictVo.setSort(item.getSort() + 30);
+                if(PublicUtil.isEmpty(dictVo.getId()))dictVo.setSort(item.getSort() + 30);
             });
             service.findOneById(dictVo.getParentId()).ifPresent(item -> dictVo.setParentName(item.getName()));
         }

@@ -28,6 +28,7 @@ public class UserVo extends DataEntityVo<String> {
     public static final String F_LOGINID = "loginId";
     /*** F_LOGINID */
     public static final String F_EMAIL = "email";
+    public static final String F_PHONE = "phone";
     private static final long serialVersionUID = 1L;
     /*** 头像 */
     private String avatar;
