@@ -106,7 +106,7 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
     @GetMapping(value = "/page")
     public ResponseEntity getPage(PageModel pm) {
         pm = service.findPage(pm, SecurityUtil.dataScopeFilterSql("b", "a"));
-        JSON rs = JsonUtil.getInstance(Lists.newArrayList("sys_status"), "status")
+        JSON rs = JsonUtil.getInstance()
             .toJsonObject(pm);
         return ResultBuilder.buildObject(rs);
     }

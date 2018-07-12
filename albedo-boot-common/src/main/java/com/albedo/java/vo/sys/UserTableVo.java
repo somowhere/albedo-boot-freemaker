@@ -1,5 +1,6 @@
 package com.albedo.java.vo.sys;
 
+import com.albedo.java.util.annotation.DictType;
 import com.albedo.java.util.base.Collections3;
 import com.albedo.java.vo.base.DataEntityVo;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class UserTableVo  implements Serializable {
     private String phone;
     private String email;
     private String roleNames;
+    @DictType(name="sys_status")
     private String status;
     private Date lastModifiedDate;
 
