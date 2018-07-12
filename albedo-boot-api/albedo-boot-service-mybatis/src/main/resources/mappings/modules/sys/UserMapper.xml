@@ -62,6 +62,7 @@
     <select id="selectRelationPage" resultType="com.albedo.java.vo.sys.UserTableVo">
         SELECT
         a.id_ as id,
+        a.name_ AS name,
         b.name_ AS orgName,
         a.login_id AS loginId,
         a.email_ AS email,

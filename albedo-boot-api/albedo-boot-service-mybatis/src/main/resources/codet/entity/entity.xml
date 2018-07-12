@@ -59,12 +59,12 @@ public class ${ClassName} extends IdEntity<${ClassName}, ${table.pkJavaType}> {
 	@TableField(exist = false)
 	private ${table.parent.className} ${column.simpleJavaField};
 	<#elseif column.showType == "userselect" || column.showType == "orgselect" || column.showType == "areaselect">
-	@TableField(${ClassName}.F_SQL_${column.constantJavaField})
+	@TableField(F_SQL_${column.constantJavaField})
 	private String ${column.simpleJavaField}Id;
-    @ManyToOne(name = ${ClassName}.F_SQL_${column.constantJavaField})
+    @ManyToOne(name = F_SQL_${column.constantJavaField})
 	@TableField(exist = false)
 	private ${column.simpleJavaType} ${column.simpleJavaField};
-	<#else>${column.hibernateValidatorExprssion}@TableField(${ClassName}.F_SQL_${column.constantJavaField})<#if column.unique>@SearchField</#if><#if column.dictType?? && column.dictType != "">@DictType(name="${column.dictType}")</#if>
+	<#else>${column.hibernateValidatorExprssion}@TableField(F_SQL_${column.constantJavaField})<#if column.unique>@SearchField</#if><#if column.dictType?? && column.dictType != "">@DictType(name="${column.dictType}")</#if>
 	private ${column.simpleJavaType} ${column.simpleJavaField};
 			</#if>
 		</#if>

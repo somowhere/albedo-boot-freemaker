@@ -65,6 +65,7 @@ public class User extends IdEntity<User, String> {
     private String name;
     @Size(max = 50)
     @TableField("phone_")
+    @SearchField
     private String phone;
 
     @Email

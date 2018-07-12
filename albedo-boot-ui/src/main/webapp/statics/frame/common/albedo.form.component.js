@@ -617,9 +617,11 @@ var albedoForm = function () {
 
 
         $tagert.length > 0 && $tagert.fileupload && $tagert.each(function () {
-            var options = $(this).attr("options"), $parent = $(this).parents(".fileinput"),
-                multiple = $(this).attr("multiple"), showType = $(this).attr("showType");
-
+            var options={}, $parent = $(this).parents(".fileinput"), multiple = $(this).attr("multiple"), showType = $(this).attr("showType");
+            var tempOptions= $(this).attr("options");
+            if(tempOptions){
+                eval("options = "+tempOptions);
+            }
             options = $.extend(true, {
                 autoUpload: true,
                 singleFileUploads: false,

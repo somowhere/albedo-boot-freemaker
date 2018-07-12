@@ -22,6 +22,16 @@ import java.util.Optional;
 public interface BaseRepository<T extends GeneralEntity, pk extends Serializable> extends
     BaseMapper<T> {
 
+
+    T findOne(@Param("ew") Wrapper<T> wrapper);
+    /**
+     * BaseRepository
+     * 使用Wrapper 需要指定前缀 getClassNameProfix()
+     * @author admin
+     * @version 2018-03-07
+     */
+    T findRelationOne(@Param("ew") Wrapper<T> wrapper);
+
     /**
      * BaseRepository
      * 使用Wrapper 需要指定前缀 getClassNameProfix()

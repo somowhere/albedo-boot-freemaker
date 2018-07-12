@@ -39,6 +39,8 @@
                         <button class="btn btn-sm green btn-outline filter-submit-table-user margin-bottom"
                                 type="button"><i class="fa fa-search"></i> 查询
                         </button>
+                        <button id="dialogUserUpload" class="btn green btn-outline btn-sm" type="button"> 批量上传</button>
+                        <button id="downloadUserTemplate" class="btn green btn-outline btn-sm" type="button"> 模板下载</button>
                         <button class="btn btn-sm red btn-outline filter-cancel" type="reset"><i
                                 class="fa fa-times"></i> 重置
                         </button>
@@ -65,6 +67,37 @@
             </div>
         </div>
         <!-- END EXAMPLE TABLE PORTLET-->
+        <div id="user-dialog-modal" class="modal fade confirm-modal modal-confirm-dialog" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">批量上传</h4>
+            </div>
+            <div class="modal-body">
+                <div id="bootstrap-alerts"></div>
+                <form id="user-form-update" class="form-horizontal" >
+                    <div class="form-group">
+                        <label class="control-label col-md-2">文件</label>
+                        <div class="col-md-10">
+                            <div class="col-md-8">
+                            <#--<input id="dataFile" name="dataFile" type="file" class="required" />-->
+                                <@albedo.fileInput name="dataFile" cssClass="required" type="files" options="{
+                                autoUpload: false,
+                                singleFileUploads: true,
+                                url: '${ctx}/sys/user/uploadData',
+                                add: fileuploadAdd
+                                }"> </@albedo.fileInput>
+                            <#--<@albedo.fileInput name="dataFile1" cssClass="required" type="files" options="{-->
+                            <#--}"> </@albedo.fileInput>-->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn dark btn-outline" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button id="btn-confirm-user-upload" class="btn green">确认</button>
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -112,7 +145,38 @@
             }
         };
     }();
+
+    function fileuploadAdd(e, data) {
+        $("input[name='dataFile']").val(data.files[0].name);
+        console.log($('#btn-confirm-user-upload'))
+        //绑定开始上传事件
+        $('#btn-confirm-user-upload').click(function() {
+            if(FormValidation.validate()){
+                jqXHR = data.submit()
+                    .success(function (data, textStatus, jqXHR) {
+                        if(data && data.status==1) {
+                            toastr.success(data.message)
+                            $("#user-dialog-modal").modal("hide");
+                            $("input[name='dataFile']").val("");
+                            $(".filter-submit-table-user").trigger("click")
+                            //解绑，防止重复执行
+                            $("#btn-confirm-user-upload").off("click");
+                        }else{
+                            toastr.warning(data.message);
+                        }
+                    });
+            }
+        })
+    }
     jQuery(document).ready(function () {
         dataUserTables.init();
+        $("#downloadUserTemplate").click(function(){
+            albedo.goTo("${ctx}/sys/user/importTemplate")
+        })
+        $("#dialogUserUpload").click(function(){
+            $("input[name='dataFile']").val("");
+            $("#user-dialog-modal").modal({width:740});
+            FormValidation.init($("#user-form-update"));
+        });
     });
 </script>

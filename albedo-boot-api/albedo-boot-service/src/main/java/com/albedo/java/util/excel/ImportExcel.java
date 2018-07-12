@@ -127,7 +127,7 @@ public class ImportExcel {
     }
 
     public ImportExcel(MultipartFile file, int i, int sheetIndex) throws InvalidFormatException, IOException {
-        this(file.getOriginalFilename(), i, sheetIndex);
+        this(file.getOriginalFilename(), file.getInputStream(), i, sheetIndex);
     }
 
     /**

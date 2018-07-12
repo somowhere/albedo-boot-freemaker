@@ -175,6 +175,10 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
     public List<T> findAll() {
         return repository.selectList(null);
     }
+    public T findOne(Wrapper<T> wrapper) {
+        List<T> ts = repository.selectList(wrapper);
+        return PublicUtil.isNotEmpty(ts) ? ts.get(0) : null;
+    }
     public List<T> findAll(Map<String, Object> paramsMap) {
         return repository.selectByMap(paramsMap);
     }
@@ -241,13 +245,7 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
     }
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<T> findAll(Wrapper<T> wrapper) {
-        try {
-            return repository.selectList(wrapper);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            Assert.buildException(e.getMessage());
-        }
-        return null;
+        return repository.selectList(wrapper);
     }
     public PageModel<T> findPage(PageModel<T> pm) {
         return findPage(pm, null);

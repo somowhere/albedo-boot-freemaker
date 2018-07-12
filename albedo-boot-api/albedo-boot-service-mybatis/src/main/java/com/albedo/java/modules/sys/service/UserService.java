@@ -4,23 +4,32 @@ import com.albedo.java.common.persistence.DynamicSpecifications;
 import com.albedo.java.common.persistence.PageQuery;
 import com.albedo.java.common.persistence.SpecificationDetail;
 import com.albedo.java.common.persistence.service.DataVoService;
+import com.albedo.java.modules.sys.domain.Org;
+import com.albedo.java.modules.sys.domain.Role;
 import com.albedo.java.modules.sys.domain.User;
 import com.albedo.java.modules.sys.repository.OrgRepository;
 import com.albedo.java.modules.sys.repository.RoleRepository;
 import com.albedo.java.modules.sys.repository.UserRepository;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.RandomUtil;
+import com.albedo.java.util.base.Reflections;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
+import com.albedo.java.util.exception.RuntimeMsgException;
+import com.albedo.java.vo.sys.UserExcelVo;
 import com.albedo.java.vo.sys.UserVo;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.SqlHelper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.google.common.collect.Lists;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +49,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
 
     private final CacheManager cacheManager;
 
-    public UserService(OrgRepository orgRepository, RoleRepository roleRepository, CacheManager cacheManager) {
+    public UserService( OrgRepository orgRepository, RoleRepository roleRepository,CacheManager cacheManager) {
         this.orgRepository = orgRepository;
         this.roleRepository = roleRepository;
         this.cacheManager = cacheManager;
@@ -75,6 +84,11 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     public void save(UserVo userVo) {
         User user = PublicUtil.isNotEmpty(userVo.getId()) ? repository.selectById(userVo.getId()) : new User();
         copyVoToBean(userVo, user);
+        save(user);
+    }
+
+    @Override
+    public User save(User user) {
         if (user.getLangKey() == null) {
             // default language
             user.setLangKey("zh-cn");
@@ -91,7 +105,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         }
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId());
         log.debug("Save Information for User: {}", user);
-
+        return user;
     }
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
@@ -182,5 +196,21 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         selectBatchIds(idList).forEach(user ->
                 cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId()));
         return rs;
+    }
+
+    public void save(@Valid UserExcelVo userExcelVo) {
+        User user = new User();
+        BeanUtils.copyProperties(userExcelVo, user);
+        Org org = orgRepository.findOne(Condition.create().eq(Org.F_SQL_NAME, userExcelVo.getOrgName()));
+        if(org!=null){
+            user.setOrgId(org.getId());
+        }
+        Role role = roleRepository.findOne(Condition.create().eq(Role.F_SQL_NAME, userExcelVo.getRoleNames()));
+        if(role==null){
+            throw new RuntimeMsgException("无法获取角色"+userExcelVo.getRoleNames()+"信息");
+        }
+        user.setRoleIdList(Lists.newArrayList(role.getId()));
+
+        save(user);
     }
 }

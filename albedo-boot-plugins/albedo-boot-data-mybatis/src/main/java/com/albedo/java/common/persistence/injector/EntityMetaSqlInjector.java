@@ -30,6 +30,8 @@ public class EntityMetaSqlInjector extends LogicSqlInjector {
 
     public final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
     public enum SqlTreeMethod {
+        FIND_ONE("findOne", "查询单个对象", "<script>SELECT %s FROM %s %s</script>"),
+        FIND_RELATION_ONE("findRelationOne", "查询包含关联对象集合", "<script>SELECT %s FROM %s %s</script>"),
         FIND_RELATION_LIST("findRelationList", "查询包含关联对象集合", "<script>SELECT %s FROM %s %s</script>"),
         FIND_RELATION_PAGE("findRelationPage", "查询包含关联对象集合（并翻页）", "<script>SELECT %s FROM %s %s</script>");
 
@@ -63,6 +65,8 @@ public class EntityMetaSqlInjector extends LogicSqlInjector {
         try {
             if (null != modelClass) {
                 TableInfo table = TableInfoHelper.initTableInfo(builderAssistant, modelClass);
+                this.injectFindList(SqlTreeMethod.FIND_ONE, mapperClass, modelClass, table, false);
+                this.injectFindRelationList(SqlTreeMethod.FIND_RELATION_ONE, mapperClass, modelClass, table);
                 this.injectFindRelationList(SqlTreeMethod.FIND_RELATION_LIST, mapperClass, modelClass, table);
                 this.injectFindRelationList(SqlTreeMethod.FIND_RELATION_PAGE, mapperClass, modelClass, table);
             }
@@ -73,25 +77,32 @@ public class EntityMetaSqlInjector extends LogicSqlInjector {
             log.error("{}", e);
         }
     }
-
-    public void injectFindRelationList(SqlTreeMethod sqlMethod, Class<?> mapperClass, Class<?> modelClass, TableInfo table) {
-        String tableNameAlias = StringUtil.toFirstLowerCase(modelClass.getSimpleName()), tempNameAlias;
+    public void injectFindRelationList(SqlTreeMethod sqlMethod, Class<?> mapperClass,
+                                       Class<?> modelClass, TableInfo table) {
+        injectFindList(sqlMethod, mapperClass, modelClass, table, true);
+    }
+    public void injectFindList(SqlTreeMethod sqlMethod, Class<?> mapperClass,
+                                       Class<?> modelClass, TableInfo table, boolean isRelation) {
+        String tableNameAlias = StringUtil.toFirstLowerCase(modelClass.getSimpleName());
         TableInfo tableAlias;
-        PropertyDescriptor[] ps = PropertyUtils.getPropertyDescriptors(modelClass);
         StringBuffer sbSelectCoumns = new StringBuffer(sqlSelectColumns(table, false, tableNameAlias, null)),
         sbLeftJoin = new StringBuffer(table.getTableName()).append(" ").append(tableNameAlias);
-        for (PropertyDescriptor p : ps) {
-            ManyToOne annotation = Reflections.getAnnotationByClazz(modelClass, p.getName(), ManyToOne.class);
-            if (annotation != null) {
+        if(isRelation){
+            PropertyDescriptor[] ps = PropertyUtils.getPropertyDescriptors(modelClass);
+            for (PropertyDescriptor p : ps) {
+                ManyToOne annotation = Reflections.getAnnotationByClazz(modelClass, p.getName(), ManyToOne.class);
+                if (annotation != null) {
 //                tempNameAlias =  StringUtil.toFirstLowerCase(p.getPropertyType().getSimpleName());
-                tableAlias = TableInfoHelper.initTableInfo(builderAssistant, p.getPropertyType());
-                sbSelectCoumns.append(",")
-                    .append(sqlSelectColumns(tableAlias, false, p.getName(), p.getName()));
-                sbLeftJoin.append(" LEFT JOIN ").append(tableAlias.getTableName()).append(" ").append(p.getName())
-                    .append(" ON ").append(tableNameAlias).append(".").append(annotation.name())
-                    .append(" = ").append(p.getName()).append(".").append(TreeEntity.F_SQL_ID);
+                    tableAlias = TableInfoHelper.initTableInfo(builderAssistant, p.getPropertyType());
+                    sbSelectCoumns.append(",")
+                        .append(sqlSelectColumns(tableAlias, false, p.getName(), p.getName()));
+                    sbLeftJoin.append(" LEFT JOIN ").append(tableAlias.getTableName()).append(" ").append(p.getName())
+                        .append(" ON ").append(tableNameAlias).append(".").append(annotation.name())
+                        .append(" = ").append(p.getName()).append(".").append(TreeEntity.F_SQL_ID);
+                }
             }
         }
+
        String sql = String.format(sqlMethod.getSql(),
            sbSelectCoumns.toString(),
            sbLeftJoin.toString(),
