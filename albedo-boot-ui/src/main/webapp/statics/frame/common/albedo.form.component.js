@@ -396,8 +396,13 @@ var albedoForm = function () {
             showProperty = $thiz.attr("_showProperty") ? $thiz.attr("_showProperty") : "name",
             selectedValueFn = $thiz.attr("_selectedValueFn") ? $thiz.attr("_selectedValueFn") : "",
             grid_select_ = "#" + id + '-grid-table', pager_select_ = "#" + id + '-grid-pager';
-
         if (name && name.indexOf(".") != -1) name = name.replace(".", "-");
+
+        var selectedIds = albedo.validateNull(value) ? [] : value.split(",");
+        var showNames = $thiz.val();
+        var selectedNames = albedo.validateNull(showNames) ? [] : showNames.split(",");
+        var showNodes = $thiz.attr("data-nodes");
+        var selectedNodes = albedo.validateNull(showNodes) ? [] : JSON.parse(showNodes);
 
         var thStr = "";
         if (colNames) {
@@ -426,8 +431,8 @@ var albedoForm = function () {
             '</div>' +
             '<div class="modal-footer">' +
             '<button type="button" class="btn blue confirm">确定</button>' +
-            '<button type="button" class="btn default" data-dismiss="modal">关闭</button>' +
             (allowClear ? '<button type="button" class="btn blue clear">清除</button>' : '') +
+            '<button type="button" class="btn default" data-dismiss="modal">关闭</button>' +
             '</div>' +
             '</div>';
         var $modal = $(html);
@@ -457,13 +462,21 @@ var albedoForm = function () {
             "dom": "<'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
             "columns": eval(colModel),
             "rowCallback": function (row, data) {
-                if (value) {
-                    var selected = value.split(",");
-                    if ($.inArray(data.id, selected) !== -1) {
-                        $(row).addClass('selected');
+                if ($.inArray(data.id, selectedIds) !== -1 || $.inArray(data.id, ids) !== -1) {
+                    $(row).addClass('selected');
+                    if($.inArray(data.id, ids) === -1){
+                        var tempNames = eval("data." + showProperty);
                         ids.push(data.id);
-                        names.push(eval("data." + showProperty));
+                        names.push(tempNames);
                         nodes.push(data);
+                        selectedIds.removeByValue(data.id)
+                        selectedNames.removeByValue(tempNames)
+                        for (var i = 0; i < selectedNodes.length; i++) {
+                            if (selectedNodes[i].id == data.id) {
+                                selectedNodes.splice(i, 1);
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -480,6 +493,7 @@ var albedoForm = function () {
                 if (!checked) {
                     ids = [], names = [], nodes = [];
                 }
+
                 if (checked && $(this).attr("class").indexOf("selected") != -1) { //取消 选择
                     ids.removeByValue(id);
                     for (var index = 0; index < rsData.data.length; index++) {
@@ -537,6 +551,21 @@ var albedoForm = function () {
                     toastr.warning("请至少选择一条数据");
                     return false;
                 }
+                for(var i =0; i<selectedIds.length; i++){
+                    if($.inArray(selectedIds[i], ids) === -1){
+                        ids.push(selectedIds[i])
+                    }
+                }
+                for(var i =0; i<selectedNames.length; i++){
+                    if($.inArray(selectedNames[i], names) === -1){
+                        names.push(selectedNames[i])
+                    }
+                }
+                for(var i =0; i<selectedNodes.length; i++){
+                    if($.inArray(selectedNodes[i], nodes) === -1){
+                        nodes.push(selectedNodes[i])
+                    }
+                }
             } else {
                 if (ids.length != 1) {
                     toastr.warning("请选择一条数据");
@@ -545,6 +574,7 @@ var albedoForm = function () {
             }
             $thizVal.val(ids);
             $thiz.val(names);
+            $thiz.attr("data-nodes", JSON.stringify(nodes));
             if (albedo.isExitsVariable(selectedValueFn) && albedo.isExitsFunction(selectedValueFn)) {
                 eval(selectedValueFn + "('" + ids + "','" + names + "',nodes)");
             }
@@ -593,7 +623,11 @@ var albedoForm = function () {
                 language: 'zh-CN',
                 autoclose: true,
                 isRTL: App.isRTL(),
-                format: "yyyy-mm-dd"
+                altFormat: "yy-mm-dd",
+                format: "yyyy-mm-dd",
+                changeDate:function(){
+                    console.log(1)
+                }
             }, options);
             // $("div.datetimepicker.dropdown-menu").remove();
             $(this).datetimepicker("remove").datepicker("remove");
