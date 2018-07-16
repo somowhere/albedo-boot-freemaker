@@ -8,6 +8,7 @@ import com.albedo.java.util.domain.Order;
 import com.albedo.java.util.domain.QueryCondition;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -75,9 +76,9 @@ public class QueryWrapperUtil {
                     case in:
                         entityWrapper.in(fieldName, handlerQueryConditionCollectionValue(queryCondition));
                         break;
-                    case like:entityWrapper.like(fieldName, handlerQueryConditionLikeValue(queryCondition));
+                    case like:entityWrapper.like(fieldName, handlerQueryConditionLikeValue(queryCondition), SqlLike.CUSTOM );
                         break;
-                    case notLike:entityWrapper.notLike(fieldName, handlerQueryConditionLikeValue(queryCondition));
+                    case notLike:entityWrapper.notLike(fieldName, handlerQueryConditionLikeValue(queryCondition), SqlLike.CUSTOM );
                         break;
                     case between:
                         entityWrapper.between(fieldName
