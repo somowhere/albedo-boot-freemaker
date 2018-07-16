@@ -3,25 +3,31 @@ package com.albedo.java.common.config.apidoc;
 import com.albedo.java.common.config.AlbedoSwaggerProperties;
 import com.albedo.java.util.domain.Globals;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.schema.TypeNameExtractor;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.List;
 
 /**
  * Springfox Swagger configuration.
@@ -54,18 +60,59 @@ public class SwaggerConfiguration {
         StopWatch watch = new StopWatch();
         watch.start();
         Contact contact = new Contact(albedoSwaggerProperties.getContactName(), albedoSwaggerProperties.getContactUrl(), albedoSwaggerProperties.getContactEmail());
-        ApiInfo apiInfo = new ApiInfo(albedoSwaggerProperties.getTitle(), albedoSwaggerProperties.getDescription(), albedoSwaggerProperties.getVersion(), albedoSwaggerProperties.getTermsOfServiceUrl(),
-                contact, albedoSwaggerProperties.getLicense(), albedoSwaggerProperties.getLicenseUrl());
-        Docket docket = (new Docket(DocumentationType.SWAGGER_2)).apiInfo(apiInfo).forCodeGeneration(true).
-                genericModelSubstitutes(new Class[]{ResponseEntity.class}).select().paths(PathSelectors.regex(albedoSwaggerProperties.getDefaultIncludePattern())).build();
+        ApiInfo apiInfo = new ApiInfoBuilder().title(albedoSwaggerProperties.getTitle())
+            .description(albedoSwaggerProperties.getDescription())
+            .version(albedoSwaggerProperties.getVersion())
+            .termsOfServiceUrl(albedoSwaggerProperties.getTermsOfServiceUrl())
+            .contact(contact)
+            .license(albedoSwaggerProperties.getLicense())
+            .licenseUrl(albedoSwaggerProperties.getLicenseUrl()).build();
+        Docket docket = (new Docket(DocumentationType.SWAGGER_2)).apiInfo(apiInfo)
+            .securitySchemes(securitySchemes())
+            .securityContexts(securityContexts())
+            .forCodeGeneration(true)
+            .genericModelSubstitutes(new Class[]{ResponseEntity.class})
+            .select()
+            .paths(PathSelectors.regex(albedoSwaggerProperties.getDefaultIncludePattern()))
+            .build();
         watch.stop();
         this.log.debug("Started Swagger in {} ms", Long.valueOf(watch.getTotalTimeMillis()));
         return docket;
     }
 
+    private List<ApiKey> securitySchemes() {
+        return Lists.newArrayList(
+            new ApiKey("Authorization", "Authorization", "header"));
+    }
 
-    @Bean
-    PageableParameterBuilderPlugin pageableParameterBuilderPlugin(TypeNameExtractor nameExtractor, TypeResolver resolver) {
-        return new PageableParameterBuilderPlugin(nameExtractor, resolver);
+    private List<SecurityContext> securityContexts() {
+        return Lists.newArrayList(
+            SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.regex("^(?!auth).*$"))
+                .build()
+        );
+    }
+
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope("global",
+            "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Lists.newArrayList(
+            new SecurityReference("Authorization", authorizationScopes));
+    }
+
+    @Configuration
+    @ConditionalOnClass({Pageable.class})
+    public static class SpringPagePluginConfiguration {
+        public SpringPagePluginConfiguration() {
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public PageableParameterBuilderPlugin pageableParameterBuilderPlugin(TypeNameExtractor typeNameExtractor, TypeResolver typeResolver) {
+            return new PageableParameterBuilderPlugin(typeNameExtractor, typeResolver);
+        }
     }
 }

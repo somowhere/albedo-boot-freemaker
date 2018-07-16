@@ -19,7 +19,7 @@
         <lombok.version>1.16.6</lombok.version>
         <!-- 依赖库的版本定义 -->
         <!-- Plugin -->
-        <springfox.version>2.5.0</springfox.version>
+        <springfox.version>2.9.2</springfox.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 

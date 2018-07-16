@@ -10,9 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>albedo-boot-swagger</artifactId>
-    <properties>
-        <springfox.version>2.5.0</springfox.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>com.albedo.java</groupId>
@@ -35,7 +32,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
     </dependencies>
     <build>
         <resources>
