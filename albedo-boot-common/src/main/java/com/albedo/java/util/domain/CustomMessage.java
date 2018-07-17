@@ -51,7 +51,7 @@ public class CustomMessage<T> implements Serializable {
         return create(null, Globals.StatusEmun.MSG_TYPE_WARNING, message);
     }
 
-    public static CustomMessage createError(Object data, String... messages) {
+    public static CustomMessage createDataError(Object data, String... messages) {
         return create(data, Globals.StatusEmun.MSG_TYPE_ERROR, messages);
     }
 

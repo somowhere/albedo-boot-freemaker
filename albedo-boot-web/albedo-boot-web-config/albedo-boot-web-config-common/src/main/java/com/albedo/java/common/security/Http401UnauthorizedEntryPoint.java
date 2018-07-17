@@ -40,7 +40,8 @@ public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
         if (albedoProperties.getHttp().isRestful()
                 || albedoProperties.getGatewayModel()
                 || RequestUtil.isRestfulRequest(request)) {
-            BaseResource.writeJsonHttpResponse(CustomMessage.createError("error_token","权限不足或登录超时"), response);
+            BaseResource.writeJsonHttpResponse(CustomMessage.createDataError("error_token",
+                "权限不足或登录超时"), response);
 
         } else {
             response.sendRedirect(PublicUtil.toAppendStr(albedoProperties.getAdminPath(), "/login"));
