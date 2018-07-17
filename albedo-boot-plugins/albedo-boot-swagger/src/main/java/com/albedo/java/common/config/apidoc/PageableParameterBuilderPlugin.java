@@ -57,6 +57,7 @@ public class PageableParameterBuilderPlugin implements OperationBuilderPlugin {
                 ParameterContext parameterContext = new ParameterContext(methodParameter, new ParameterBuilder(), context.getDocumentationContext(), context.getGenericsNamingStrategy(), context);
                 parameters.add(this.createPageParameter(parameterContext));
                 parameters.add(this.createSizeParameter(parameterContext));
+                parameters.add(this.createConditionParameter(parameterContext));
                 parameters.add(this.createSortParameter(parameterContext));
                 context.operationBuilder().parameters(parameters);
             }
@@ -73,22 +74,35 @@ public class PageableParameterBuilderPlugin implements OperationBuilderPlugin {
     }
 
     protected String getSortName() {
-        return "sort";
+        return "sortName";
     }
+    protected String getQueryConditionJson() {
+        return "queryConditionJson";
+    }
+
 
     protected Parameter createPageParameter(ParameterContext context) {
         ModelReference intModel = (ModelReference)this.createModelRefFactory(context).apply(this.resolver.resolve(Integer.TYPE, new Type[0]));
-        return (new ParameterBuilder()).name(this.getPageName()).parameterType("query").modelRef(intModel).description("Page number of the requested page").build();
+        return (new ParameterBuilder()).name(this.getPageName()).parameterType("query").modelRef(intModel)
+            .description("Page number of the requested page").build();
     }
 
     protected Parameter createSizeParameter(ParameterContext context) {
         ModelReference intModel = (ModelReference)this.createModelRefFactory(context).apply(this.resolver.resolve(Integer.TYPE, new Type[0]));
-        return (new ParameterBuilder()).name(this.getSizeName()).parameterType("query").modelRef(intModel).description("Size of a page").build();
+        return (new ParameterBuilder()).name(this.getSizeName()).parameterType("query").modelRef(intModel)
+            .description("Size of a page").build();
+    }
+    //sortName: notice desc
+    protected Parameter createSortParameter(ParameterContext context) {
+        ModelReference stringModel = (ModelReference)this.createModelRefFactory(context).apply(this.resolver.resolve(String.class, new Type[0]));
+        return (new ParameterBuilder()).name(this.getSortName()).parameterType("query").modelRef(stringModel)
+            .allowMultiple(true).description("格式: property (asc|desc). 默认 sort order is ascending.").build();
     }
 
-    protected Parameter createSortParameter(ParameterContext context) {
-        ModelReference stringModel = (ModelReference)this.createModelRefFactory(context).apply(this.resolver.resolve(List.class, new Type[]{String.class}));
-        return (new ParameterBuilder()).name(this.getSortName()).parameterType("query").modelRef(stringModel).allowMultiple(true).description("Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.").build();
+    protected Parameter createConditionParameter(ParameterContext context) {
+        ModelReference stringModel = (ModelReference)this.createModelRefFactory(context).apply(this.resolver.resolve(String.class, new Type[0]));
+        return (new ParameterBuilder()).name(this.getQueryConditionJson()).parameterType("query").modelRef(stringModel)
+            .allowMultiple(true).description("查询json [{\"fieldName\":\"orgId\",\"attrType\":\"String\",\"operate\":\"like\",\"value\":\"a\"}]").build();
     }
 
     protected Function<ResolvedType, ModelReference> createModelRefFactory(ParameterContext context) {

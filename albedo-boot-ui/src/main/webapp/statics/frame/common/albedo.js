@@ -339,16 +339,10 @@ var albedo = {
                         _json.format = $(this).attr("format") ? $(this)
                             .attr("format") : 'yyyy-MM-dd';
                     }
-                    _json.fieldNode = $(this).attr("fieldNode") ? $(this)
-                        .attr("fieldNode") : '';
                     _json.operate = $(this).attr("operate") ? $(this).attr(
                         "operate") : 'like';
                     _json.weight = $(this).attr("weight") ? $(this).attr(
                         "weight") : 0;
-                    _json.analytiColumn = $(this).attr("analytiColumn") ? $(this).attr(
-                        "analytiColumn") : true;
-                    _json.analytiColumnPrefix = $(this).attr("analytiColumnPrefix") ? $(this).attr(
-                        "analytiColumnPrefix") : null;
                     if (_json.operate == "between") {
                         var endValue = $("input[for-date='" + $(this).attr("name") + "']").val();
                         _json.endValue = endValue ? ($(this)
