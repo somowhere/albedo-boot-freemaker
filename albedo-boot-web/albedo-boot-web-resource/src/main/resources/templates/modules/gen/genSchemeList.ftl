@@ -23,19 +23,19 @@
                     <div class="form-group">
                         <label class="input-label" for="name">名称 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="name" name="name"
-                               placeholder="..."></div>
+                               /></div>
                     <div class="form-group">
                         <label class="input-label" for="genTableName">表名 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="genTableName"
-                               name="genTableName" placeholder="..."></div>
+                               name="genTableName" /></div>
                     <div class="form-group">
                         <label class="input-label" for="functionName">功能名称 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="functionName"
-                               name="functionName" placeholder="..."></div>
+                               name="functionName" /></div>
                     <div class="form-group">
                         <label class="input-label" for="name">功能作者 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="functionAuthor"
-                               name="functionAuthor" placeholder="..."></div>
+                               name="functionAuthor" /></div>
                     <div class="form-group">
                         <label class="input-label">状态</label>
                     <@albedo.form name="status" searchItem="searchItem" dictCode="sys_status" boxType="checkbox" operate="in" attrType="Integer"> </@albedo.form>

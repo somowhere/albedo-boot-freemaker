@@ -14,12 +14,12 @@
                     <div class="form-group">
                         <label class="input-label" for="userLoginId">用户</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="userLoginId"
-                               name="user.loginId" htmlEscape="false" maxlength="254" placeholder="...">
+                               name="user.loginId" htmlEscape="false" maxlength="254" />
                     </div>
                     <div class="form-group">
                         <label class="input-label" for="ipAddress">ip</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="ipAddress" name="ipAddress"
-                               htmlEscape="false" maxlength="254" placeholder="...">
+                               htmlEscape="false" maxlength="254" />
                     </div>
                     <div class="form-group form-btn">
                         <button class="btn btn-sm green btn-outline filter-submit-table-persistentToken margin-bottom"

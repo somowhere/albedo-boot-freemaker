@@ -15,7 +15,7 @@
                         <label class="input-label" for="loggerName">名称</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="loggerName"
                                name="loggerName" value="${(loggingEvent.loggerName)!}" attrType="String" operation="eq"
-                               htmlEscape="false" maxlength="254" placeholder="...">
+                               htmlEscape="false" maxlength="254" />
                     </div>
                     <div class="form-group">
                         <label class="input-label" for="levelString">级别</label>

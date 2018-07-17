@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label class="input-label" for="loginId">名称 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="name" name="name"
-                               placeholder="..."></div>
+                               /></div>
                     <div class="form-group">
                         <label class="input-label">系统数据</label>
                     <@albedo.form name="sysData" searchItem="searchItem" dictCode="sys_yes_no" boxType="checkbox" operate="in" attrType="Integer"> </@albedo.form>

@@ -30,15 +30,15 @@
                     <div class="form-group">
                         <label class="input-label" for="loginId">名称 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="name" name="name"
-                               placeholder="..."></div>
+                               /></div>
                     <div class="form-group">
                         <label class="input-label" for="loginId">编码 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="code" name="code"
-                               placeholder="..."></div>
+                               /></div>
                     <div class="form-group">
                         <label class="input-label" for="loginId">key </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="code" name="key"
-                               placeholder="..."></div>
+                               /></div>
                     <div class="form-group">
                         <label class="input-label">状态</label>
                     <@albedo.form name="status" searchItem="searchItem" dictCode="sys_status" boxType="checkbox" operate="in" attrType="Integer"> </@albedo.form>

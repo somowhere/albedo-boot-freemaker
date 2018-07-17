@@ -25,7 +25,7 @@
                         <label class="input-label" for="name">名称</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="name" name="name"
                                value="${(taskScheduleJob.name)!}" attrType="String" operate="like" htmlEscape="false"
-                               maxlength="255" placeholder="...">
+                               maxlength="255" />
                     </div>
                     <div class="form-group form-btn">
                         <button class="btn btn-sm green btn-outline filter-submit-table-taskScheduleJob margin-bottom"

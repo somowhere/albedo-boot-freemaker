@@ -29,11 +29,11 @@
                     <div class="form-group">
                         <label class="input-label" for="name">名称 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="name" name="name"
-                               placeholder="..."></div>
+                               /></div>
                     <div class="form-group">
                         <label class="input-label" for="permission">权限 </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="permission"
-                               name="permission" placeholder="..."></div>
+                               name="permission" /></div>
                     <div class="form-group">
                         <label class="input-label">类型</label>
                     <@albedo.form name="type" searchItem="searchItem" dictCode="sys_module_type" boxType="checkbox" operate="in" attrType="Integer"> </@albedo.form>

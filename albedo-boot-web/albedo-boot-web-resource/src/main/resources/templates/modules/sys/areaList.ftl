@@ -30,13 +30,13 @@
                         <label class="input-label" for="name">区域名称</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="name" name="name"
                                value="${(area.name)!}" operation="like" htmlEscape="false" maxlength="32"
-                               placeholder="...">
+                               />
                     </div>
                     <div class="form-group">
                         <label class="input-label" for="code">区域编码</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="code" name="code"
                                value="${(area.code)!}" operation="like" htmlEscape="false" maxlength="32"
-                               placeholder="...">
+                               />
                     </div>
                     <div class="form-group form-btn">
                         <button class="btn btn-sm green btn-outline filter-submit-table-area margin-bottom"
