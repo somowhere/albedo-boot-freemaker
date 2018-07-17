@@ -1,5 +1,6 @@
 package com.albedo.java.common.config.apidoc;
 
+import com.albedo.java.util.domain.PageModel;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
@@ -38,7 +39,7 @@ public class PageableParameterBuilderPlugin implements OperationBuilderPlugin {
     public PageableParameterBuilderPlugin(TypeNameExtractor nameExtractor, TypeResolver resolver) {
         this.nameExtractor = nameExtractor;
         this.resolver = resolver;
-        this.pageableType = resolver.resolve(Pageable.class, new Type[0]);
+        this.pageableType = resolver.resolve(PageModel.class, new Type[0]);
     }
 
     public boolean supports(DocumentationType delimiter) {
