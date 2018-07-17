@@ -71,9 +71,9 @@ public class WebConfigurer extends WebMvcConfigurerAdapter implements ServletCon
                 DispatcherType.ASYNC);
         initPageInitParamFilter(servletContext, disps);
         initMetrics(servletContext, disps);
-        if (env.acceptsProfiles(Globals.SPRING_PROFILE_PRODUCTION)) {
+//        if (env.acceptsProfiles(Globals.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
-        }
+//        }
 
 
         log.info("Web application fully configured");
