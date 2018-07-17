@@ -66,6 +66,10 @@ public class UserResourceIntTest {
 
     private static final String DEFAULT_NAME = "doe";
     private static final String UPDATED_NAME = "jhipsterLastName";
+    private static final String DEFAULT_TYPE = "system";
+    private static final String UPDATED_TYPE = "ios";
+    private static final String DEFAULT_KEY = "key1";
+    private static final String UPDATED_KEY = "key2";
 
     private static final String DEFAULT_LANGKEY = "en";
     private static final String UPDATED_LANGKEY = "fr";
@@ -106,7 +110,6 @@ public class UserResourceIntTest {
         User user = new User();
         user.setLoginId(DEFAULT_LOGIN);
         user.setPassword(PublicUtil.getRandomString(60));
-        user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
         user.setPhone(DEFAULT_PHONE);
         user.setName(DEFAULT_NAME);
@@ -126,7 +129,6 @@ public class UserResourceIntTest {
         User anotherUser = new User();
         anotherUser.setLoginId(DEFAULT_ANOTHER_LOGIN);
         anotherUser.setPassword(PublicUtil.getRandomString(60));
-        anotherUser.setActivated(true);
         anotherUser.setEmail(DEFAULT_ANOTHER_EMAIL);
         anotherUser.setName("java");
         anotherUser.setLangKey("en");
@@ -145,14 +147,16 @@ public class UserResourceIntTest {
             DEFAULT_PASSWORD,
             DEFAULT_PASSWORD,
             orgs.get(0).getId(),
+            DEFAULT_TYPE,
+            DEFAULT_KEY,
             DEFAULT_NAME,
             DEFAULT_PHONE,
             DEFAULT_EMAIL,
-            true,
             DEFAULT_LANGKEY,
             null,
             null,
             null,
+
             Collections3.extractToList(roles, Role.F_ID),
             null,
             null,null);
@@ -183,10 +187,11 @@ public class UserResourceIntTest {
             DEFAULT_PASSWORD,
             DEFAULT_PASSWORD,
             orgs.get(0).getId(),
+            DEFAULT_TYPE,
+            DEFAULT_KEY,
             DEFAULT_NAME,
             DEFAULT_PHONE,
             DEFAULT_EMAIL,
-            true,
             DEFAULT_LANGKEY,
             null,
             null,
@@ -263,10 +268,11 @@ public class UserResourceIntTest {
             UPDATED_PASSWORD,
             UPDATED_PASSWORD,
             orgs.get(0).getId(),
+            UPDATED_TYPE,
+            UPDATED_KEY,
             UPDATED_NAME,
             UPDATED_PHONE,
             UPDATED_EMAIL,
-            true,
             UPDATED_LANGKEY,
             null,
             null,
@@ -307,10 +313,11 @@ public class UserResourceIntTest {
             UPDATED_PASSWORD,
             UPDATED_PASSWORD,
             orgs.get(0).getId(),
+            UPDATED_TYPE,
+            UPDATED_KEY,
             UPDATED_NAME,
             UPDATED_PHONE,
             DEFAULT_ANOTHER_EMAIL,
-            true,
             UPDATED_LANGKEY,
             null,
             null,
@@ -341,10 +348,11 @@ public class UserResourceIntTest {
             UPDATED_PASSWORD,
             UPDATED_PASSWORD,
             orgs.get(0).getId(),
+            UPDATED_TYPE,
+            UPDATED_KEY,
             UPDATED_NAME,
             UPDATED_PHONE,
             UPDATED_EMAIL,
-            true,
             UPDATED_LANGKEY,
             null,
             null,

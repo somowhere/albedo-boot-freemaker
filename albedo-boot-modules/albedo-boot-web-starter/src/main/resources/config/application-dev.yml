@@ -23,7 +23,7 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mysql://localhost:3306/tunnel?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/albedo-old?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
         username: root
         password: 123456

@@ -237,6 +237,8 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
                 Lists.newArrayList(UserVo.F_EMAIL), userExcelVo.getEmail()))) {
                 throw new RuntimeMsgException("邮箱"+userExcelVo.getEmail()+"已存在");
             }
+            //初始密码
+            userExcelVo.setPassword(passwordEncoder.encode("123456"));
             service.save(userExcelVo);
         }
         return ResultBuilder.buildOk("操作成功");

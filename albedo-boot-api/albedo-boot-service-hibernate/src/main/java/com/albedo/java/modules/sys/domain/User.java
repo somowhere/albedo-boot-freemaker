@@ -81,6 +81,12 @@ public class User extends IdEntity<String> {
     @NotNull
     @Column(name = "activated_", nullable = false)
     private boolean activated = false;
+    @Size( max = 32)
+    @Column(name = "type_")
+    private String type;
+    @Size( max = 500)
+    @Column(name = "key_")
+    private String key;
 
     @Size(min = 2, max = 5)
     @Column(name = "lang_key", length = 5)

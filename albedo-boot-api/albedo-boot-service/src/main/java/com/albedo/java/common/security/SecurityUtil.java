@@ -9,11 +9,13 @@ import com.albedo.java.util.JedisUtil;
 import com.albedo.java.util.Json;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.StringUtil;
+import com.albedo.java.util.base.Assert;
 import com.albedo.java.util.domain.Globals;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.util.exception.RuntimeMsgException;
 import com.albedo.java.util.spring.SpringContextHolder;
 import com.albedo.java.vo.sys.RoleVo;
+import com.albedo.java.vo.sys.UserVo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
@@ -129,9 +131,9 @@ public final class SecurityUtil {
         if (user == null||PublicUtil.isEmpty(user.getId())) {
             user = userService.findOneByLoginId(loginId).map(u -> {
 
-                if(!BaseEntity.FLAG_NORMAL.equals(u.getStatus())){
-                    throw new RuntimeMsgException("用户 " + loginId + " 登录信息已被锁定");
-                }
+                Assert.assertIsTrue(BaseEntity.FLAG_NORMAL.equals(u.getStatus()), "用户 " + loginId + " 登录信息已被锁定");
+                Assert.assertIsTrue(UserVo.TYPE_SYSTEM.equals(u.getType()),"用户 " + loginId + " 无法登录" );
+
                 String json = Json.toJsonString(u);
                 JedisUtil.put(USER_CACHE, USER_CACHE_ID_ + u.getId(), json);
                 JedisUtil.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + u.getLoginId(), json);

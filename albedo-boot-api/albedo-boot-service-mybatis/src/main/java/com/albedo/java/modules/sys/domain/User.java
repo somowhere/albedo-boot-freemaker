@@ -3,6 +3,7 @@ package com.albedo.java.modules.sys.domain;
 import com.albedo.java.common.persistence.annotation.ManyToOne;
 import com.albedo.java.common.persistence.domain.IdEntity;
 import com.albedo.java.util.PublicUtil;
+import com.albedo.java.util.annotation.DictType;
 import com.albedo.java.util.annotation.SearchField;
 import com.albedo.java.util.domain.Globals;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -67,16 +68,17 @@ public class User extends IdEntity<User, String> {
     @TableField("phone_")
     @SearchField
     private String phone;
-
     @Email
     @Size(max = 100)
     @SearchField
     @TableField("email_")
     private String email;
 
-    @NotNull
-    @TableField("activated_")
-    private boolean activated = false;
+    @TableField("type_")
+    @DictType(name="sys_user_type")
+    private String type;
+    @TableField("key_")
+    private String key;
 
     @Size(min = 2, max = 5)
     @TableField("lang_key")
@@ -107,105 +109,6 @@ public class User extends IdEntity<User, String> {
         this.id = id;
     }
 
-    /**
-     * 用户拥有的角色名称字符串, 多个角色名称用','分隔.
-     */
-    public String getRoleNames() {
-        return roleNames;
-    }
-
-    public void setRoleNames(String roleNames) {
-        this.roleNames = roleNames;
-    }
-
-    public String getLoginId() {
-        return loginId;
-    }
-
-    //Lowercase the login before saving it in database
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean getActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getActivationKey() {
-        return activationKey;
-    }
-
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
-
-    public String getResetKey() {
-        return resetKey;
-    }
-
-    public void setResetKey(String resetKey) {
-        this.resetKey = resetKey;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getResetDate() {
-        return resetDate;
-    }
-
-    public void setResetDate(Date resetDate) {
-        this.resetDate = resetDate;
-    }
-
-    public String getLangKey() {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
-
-    public Org getOrg() {
-        return org;
-    }
-
-    public void setOrg(Org org) {
-        this.org = org;
-    }
 
     public List<String> getRoleIdList() {
         if (PublicUtil.isEmpty(roleIdList) && PublicUtil.isNotEmpty(roles)) {
@@ -227,10 +130,6 @@ public class User extends IdEntity<User, String> {
                 }
             });
         }
-    }
-
-    public String getOrgId() {
-        return orgId;
     }
 
     public void setOrgId(String orgId) {

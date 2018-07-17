@@ -16,6 +16,7 @@ import com.albedo.java.util.base.Reflections;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.util.exception.RuntimeMsgException;
+import com.albedo.java.vo.account.PasswordChangeVo;
 import com.albedo.java.vo.sys.UserExcelVo;
 import com.albedo.java.vo.sys.UserVo;
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -97,7 +98,6 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         }
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(PublicUtil.getCurrentDate());
-        user.setActivated(true);
         insertOrUpdate(user);
         if (PublicUtil.isNotEmpty(user.getRoleIdList())) {
             repository.deleteUserRoles(user.getId());
@@ -210,7 +210,6 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
             throw new RuntimeMsgException("无法获取角色"+userExcelVo.getRoleNames()+"信息");
         }
         user.setRoleIdList(Lists.newArrayList(role.getId()));
-
         save(user);
     }
 }

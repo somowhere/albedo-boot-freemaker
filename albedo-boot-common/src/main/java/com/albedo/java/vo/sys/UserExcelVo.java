@@ -18,6 +18,8 @@ public class UserExcelVo {
     @NotBlank
     @ExcelField(title = "登录Id",sort = 20)
     private String loginId;
+
+    private String password;
     @NotBlank
     @ExcelField(title = "姓名",sort = 30)
     private String name;

@@ -24,6 +24,12 @@ public class UserVo extends DataEntityVo<String> {
 
     public static final int PASSWORD_MAX_LENGTH = 64;
 
+    /*** TYPE_SYSTEM 系统用户 */
+    public static final String TYPE_SYSTEM = "system";
+    /*** TYPE_APP_IOS ios */
+    public static final String TYPE_APP_IOS = "ios";
+    /*** TYPE_APP_ANDRIOD andriod */
+    public static final String TYPE_APP_ANDRIOD = "andriod";
     /*** F_LOGINID */
     public static final String F_LOGINID = "loginId";
     /*** F_LOGINID */
@@ -38,12 +44,12 @@ public class UserVo extends DataEntityVo<String> {
     private String confirmPassword;
     private String orgId;
 
+    private String type;
+    private String key;
     private String name;
     private String phone;
 
     private String email;
-
-    private boolean activated = false;
 
     private String langKey;
 

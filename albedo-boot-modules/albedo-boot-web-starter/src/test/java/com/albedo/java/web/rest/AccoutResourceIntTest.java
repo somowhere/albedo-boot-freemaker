@@ -130,7 +130,6 @@ public class AccoutResourceIntTest {
         User user = new User();
         user.setLoginId("user-jwt-controller-remember-me");
         user.setEmail("user-jwt-controller-remember-me@example.com");
-        user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test11"));
 
         userRepository.insert(user);

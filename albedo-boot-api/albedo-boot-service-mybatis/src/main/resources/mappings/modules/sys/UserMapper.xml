@@ -4,7 +4,8 @@
 
     <sql id="pageUserColumn">
         a.id_ AS `id`,
-        a.activated_ AS `activated`,
+        a.type_ AS `type`,
+        a.key_ AS `key`,
         a.activation_key AS `activationKey`,
         a.created_by AS `createdBy`,
         a.created_date AS `createdDate`,

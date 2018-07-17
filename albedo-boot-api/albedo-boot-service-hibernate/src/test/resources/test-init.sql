@@ -517,7 +517,6 @@ CREATE TABLE sys_user_t (
   name_ varchar(50) DEFAULT NULL,
   email_ varchar(100) DEFAULT NULL,
   phone_ varchar(32) DEFAULT NULL,
-  activated_ bit(1) NOT NULL,
   lang_key varchar(5) DEFAULT NULL,
   activation_key varchar(20) DEFAULT NULL,
   reset_key varchar(20) DEFAULT NULL,

@@ -34,6 +34,15 @@
                     url="${ctx}/sys/org/findTreeData"> </@albedo.treeSelect></div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label col-md-3">用户类型<span class="required">*</span>
+                    </label>
+                    <div class="col-md-5">
+                        <@albedo.form name="type"
+                        cssClass="required" boxType="radio" dictCode="sys_user_type"
+                        value="${(userVo.type)! }"> </@albedo.form>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label col-md-3">登录Id<span class="required">*</span>
                     </label>
                     <div class="col-md-5">
@@ -94,6 +103,12 @@
                     <div class="col-md-8"><@albedo.form name="roleIdList"
                     cssClass="required" data="${allRoles!}" boxType="checkbox"
                     value="${(userVo.roleIds)! }"> </@albedo.form></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">key</label>
+                    <div class="col-md-8">
+                        <input type="text" name="key" value="${(userVo.key)! }" class="form-control"/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">描述</label>
