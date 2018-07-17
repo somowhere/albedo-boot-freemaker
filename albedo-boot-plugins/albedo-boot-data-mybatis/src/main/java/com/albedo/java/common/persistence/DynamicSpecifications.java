@@ -11,7 +11,6 @@ import java.util.List;
 
 public class DynamicSpecifications {
     public static final String MYBITS_SEARCH_PARAMS_MAP = "paramsMap";
-    public static final String MYBITS_SEARCH_DSF = "_sqlConditionDsf";
     public static final String MYBITS_SEARCH_CONDITION = "_condition";
     protected static Logger logger = LoggerFactory.getLogger(DynamicSpecifications.class);
 

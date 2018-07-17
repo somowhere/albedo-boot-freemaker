@@ -4,6 +4,7 @@ import com.albedo.java.util.base.Encodes;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,20 +26,23 @@ public class PageModel<T> implements Pageable, Serializable {
     private int page = 1;
     private int size = 10;
     @JSONField(serialize = false)
+    @ApiModelProperty(hidden = true)
     private Sort sort;
     /**
      * 查询条件json
      */
     @JSONField(serialize = false)
     private String queryConditionJson;
-    @JSONField(serialize = false)
-    private String sqlConditionDsf;
     @JSONField(name="recordsTotal")
+    @ApiModelProperty(hidden = true)
     private long recordsTotal;
+    @ApiModelProperty(hidden = true)
     private long recordsFiltered;
+    @ApiModelProperty(hidden = true)
     private int draw;
 
     @JSONField(name = "data", serialzeFeatures = {SerializerFeature.WriteNullListAsEmpty})
+    @ApiModelProperty(hidden = true)
     private List<T> data;
 
     public PageModel() {
@@ -164,7 +168,7 @@ public class PageModel<T> implements Pageable, Serializable {
      * (non-Javadoc)
      * @see org.springframework.data.domain.Pageable#getPageSize()
      */
-    @JSONField(serialize = false)
+    @JSONField(serialize = false)@ApiModelProperty(hidden = true)
     public int getPageSize() {
         return size;
     }
@@ -173,7 +177,7 @@ public class PageModel<T> implements Pageable, Serializable {
      * (non-Javadoc)
      * @see org.springframework.data.domain.Pageable#getPageNumber()
      */
-    @JSONField(serialize = false)
+    @JSONField(serialize = false)@ApiModelProperty(hidden = true)
     public int getPageNumber() {
         return page;
     }
@@ -181,7 +185,7 @@ public class PageModel<T> implements Pageable, Serializable {
     /*
      * (non-Javadoc)
      * @see org.springframework.data.domain.Pageable#getOffset()
-     */
+     */@ApiModelProperty(hidden = true)
     public int getOffset() {
         return (page - 1) * size;
     }
@@ -288,13 +292,6 @@ public class PageModel<T> implements Pageable, Serializable {
         return result;
     }
 
-    public String getSqlConditionDsf() {
-        return sqlConditionDsf;
-    }
-
-    public void setSqlConditionDsf(String sqlConditionDsf) {
-        this.sqlConditionDsf = sqlConditionDsf;
-    }
     public long getRecordsFiltered() {
         if (recordsFiltered == 0) recordsFiltered = getRecordsTotal();
         return recordsFiltered;
