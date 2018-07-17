@@ -139,7 +139,7 @@ public class WebConfigurer extends WebMvcConfigurerAdapter implements ServletCon
         FilterRegistration.Dynamic cachingHttpHeadersFilter = servletContext.addFilter("cachingHttpHeadersFilter",
                 new CachingHttpHeadersFilter(albedoProperties));
 
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/statics/*", "/swagger-ui/*", "/WEB-INF/views/*", "classpath:/statics/*", "classpath:/WEB-INF/views/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/statics/*", "/swagger-ui/*");
         cachingHttpHeadersFilter.setAsyncSupported(true);
 
     }
