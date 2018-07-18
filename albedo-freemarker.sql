@@ -11,7 +11,7 @@
  Target Server Version : 50721
  File Encoding         : 65001
 
- Date: 17/07/2018 13:40:13
+ Date: 18/07/2018 17:22:22
 */
 
 SET NAMES utf8mb4;
@@ -181,7 +181,7 @@ CREATE TABLE `jhi_persistent_audit_event`  (
   `event_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`event_id`) USING BTREE,
   INDEX `idx_persistent_audit_event`(`principal`, `event_date`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 567 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 568 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of jhi_persistent_audit_event
@@ -430,6 +430,7 @@ INSERT INTO `jhi_persistent_audit_event` VALUES (563, 'admin', '2018-07-17 09:14
 INSERT INTO `jhi_persistent_audit_event` VALUES (564, 'admin', '2018-07-17 10:29:11', 'AUTHENTICATION_SUCCESS');
 INSERT INTO `jhi_persistent_audit_event` VALUES (565, 'admin', '2018-07-17 13:32:10', 'AUTHENTICATION_SUCCESS');
 INSERT INTO `jhi_persistent_audit_event` VALUES (566, 'admin', '2018-07-17 13:39:31', 'AUTHENTICATION_SUCCESS');
+INSERT INTO `jhi_persistent_audit_event` VALUES (567, 'admin', '2018-07-18 16:50:02', 'AUTHENTICATION_SUCCESS');
 
 -- ----------------------------
 -- Table structure for jhi_persistent_audit_evt_data
@@ -4651,6 +4652,7 @@ CREATE TABLE `sys_user_role_t`  (
 -- ----------------------------
 -- Records of sys_user_role_t
 -- ----------------------------
+INSERT INTO `sys_user_role_t` VALUES ('2', '43186a6c08d247c098ea357e28cc75f4');
 INSERT INTO `sys_user_role_t` VALUES ('5', '43186a6c08d247c098ea357e28cc75f4');
 INSERT INTO `sys_user_role_t` VALUES ('fff43e1b172544e890a86f7b38fe6138', '43186a6c08d247c098ea357e28cc75f4');
 
@@ -4670,7 +4672,7 @@ CREATE TABLE `sys_user_t`  (
   `type_` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'system' COMMENT '类型',
   `key_` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `lang_key` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `activation_key` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `property_` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `reset_key` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `reset_date` timestamp(0) NULL DEFAULT NULL,
   `created_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -4689,6 +4691,6 @@ CREATE TABLE `sys_user_t`  (
 -- Records of sys_user_t
 -- ----------------------------
 INSERT INTO `sys_user_t` VALUES ('1', NULL, NULL, 'admin', '$2a$10$LqPGl3Eg4y8Y18cg8ZmBZ.neox2ldzwYOUl7kpGhhL0F8Q80gev5W', 'Administrator', 'admin@localhost', NULL, 'system', NULL, 'zh-cn', NULL, NULL, NULL, 'system', '2018-07-17 13:14:36', 'system', NULL, 0, NULL, 0);
-INSERT INTO `sys_user_t` VALUES ('2', '1', NULL, 'mange', '$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO', '李武', 'anonymous@localhost1', '', 'system', NULL, 'zh-cn', NULL, '54902519356496384898', '2018-07-11 15:29:17', 'system', '2018-07-17 13:14:38', '1', '2018-07-11 15:29:17', 0, '<p>fdsfg</p>', 13);
+INSERT INTO `sys_user_t` VALUES ('2', '1', '/2018/7/18/848cd05dcb714d96b262b97fd54e2ddb.jpg', 'mange', '$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO', '李武', 'anonymous@localhost1', '', 'system', '', 'zh-cn', NULL, '07101724038444399296', '2018-07-18 17:00:54', 'system', '2018-07-17 13:14:38', '1', '2018-07-18 17:00:54', 0, '<p>fdsfg</p>', 17);
 
 SET FOREIGN_KEY_CHECKS = 1;
