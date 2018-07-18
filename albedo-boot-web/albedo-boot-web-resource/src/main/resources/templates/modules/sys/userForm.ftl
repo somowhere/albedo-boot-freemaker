@@ -24,6 +24,13 @@
             <div class="form-body">
                 <input type="hidden" name="id" value="${(userVo.id)!}"/>
                 <div class="form-group">
+                    <label class="control-label col-md-3">头像<span class="required">*</span>
+                    </label>
+                    <div class="col-md-5">
+                        <@albedo.fileInput name="avatar" value="${(userVo.avatar)!}" cssClass="required" type="image"> </@albedo.fileInput>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label col-md-3">所属组织<span
                             class="required">*</span>
                     </label>

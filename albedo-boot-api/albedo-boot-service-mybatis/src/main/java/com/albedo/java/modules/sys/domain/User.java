@@ -40,6 +40,9 @@ public class User extends IdEntity<User, String> {
     /*** F_LOGINID */
     public static final String F_EMAIL = "email";
     private static final long serialVersionUID = 1L;
+    /*** 头像 */
+    @TableField("avatar_")
+    private String avatar;
     @NotBlank
     @Pattern(regexp = Globals.LOGIN_REGEX)
     @Size(min = 1, max = 50)
