@@ -87,10 +87,10 @@ public class User extends IdEntity<User, String> {
     @TableField("lang_key")
     private String langKey;
 
-    @Size(max = 20)
-    @TableField("activation_key")
+    @Size(max = 500)
+    @TableField("property_")
     @JSONField(serialize = false)
-    private String activationKey;
+    private String property;
 
     @Size(max = 20)
     @TableField("reset_key")

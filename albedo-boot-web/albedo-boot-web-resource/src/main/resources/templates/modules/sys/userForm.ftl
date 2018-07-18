@@ -112,9 +112,9 @@
                     value="${(userVo.roleIds)! }"> </@albedo.form></div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">key</label>
+                    <label class="col-md-3 control-label">动态属性</label>
                     <div class="col-md-8">
-                        <input type="text" name="key" value="${(userVo.key)! }" class="form-control"/>
+                        <input type="text" name="key" value="${(userVo.property)! }" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group">

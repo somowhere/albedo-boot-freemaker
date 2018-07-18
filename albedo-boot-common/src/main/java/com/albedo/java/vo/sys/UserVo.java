@@ -2,6 +2,7 @@ package com.albedo.java.vo.sys;
 
 import com.albedo.java.util.base.Collections3;
 import com.albedo.java.vo.base.DataEntityVo;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,7 +54,7 @@ public class UserVo extends DataEntityVo<String> {
 
     private String langKey;
 
-    private String activationKey;
+    private String property;
 
     private String resetKey;
     private ZonedDateTime resetDate = null;
