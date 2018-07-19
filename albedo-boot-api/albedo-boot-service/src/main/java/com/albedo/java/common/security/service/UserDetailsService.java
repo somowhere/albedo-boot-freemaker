@@ -1,9 +1,9 @@
 package com.albedo.java.common.security.service;
 
+import com.albedo.java.common.config.AlbedoProperties;
 import com.albedo.java.common.persistence.domain.BaseEntity;
 import com.albedo.java.common.security.*;
 import com.albedo.java.modules.sys.domain.User;
-import com.albedo.java.modules.sys.repository.UserRepository;
 import com.albedo.java.modules.sys.service.UserService;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.StringUtil;
@@ -34,10 +34,12 @@ public class UserDetailsService implements org.springframework.security.core.use
     private final UserService userService;
 
     private final CacheManager cacheManager;
+    private final AlbedoProperties albedoProperties;
 
-    public UserDetailsService(UserService userService, CacheManager cacheManager) {
+    public UserDetailsService(UserService userService, CacheManager cacheManager, AlbedoProperties albedoProperties) {
         this.userService = userService;
         this.cacheManager = cacheManager;
+        this.albedoProperties = albedoProperties;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         Optional<User> userFromDatabase = userService.findOneByLoginId(login);
         return userFromDatabase.map(user -> {
             Assert.assertIsTrue(BaseEntity.FLAG_NORMAL.equals(user.getStatus()), "用户 " + login + " 登录信息已被锁定");
-            Assert.assertIsTrue(UserVo.TYPE_SYSTEM.equals(user.getType()),"用户 " + login + " 无法登录" );
+            Assert.assertIsTrue(albedoProperties.getUserType().equals(user.getType()),"用户 " + login + " 无法登录" );
 
             List<GrantedAuthority> grantedAuthorities = Lists.newArrayList(new SimpleGrantedAuthority("user"));
             if (SecurityAuthUtil.isAdmin(user.getId())) {

@@ -38,6 +38,7 @@ public class AlbedoProperties {
 
     private String adminPath = "/a";
     private String frontPath = "/f";
+    private String userType = "system";
     private String defaultView;
     private String application = "albedo";
     private String jedisKeyPrefix = "";
@@ -51,7 +52,6 @@ public class AlbedoProperties {
     private Boolean cluster = false;
     private String freeURL = "";
     private String staticFileDirectory = "";
-
     public String getAdminPath(String strs) {
         return PublicUtil.toAppendStr(adminPath, strs);
     }
