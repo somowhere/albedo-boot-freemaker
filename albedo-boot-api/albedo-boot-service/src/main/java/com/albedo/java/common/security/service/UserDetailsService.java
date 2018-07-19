@@ -7,7 +7,9 @@ import com.albedo.java.modules.sys.repository.UserRepository;
 import com.albedo.java.modules.sys.service.UserService;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.StringUtil;
+import com.albedo.java.util.base.Assert;
 import com.albedo.java.util.exception.RuntimeMsgException;
+import com.albedo.java.vo.sys.UserVo;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +46,8 @@ public class UserDetailsService implements org.springframework.security.core.use
         log.debug("Authenticating {}", login);
         Optional<User> userFromDatabase = userService.findOneByLoginId(login);
         return userFromDatabase.map(user -> {
-            if (!BaseEntity.FLAG_NORMAL.equals(user.getStatus())) {
-                throw new RuntimeMsgException("用户 " + login + " 登录信息已被锁定");
-            }
+            Assert.assertIsTrue(BaseEntity.FLAG_NORMAL.equals(user.getStatus()), "用户 " + login + " 登录信息已被锁定");
+            Assert.assertIsTrue(UserVo.TYPE_SYSTEM.equals(user.getType()),"用户 " + login + " 无法登录" );
 
             List<GrantedAuthority> grantedAuthorities = Lists.newArrayList(new SimpleGrantedAuthority("user"));
             if (SecurityAuthUtil.isAdmin(user.getId())) {
