@@ -6,7 +6,7 @@
         a.id_ AS `id`,
         a.type_ AS `type`,
         a.key_ AS `key`,
-        a.activation_key AS `activationKey`,
+        a.property_ AS `property`,
         a.created_by AS `createdBy`,
         a.created_date AS `createdDate`,
         a.description_ AS `description`,
