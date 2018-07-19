@@ -105,6 +105,10 @@ public class AccoutResource extends BaseResource {
      */
     @GetMapping(value = "login")
     public String login(HttpServletRequest request, Model model) {
+        User user = SecurityUtil.getCurrentUser();
+        if (PublicUtil.isNotEmpty(user.getId())) {
+            return PublicUtil.toAppendStr("redirect:", adminPath, "/index");
+        }
         model.addAttribute("isValidateCodeLogin", LoginUtil.isValidateCodeLogin(request.getSession().getId(), false, false));
         return "loginPage";
     }
