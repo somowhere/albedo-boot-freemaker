@@ -32,6 +32,10 @@ import java.util.Set;
 @DynamicInsert
 @DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends IdEntity<String> {
 
     /*** F_LOGINID */
@@ -93,9 +97,9 @@ public class User extends IdEntity<String> {
     private String langKey;
 
     @Size(max = 20)
-    @Column(name = "activation_key", length = 20)
+    @Column(name = "property_", length = 20)
     @JSONField(serialize = false)
-    private String activationKey;
+    private String property;
 
     @Size(max = 20)
     @Column(name = "reset_key", length = 20)
@@ -140,119 +144,6 @@ public class User extends IdEntity<String> {
         this.roleNames = roleNames;
     }
 
-    public String getLoginId() {
-        return loginId;
-    }
-
-    //Lowercase the login before saving it in database
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean getActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getActivationKey() {
-        return activationKey;
-    }
-
-    public void setActivationKey(String activationKey) {
-        this.activationKey = activationKey;
-    }
-
-    public String getResetKey() {
-        return resetKey;
-    }
-
-    public void setResetKey(String resetKey) {
-        this.resetKey = resetKey;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public ZonedDateTime getResetDate() {
-        return resetDate;
-    }
-
-    public void setResetDate(ZonedDateTime resetDate) {
-        this.resetDate = resetDate;
-    }
-
-    public String getLangKey() {
-        return langKey;
-    }
-
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
-
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Set<PersistentToken> getPersistentTokens() {
-        return persistentTokens;
-    }
-
-    public void setPersistentTokens(Set<PersistentToken> persistentTokens) {
-        this.persistentTokens = persistentTokens;
-    }
-
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
-
-    public Org getOrg() {
-        return org;
-    }
-
-    public void setOrg(Org org) {
-        this.org = org;
-    }
 
     public List<String> getRoleIdList() {
         if (PublicUtil.isEmpty(roleIdList) && PublicUtil.isNotEmpty(roles)) {
@@ -281,11 +172,4 @@ public class User extends IdEntity<String> {
     }
 
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 }
