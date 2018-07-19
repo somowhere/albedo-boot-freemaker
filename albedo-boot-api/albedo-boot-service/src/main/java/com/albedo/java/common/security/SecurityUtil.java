@@ -81,11 +81,18 @@ public final class SecurityUtil {
         }
         return null;
     }
-
+    public static String getCurrentUserIdWithNoException() {
+        try {
+            return getCurrentUserId();
+        }catch (Exception e){
+            logger.info("{}", e.getMessage());
+        }
+        return null;
+    }
 
 
     public static String getCurrentAuditor() {
-        String userName = SecurityUtil.getCurrentUserId();
+        String userName = SecurityUtil.getCurrentUserIdWithNoException();
         return (userName != null ? userName : Globals.SYSTEM_ACCOUNT);
     }
 
@@ -96,6 +103,7 @@ public final class SecurityUtil {
      * @return 取不到返回null
      */
     public static User getByUserId(String userId) {
+        if(PublicUtil.isEmpty(userId))return null;
         User user = JedisUtil.getJson(USER_CACHE, USER_CACHE_ID_ + userId, User.class);
         boolean isSearch = false;
         if (user != null && PublicUtil.isNotEmpty(user.getRoles())) {

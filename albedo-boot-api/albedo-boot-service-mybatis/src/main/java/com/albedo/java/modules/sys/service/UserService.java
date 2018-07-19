@@ -103,7 +103,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
             repository.deleteUserRoles(user.getId());
             repository.addUserRoles(user);
         }
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId());
+//        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId());
         log.debug("Save Information for User: {}", user);
         return user;
     }
@@ -163,7 +163,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
             user -> {
                 user.setPassword(newPassword);
                 repository.updateById(user);
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId());
+//                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId());
                 log.debug("Changed password for User: {}", user);
             }
         );
@@ -175,7 +175,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
             user = repository.selectUserByLoginId(loginId);
         }catch (Exception e){
             log.error("{}",e);
-            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId());
+//            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId());
             user = repository.selectUserByLoginId(loginId);
         }
         return user!=null ? Optional.of(user) : Optional.empty();
@@ -184,8 +184,8 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     @Override
     public void lockOrUnLock(List<String> idList) {
         super.lockOrUnLock(idList);
-        selectBatchIds(idList).forEach(user ->
-            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId()));
+//        selectBatchIds(idList).forEach(user ->
+//            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId()));
     }
 
 
@@ -193,8 +193,8 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     public boolean deleteBatchIds(Collection<? extends Serializable> idList) {
 
         boolean rs = super.deleteBatchIds(idList);
-        selectBatchIds(idList).forEach(user ->
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId()));
+//        selectBatchIds(idList).forEach(user ->
+//                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLoginId()));
         return rs;
     }
 

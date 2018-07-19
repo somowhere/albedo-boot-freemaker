@@ -30,7 +30,7 @@ public class PageInitParamFilter extends OncePerRequestFilter {
         request.setAttribute("ctxStatic", PublicUtil.toAppendStr(basePath, "/statics/frame"));
         request.setAttribute("application", albedoProperties.getApplication());
         HttpSession session = request.getSession();
-        if (session.getAttribute("moduleList") == null && PublicUtil.isNotEmpty(SecurityUtil.getCurrentUserId())) {
+        if (session.getAttribute("moduleList") == null && PublicUtil.isNotEmpty(SecurityUtil.getCurrentUserIdWithNoException())) {
             session.setAttribute("moduleList", SecurityUtil.getModuleList());
         }
         filterChain.doFilter(request, response);

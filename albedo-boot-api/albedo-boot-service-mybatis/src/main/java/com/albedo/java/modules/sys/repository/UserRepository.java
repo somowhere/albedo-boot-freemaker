@@ -14,9 +14,9 @@ import java.util.List;
  */
 public interface UserRepository extends BaseRepository<User, String> {
 
-    String USERS_BY_LOGIN_CACHE = "usersByLogin";
+//    String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+//    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     User selectUserByLoginId(String loginId);
 
     void deleteUserRoles(String userId);
