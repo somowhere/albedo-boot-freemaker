@@ -49,7 +49,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         Optional<User> userFromDatabase = userService.findOneByLoginId(login);
         return userFromDatabase.map(user -> {
             Assert.assertIsTrue(BaseEntity.FLAG_NORMAL.equals(user.getStatus()), "用户 " + login + " 登录信息已被锁定");
-            Assert.assertIsTrue(albedoProperties.getUserType().equals(user.getType()),"用户 " + login + " 无法登录" );
+            Assert.assertIsTrue(albedoProperties.getUserType().contains(user.getType()),"用户 " + login + " 无法登录" );
 
             List<GrantedAuthority> grantedAuthorities = Lists.newArrayList(new SimpleGrantedAuthority("user"));
             if (SecurityAuthUtil.isAdmin(user.getId())) {

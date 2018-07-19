@@ -140,7 +140,7 @@ public final class SecurityUtil {
             user = userService.findOneByLoginId(loginId).map(u -> {
 
                 Assert.assertIsTrue(BaseEntity.FLAG_NORMAL.equals(u.getStatus()), "用户 " + loginId + " 登录信息已被锁定");
-                Assert.assertIsTrue(albedoProperties.getUserType().equals(u.getType()),"用户 " + loginId + " 无法登录" );
+                Assert.assertIsTrue(albedoProperties.getUserType().contains(u.getType()),"用户 " + loginId + " 无法登录" );
 
                 String json = Json.toJsonString(u);
                 JedisUtil.put(USER_CACHE, USER_CACHE_ID_ + u.getId(), json);
