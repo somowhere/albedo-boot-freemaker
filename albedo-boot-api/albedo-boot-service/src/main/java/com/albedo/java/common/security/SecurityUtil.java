@@ -151,7 +151,14 @@ public final class SecurityUtil {
         }
         return user;
     }
-
+    public static User getCurrentUserWithNoException() {
+        try {
+            return getCurrentUser();
+        }catch (Exception e){
+            logger.info("{}", e.getMessage());
+        }
+        return new User();
+    }
     /**
      * 返回当前用户可操作状态不为已删除的所有模块
      * <p>

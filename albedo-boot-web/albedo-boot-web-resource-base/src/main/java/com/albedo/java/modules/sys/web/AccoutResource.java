@@ -89,7 +89,7 @@ public class AccoutResource extends BaseResource {
      */
     @GetMapping(value = Globals.INDEX_URL)
     public String index(HttpServletRequest request, Model modele) {
-        User user = SecurityUtil.getCurrentUser();
+        User user = SecurityUtil.getCurrentUserWithNoException();
         if (PublicUtil.isEmpty(user.getId())) {
             return PublicUtil.toAppendStr("redirect:", adminPath, "/login");
         }
@@ -105,7 +105,7 @@ public class AccoutResource extends BaseResource {
      */
     @GetMapping(value = "login")
     public String login(HttpServletRequest request, Model model) {
-        User user = SecurityUtil.getCurrentUser();
+        User user = SecurityUtil.getCurrentUserWithNoException();
         if (PublicUtil.isNotEmpty(user.getId())) {
             return PublicUtil.toAppendStr("redirect:", adminPath, "/index");
         }
