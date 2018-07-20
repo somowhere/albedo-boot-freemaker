@@ -212,4 +212,19 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         user.setRoleIdList(Lists.newArrayList(role.getId()));
         save(user);
     }
+
+    public void checkUserProperty(UserVo userVo){
+        if (doCheckByProperty(Reflections.createObj(UserVo.class, Lists.newArrayList(UserVo.F_ID, UserVo.F_LOGINID),
+            userVo.getId(), userVo.getLoginId()))) {
+            throw new RuntimeMsgException("登录Id已存在");
+        }
+        if (PublicUtil.isNotEmpty(userVo.getPhone()) && !doCheckByProperty(Reflections.createObj(UserVo.class,
+            Lists.newArrayList(UserVo.F_ID, UserVo.F_PHONE), userVo.getId(), userVo.getPhone()))) {
+            throw new RuntimeMsgException("手机已存在");
+        }
+        if (PublicUtil.isNotEmpty(userVo.getEmail()) && !doCheckByProperty(Reflections.createObj(UserVo.class,
+            Lists.newArrayList(UserVo.F_ID, UserVo.F_EMAIL), userVo.getId(), userVo.getEmail()))) {
+            throw new RuntimeMsgException("邮箱已存在");
+        }
+    }
 }
