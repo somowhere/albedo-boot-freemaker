@@ -151,7 +151,7 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
             throw new RuntimeMsgException("两次输入密码不一致");
         }
         // Lowercase the user login before comparing with database
-        service.checkUserProperty(userVo);
+        service.checkProperty(userVo);
         if (PublicUtil.isNotEmpty(userVo.getId())) {
             UserVo temp = service.findOneVo(userVo.getId());
             userVo.setPassword(PublicUtil.isEmpty(userVo.getPassword()) ? temp.getPassword() : passwordEncoder.encode(userVo.getPassword()));

@@ -213,7 +213,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         save(user);
     }
 
-    public void checkUserProperty(UserVo userVo){
+    public void checkProperty(UserVo userVo){
         if (doCheckByProperty(Reflections.createObj(UserVo.class, Lists.newArrayList(UserVo.F_ID, UserVo.F_LOGINID),
             userVo.getId(), userVo.getLoginId()))) {
             throw new RuntimeMsgException("登录Id已存在");
