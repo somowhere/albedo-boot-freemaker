@@ -77,15 +77,7 @@ public class ${ClassName}Resource extends DataVoResource<${ClassName}Service, ${
 	@Timed
 	public ResponseEntity save(@Valid @RequestBody ${ClassName}Vo ${className}Vo) {
 		log.debug("REST request to save ${ClassName}Form : {}", ${className}Vo);
-		<#assign firstListField = true><#list table.columnList as column>
-			<#if column.unique && !column.pk>
-		<#if firstListField><#assign firstListField = false>${ClassName} </#if>${className}Validate = new ${ClassName}(${className}Vo.getId());
-		${className}Validate.set${column.simpleJavaField?cap_first}(${className}Vo.get${column.simpleJavaField?cap_first}());
-		if (<#if column.nullable>PublicUtil.isNotEmpty(${className}Vo.get${column.simpleJavaField?cap_first}()) && </#if>!checkByProperty(${className}Validate)) {
-			throw new RuntimeMsgException(PublicUtil.toAppendStr("保存${functionNameSimple}'", ${className}Vo.get${column.simpleJavaField?cap_first}(),"'失败，${column.comments }已存在"));
-		}
-			</#if>
-		</#list>
+        service.checkProperty({className}Vo);
 		service.save(${className}Vo);
 		return ResultBuilder.buildOk("保存${functionNameSimple}成功");
 
