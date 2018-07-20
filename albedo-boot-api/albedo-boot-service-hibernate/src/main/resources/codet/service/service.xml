@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.albedo.java.util.base.Assert;
 import com.albedo.java.common.persistence.service.DataVoService;
 import com.albedo.java.vo.sys.AreaVo;
 import ${packageName}.${moduleName}.domain.vo<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Vo;
@@ -41,9 +42,8 @@ public class ${ClassName}Service extends DataVoService<${ClassName}Repository, $
 			<#if column.unique && !column.pk>
 		<#if firstListField><#assign firstListField = false>${ClassName} </#if>${className}Validate = new ${ClassName}(${className}Vo.getId());
 		${className}Validate.set${column.simpleJavaField?cap_first}(${className}Vo.get${column.simpleJavaField?cap_first}());
-		if (<#if column.nullable>PublicUtil.isNotEmpty(${className}Vo.get${column.simpleJavaField?cap_first}()) && </#if>!checkByProperty(${className}Validate)) {
-			throw new RuntimeMsgException(PublicUtil.toAppendStr("保存${functionNameSimple}'", ${className}Vo.get${column.simpleJavaField?cap_first}(),"'失败，${column.comments }已存在"));
-		}
+		Assert.assertIsTrue(<#if column.nullable>PublicUtil.isEmpty(${className}Vo.get${column.simpleJavaField?cap_first}()) || </#if>checkByProperty(${className}Validate),
+		PublicUtil.toAppendStr("保存${functionNameSimple}'", ${className}Vo.get${column.simpleJavaField?cap_first}(),"'失败，${column.comments }已存在"))
 			</#if>
 		</#list>
     }
