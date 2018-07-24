@@ -119,7 +119,7 @@ public class DictResource extends TreeVoResource<DictService, DictVo> {
         log.debug("REST request to save Dict : {}", dictVo);
         // Lowercase the dictVo login before comparing with database
         if (!checkByProperty(Reflections.createObj(DictVo.class, Lists.newArrayList(DictVo.F_ID, DictVo.F_CODE),
-                dictVo.getId(), dictVo.getName()))) {
+                dictVo.getId(), dictVo.getCode()))) {
             throw new RuntimeMsgException("编码已存在");
         }
         service.save(dictVo);
