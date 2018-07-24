@@ -219,7 +219,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
             userVo.getId(), userVo.getLoginId())), "登录Id已存在");
         Assert.assertIsTrue(PublicUtil.isEmpty(userVo.getPhone()) || doCheckByProperty(Reflections.createObj(UserVo.class,
             Lists.newArrayList(UserVo.F_ID, UserVo.F_PHONE), userVo.getId(), userVo.getPhone())), "手机已存在");
-        Assert.assertIsTrue(PublicUtil.isNotEmpty(userVo.getEmail()) || doCheckByProperty(Reflections.createObj(UserVo.class,
+        Assert.assertIsTrue(PublicUtil.isEmpty(userVo.getEmail()) || doCheckByProperty(Reflections.createObj(UserVo.class,
             Lists.newArrayList(UserVo.F_ID, UserVo.F_EMAIL), userVo.getId(), userVo.getEmail())), "邮箱已存在");
 
     }

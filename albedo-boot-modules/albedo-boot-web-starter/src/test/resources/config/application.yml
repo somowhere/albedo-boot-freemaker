@@ -17,6 +17,8 @@ management:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
 spring:
+    application:
+        name: albedoBootWebApp
     profiles:
         active: dev
         include: swagger

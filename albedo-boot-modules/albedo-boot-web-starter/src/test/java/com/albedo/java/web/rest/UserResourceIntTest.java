@@ -219,15 +219,15 @@ public class UserResourceIntTest {
         // Initialize the database
         userService.save(user);
         // Get all the users
-        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/page"))
+        restUserMockMvc.perform(get(albedoProperties.getAdminPath("/sys/user/page?sortName=a.created_date desc"))
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.data.[*].loginId").value(hasItem(DEFAULT_LOGIN)))
             .andExpect(jsonPath("$.data.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.data.[*].phone").value(hasItem(DEFAULT_PHONE)))
-            .andExpect(jsonPath("$.data.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.data.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
+            .andExpect(jsonPath("$.data.[*].email").value(hasItem(DEFAULT_EMAIL)));
+//            .andExpect(jsonPath("$.data.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
     }
 
     @Test

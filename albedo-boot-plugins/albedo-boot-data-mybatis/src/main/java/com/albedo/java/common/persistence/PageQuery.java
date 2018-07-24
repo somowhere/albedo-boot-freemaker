@@ -31,12 +31,17 @@ public class PageQuery<T> extends Page<T> {
             Iterator<Sort.Order> iterator = pageable.getSort().iterator();
             while (iterator.hasNext()){
                 Sort.Order order = iterator.next();
-                String orderProperty=PublicUtil.toAppendStr("`",order.getProperty(),"`");
+                //PublicUtil.toAppendStr("`",,"`");
+                String orderProperty=order.getProperty();
                 if(order.getDirection().isAscending()){
-                    if(this.getAscs() == null)this.setAscs(Lists.newArrayList());
+                    if(this.getAscs() == null) {
+                        this.setAscs(Lists.newArrayList());
+                    }
                     this.getAscs().add(orderProperty);
                 }else if(order.getDirection().isDescending()){
-                    if(this.getDescs() == null)this.setDescs(Lists.newArrayList());
+                    if(this.getDescs() == null) {
+                        this.setDescs(Lists.newArrayList());
+                    }
                     this.getDescs().add(orderProperty);
                 }
             }
