@@ -12,6 +12,7 @@ import com.albedo.java.modules.sys.repository.RoleRepository;
 import com.albedo.java.modules.sys.repository.UserRepository;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.RandomUtil;
+import com.albedo.java.util.base.Assert;
 import com.albedo.java.util.base.Reflections;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
@@ -214,17 +215,12 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     }
 
     public void checkProperty(UserVo userVo){
-        if (doCheckByProperty(Reflections.createObj(UserVo.class, Lists.newArrayList(UserVo.F_ID, UserVo.F_LOGINID),
-            userVo.getId(), userVo.getLoginId()))) {
-            throw new RuntimeMsgException("登录Id已存在");
-        }
-        if (PublicUtil.isNotEmpty(userVo.getPhone()) && !doCheckByProperty(Reflections.createObj(UserVo.class,
-            Lists.newArrayList(UserVo.F_ID, UserVo.F_PHONE), userVo.getId(), userVo.getPhone()))) {
-            throw new RuntimeMsgException("手机已存在");
-        }
-        if (PublicUtil.isNotEmpty(userVo.getEmail()) && !doCheckByProperty(Reflections.createObj(UserVo.class,
-            Lists.newArrayList(UserVo.F_ID, UserVo.F_EMAIL), userVo.getId(), userVo.getEmail()))) {
-            throw new RuntimeMsgException("邮箱已存在");
-        }
+        Assert.assertIsTrue(doCheckByProperty(Reflections.createObj(UserVo.class, Lists.newArrayList(UserVo.F_ID, UserVo.F_LOGINID),
+            userVo.getId(), userVo.getLoginId())), "登录Id已存在");
+        Assert.assertIsTrue(PublicUtil.isEmpty(userVo.getPhone()) || doCheckByProperty(Reflections.createObj(UserVo.class,
+            Lists.newArrayList(UserVo.F_ID, UserVo.F_PHONE), userVo.getId(), userVo.getPhone())), "手机已存在");
+        Assert.assertIsTrue(PublicUtil.isNotEmpty(userVo.getEmail()) || doCheckByProperty(Reflections.createObj(UserVo.class,
+            Lists.newArrayList(UserVo.F_ID, UserVo.F_EMAIL), userVo.getId(), userVo.getEmail())), "邮箱已存在");
+
     }
 }
