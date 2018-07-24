@@ -84,7 +84,7 @@
                         }
                         }
                         , {
-                            data: 'group'
+                            data: 'group',name:'`group`'
                         }
                         , {
                             data: 'jobStatus'
