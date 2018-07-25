@@ -1,9 +1,9 @@
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3">
     <@albedo.treeShow id="org_" title="组织机构" selectNodeId="nodeId" url="${ctx}/sys/org/findTreeData?all"
     clickNodeFn="clickTreeNodeOrg" allowCancelSelect="true" cancelClickNodeFn="cancelClickNodeOrg" nodesLevel="3"> </@albedo.treeShow>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-9">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet light bordered">
             <div class="portlet-title">

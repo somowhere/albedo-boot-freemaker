@@ -19,6 +19,7 @@ import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.util.exception.RuntimeMsgException;
 import com.albedo.java.vo.account.PasswordChangeVo;
 import com.albedo.java.vo.sys.UserExcelVo;
+import com.albedo.java.vo.sys.UserTableVo;
 import com.albedo.java.vo.sys.UserVo;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.SqlHelper;
@@ -143,8 +144,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     }
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
-    @Override
-    public PageModel<User> findPage(PageModel<User> pm, List<QueryCondition> authQueryConditions) {
+    public PageModel<UserTableVo> findTablePage(PageModel<UserTableVo> pm, List<QueryCondition> authQueryConditions) {
         //拼接查询动态对象
         SpecificationDetail<User> spec = DynamicSpecifications.
                 buildSpecification(pm.getQueryConditionJson(),

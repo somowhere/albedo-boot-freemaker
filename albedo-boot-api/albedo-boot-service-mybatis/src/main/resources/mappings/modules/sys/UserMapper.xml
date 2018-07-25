@@ -62,9 +62,10 @@
     </select>
     <select id="selectRelationPage" resultType="com.albedo.java.vo.sys.UserTableVo">
         SELECT
-        a.id_ as id,
-        a.name_ AS name,
+        a.id_ AS id,
+        a.name_ AS NAME,
         b.name_ AS orgName,
+        p.name_ AS orgParentName,
         a.login_id AS loginId,
         a.email_ AS email,
         a.phone_ AS phone,
@@ -74,11 +75,17 @@
         FROM
         sys_user_t a
         LEFT JOIN sys_org_t b ON a.org_id = b.id_
-        LEFT JOIN ( select c.user_id as userId,group_concat( d.name_ ) as roleNames from
-        sys_user_role_t c LEFT JOIN sys_role_t d ON c.role_id = d.id_
+        LEFT JOIN sys_org_t p ON b.parent_id = p.id_
+        LEFT JOIN (
+        SELECT
+        c.user_id AS userId,
+        group_concat( d.name_ ) AS roleNames
+        FROM
+        sys_user_role_t c
+        LEFT JOIN sys_role_t d ON c.role_id = d.id_
         GROUP BY
         c.user_id
-        ) c on a.id_=c.userId
+        ) c ON a.id_ = c.userId
         <where>
             ${ew.sqlSegment}
         </where>

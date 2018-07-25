@@ -2,6 +2,7 @@ package com.albedo.java.modules.sys.repository;
 
 import com.albedo.java.common.persistence.repository.BaseRepository;
 import com.albedo.java.modules.sys.domain.User;
+import com.albedo.java.vo.sys.UserTableVo;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,6 +24,6 @@ public interface UserRepository extends BaseRepository<User, String> {
 
     void addUserRoles(User user);
 
-    List<User> selectRelationPage(RowBounds rowBounds, @Param("ew") Wrapper<User> wrapper);
+    List<UserTableVo> selectRelationPage(RowBounds rowBounds, @Param("ew") Wrapper<User> wrapper);
 
 }
