@@ -31,8 +31,10 @@ public class PageQuery<T> extends Page<T> {
             Iterator<Sort.Order> iterator = pageable.getSort().iterator();
             while (iterator.hasNext()){
                 Sort.Order order = iterator.next();
-                //PublicUtil.toAppendStr("`",,"`");
                 String orderProperty=order.getProperty();
+                if(orderProperty.contains(".")){
+                    orderProperty = PublicUtil.toAppendStr("`",orderProperty,"`");
+                }
                 if(order.getDirection().isAscending()){
                     if(this.getAscs() == null) {
                         this.setAscs(Lists.newArrayList());
