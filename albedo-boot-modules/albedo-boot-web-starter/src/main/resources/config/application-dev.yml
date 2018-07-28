@@ -21,6 +21,8 @@ spring:
             enabled: true # we use gulp + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
+    jmx:
+        default-domain: ${spring.application.name}
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/albedo-old?useUnicode=true&characterEncoding=utf8&useSSL=false

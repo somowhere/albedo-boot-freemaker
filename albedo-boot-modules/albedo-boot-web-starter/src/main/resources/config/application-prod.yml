@@ -17,6 +17,8 @@ spring:
             enabled: false
     jackson:
         serialization.indent_output: true
+    jmx:
+        default-domain: ${spring.application.name}
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/albedo-new?useUnicode=true&characterEncoding=utf8&useSSL=false
