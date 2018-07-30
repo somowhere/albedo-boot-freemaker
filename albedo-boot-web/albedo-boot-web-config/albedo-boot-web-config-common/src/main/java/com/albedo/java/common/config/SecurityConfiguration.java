@@ -105,7 +105,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(albedoProperties.getAdminPath(SecurityConstants.authLogin)).permitAll()
                 .antMatchers(albedoProperties.getAdminPath(SecurityConstants.logoutUrl)).permitAll()
                 .antMatchers(permissAll).permitAll()
-                .antMatchers("/**").authenticated()
+                .antMatchers(albedoProperties.getAdminPath("/**")).authenticated()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
