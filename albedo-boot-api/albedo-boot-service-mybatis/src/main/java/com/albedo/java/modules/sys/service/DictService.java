@@ -29,6 +29,7 @@ public class DictService extends TreeVoService<DictRepository, Dict, String, Dic
             Condition.create()
                 .ne(getClassNameProfix()+Dict.F_SQL_STATUS, status)
                 .eq(getClassNameProfix()+Dict.F_SQL_ISSHOW, yes)
+                .orderBy(getClassNameProfix()+Dict.F_SQL_SORT, true)
         );
 
     }
