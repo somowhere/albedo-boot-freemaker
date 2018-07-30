@@ -131,14 +131,14 @@ public class InvocationSecurityMetadataSourceService
         }
         String rqurl = request.getRequestURI();
 
-        if (new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.loginUrl)).matches(request)
-                || new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.authLogin)).matches(request)
-                || new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.logoutUrl)).matches(request)) {
+        if (new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.loginUrl)).matches(request)
+                || new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.authLogin)).matches(request)
+                || new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.logoutUrl)).matches(request)) {
             return null;
         }
 
         for (int i = 0; i < SecurityConstants.authorizePermitAll.length; i++) {
-            if (new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.authorizePermitAll[i])).matches(request)) {
+            if (new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.authorizePermitAll[i])).matches(request)) {
                 return null;
             }
         }

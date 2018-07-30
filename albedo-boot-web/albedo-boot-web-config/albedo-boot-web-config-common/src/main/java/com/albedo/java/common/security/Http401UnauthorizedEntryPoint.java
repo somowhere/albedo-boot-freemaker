@@ -44,7 +44,7 @@ public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
                 "权限不足或登录超时"), response);
 
         } else {
-            response.sendRedirect(PublicUtil.toAppendStr(albedoProperties.getAdminPath(), "/login"));
+            response.sendRedirect(PublicUtil.toAppendStr(request.getContextPath(), albedoProperties.getAdminPath(), "/login"));
         }
 
     }
