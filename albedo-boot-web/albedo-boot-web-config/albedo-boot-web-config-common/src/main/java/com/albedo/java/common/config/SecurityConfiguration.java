@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -61,8 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource
     public void configureGlobal(AuthenticationManagerBuilder auth) {
         try {
-            auth
-                    .userDetailsService(userDetailsService)
+            auth.userDetailsService(userDetailsService)
                     .passwordEncoder(passwordEncoder());
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
@@ -105,7 +105,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(albedoProperties.getAdminPath(SecurityConstants.authLogin)).permitAll()
                 .antMatchers(albedoProperties.getAdminPath(SecurityConstants.logoutUrl)).permitAll()
                 .antMatchers(permissAll).permitAll()
-                .antMatchers(albedoProperties.getAdminPath("/**")).authenticated()
+                .antMatchers("/**").authenticated()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
