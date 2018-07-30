@@ -115,12 +115,13 @@ public class InvocationSecurityMetadataSourceService
         // object 是一个URL，被用户请求的url。
         FilterInvocation filterInvocation = (FilterInvocation) object;
         HttpServletRequest request = filterInvocation.getHttpRequest();
+        String contextPath = request.getContextPath();
         Iterator<String> ite = getResourceMap().keySet().iterator();
-        String url = null;
+        String url;
         while (ite.hasNext()) {
             url = ite.next();
             if (PublicUtil.isNotEmpty(url)) {
-                if (new AntPathRequestMatcher(PublicUtil.toAppendStr(albedoProperties.getAdminPath(), url))
+                if (new AntPathRequestMatcher(PublicUtil.toAppendStr(contextPath, albedoProperties.getAdminPath(), url))
                         .matches(request)) {
                     SecurityConstants.setCurrentUrl(url);
                     return getResourceMap().get(PublicUtil.toAppendStr(url, "-", request.getMethod().toUpperCase()));
@@ -130,19 +131,19 @@ public class InvocationSecurityMetadataSourceService
         }
         String rqurl = request.getRequestURI();
 
-        if (new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.loginUrl)).matches(request)
-                || new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.authLogin)).matches(request)
-                || new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.logoutUrl)).matches(request)) {
+        if (new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.loginUrl)).matches(request)
+                || new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.authLogin)).matches(request)
+                || new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.logoutUrl)).matches(request)) {
             return null;
         }
 
         for (int i = 0; i < SecurityConstants.authorizePermitAll.length; i++) {
-            if (new AntPathRequestMatcher(albedoProperties.getAdminPath(SecurityConstants.authorizePermitAll[i])).matches(request)) {
+            if (new AntPathRequestMatcher(contextPath+albedoProperties.getAdminPath(SecurityConstants.authorizePermitAll[i])).matches(request)) {
                 return null;
             }
         }
 
-        if (rqurl.startsWith(albedoProperties.getAdminPath())) {
+        if (rqurl.startsWith(contextPath+albedoProperties.getAdminPath())) {
             return Lists.newArrayList(new SecurityConfig("user"));
         }
 

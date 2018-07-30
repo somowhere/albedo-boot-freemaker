@@ -37,7 +37,6 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@EnableGlobalAuthentication
 @BaseInit
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -106,7 +105,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(albedoProperties.getAdminPath(SecurityConstants.authLogin)).permitAll()
                 .antMatchers(albedoProperties.getAdminPath(SecurityConstants.logoutUrl)).permitAll()
                 .antMatchers(permissAll).permitAll()
-                .antMatchers(albedoProperties.getAdminPath("/**")).authenticated()
+                .antMatchers("/**").authenticated()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
