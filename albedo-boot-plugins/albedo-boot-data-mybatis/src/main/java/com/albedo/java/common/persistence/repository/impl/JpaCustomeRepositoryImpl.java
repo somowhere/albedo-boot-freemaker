@@ -34,10 +34,10 @@ public class JpaCustomeRepositoryImpl<T extends GeneralEntity>
         if (PublicUtil.isNotEmpty(comboSearch) && PublicUtil.isNotEmpty(comboSearch.getId())
                 && PublicUtil.isNotEmpty(comboSearch.getName()) && PublicUtil.isNotEmpty(comboSearch.getModule())) {
             StringBuffer sb = new StringBuffer()
-                    .append(comboSearch.getId()).append("as id,").append(comboSearch.getName()).append("as name,");
+                    .append(comboSearch.getId()).append(" as id,").append(comboSearch.getName()).append(" as name");
             boolean flag = PublicUtil.isNotEmpty(comboSearch.getParentId());
             if (flag) {
-                sb.append(",").append(comboSearch.getParentId()).append("as pId");
+                sb.append(",").append(comboSearch.getParentId()).append(" as pId");
             }
             ComboQuery comboQuery = new ComboQuery();
             comboQuery.setColumns(sb.toString());

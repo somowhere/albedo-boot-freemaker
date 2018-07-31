@@ -25,8 +25,6 @@ public class ComboSearch implements Serializable {
     /**是否显示复选框*/
     private String ckecked;
     /**排除掉的编号（不能选择的编号）*/
-    private String extId;
-    /**默认选择值*/
-    private String selectIds;
+    private String sort;
 
 }

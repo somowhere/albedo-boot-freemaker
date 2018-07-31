@@ -8,7 +8,9 @@
         FROM
         ${tableName}
         WHERE status_ != -2 ${condition}
-        ORDER BY a.sort
+        <if test="sort!=null and sort!=''">
+        ORDER BY ${sort}
+        </if>
     </select>
 
 </mapper>
