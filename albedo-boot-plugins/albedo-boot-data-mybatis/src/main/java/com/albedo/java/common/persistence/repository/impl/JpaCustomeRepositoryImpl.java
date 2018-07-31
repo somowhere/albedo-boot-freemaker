@@ -41,7 +41,7 @@ public class JpaCustomeRepositoryImpl<T extends GeneralEntity>
             }
             ComboQuery comboQuery = new ComboQuery();
             comboQuery.setColumns(sb.toString());
-            comboQuery.setTableName(comboSearch.getName());
+            comboQuery.setTableName(comboSearch.getModule());
             if (PublicUtil.isNotEmpty(comboSearch.getWhere())) {
                 comboQuery.setCondition(" and " + comboSearch.getWhere());
             }
