@@ -69,7 +69,7 @@ public class FormDirective implements TemplateDirectiveModel {
             try {
                 sb = convertMapListToString(params, Json.parseArray(data, ComboData.class));
             } catch (Exception e) {
-                log.warn("data error {}", e.getMessage());
+                log.warn("data error {}", e);
             }
         } else if (PublicUtil.isNotEmpty(combo)) {
             try {
@@ -77,7 +77,7 @@ public class FormDirective implements TemplateDirectiveModel {
                 sb = convertMapListToString(params,
                         SpringContextHolder.getBean(JpaCustomeRepository.class).findJson(item));
             } catch (Exception e) {
-                log.warn("combo error {}", e.getMessage());
+                log.warn("combo error {}", e);
             }
         }
         if(sb == null) sb = "";
