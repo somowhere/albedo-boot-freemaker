@@ -11,6 +11,7 @@ public class ComboQuery implements Serializable {
     private String columns; // 下拉列表隐藏值
     private String tableName; // 下拉列表显示值
     private String condition; // 树形结构父节点
+    private String sort; // 树形结构父节点
 
 
 }

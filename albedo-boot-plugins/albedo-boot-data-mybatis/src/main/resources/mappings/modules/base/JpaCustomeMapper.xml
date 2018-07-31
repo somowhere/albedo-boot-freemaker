@@ -7,7 +7,9 @@
         SELECT ${columns}
         FROM
         ${tableName}
-        WHERE status_ != -2 ${condition}
+        <where>
+            ${condition}
+        </where>
         <if test="sort!=null and sort!=''">
         ORDER BY ${sort}
         </if>

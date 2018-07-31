@@ -43,9 +43,12 @@ public class JpaCustomeRepositoryImpl<T extends GeneralEntity>
             comboQuery.setColumns(sb.toString());
             comboQuery.setTableName(comboSearch.getModule());
             if (PublicUtil.isNotEmpty(comboSearch.getWhere())) {
-                comboQuery.setCondition(" and " + comboSearch.getWhere());
+                comboQuery.setCondition(comboSearch.getWhere());
             }
-            mapList = selectOne("_findByCombo", comboQuery);
+            if (PublicUtil.isNotEmpty(comboSearch.getSort())) {
+                comboQuery.setSort(comboSearch.getSort());
+            }
+            mapList = selectList("_findByCombo", comboQuery);
         }
         return mapList;
     }
