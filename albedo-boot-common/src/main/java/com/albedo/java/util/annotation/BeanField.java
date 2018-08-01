@@ -19,8 +19,12 @@ import static java.lang.annotation.ElementType.METHOD;
 public @interface BeanField {
 
     /**
-     * 导出字段字段排序（升序）
+     * 指定属性
      */
-    boolean ingore() default true;
+    String writeProperty() default "";
+    /**
+     * 是否忽略
+     */
+    boolean ingore() default false;
 
 }

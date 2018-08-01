@@ -383,13 +383,26 @@ public class Reflections {
      * @return
      */
     public static <T extends Annotation> T getAnnotationByClazz(Class<?> cls, String pName, Class<T> annotationClass) {
-        try {
-            Object obj = cls.newInstance();
-            return getAnnotation(obj, pName, annotationClass);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+        if (annotationClass == null || cls == null) {
+            throw new NullPointerException();
         }
-        return null;
+        T an = null;
+        Class<?> temp = cls;
+        while (an == null && checkClassIsBase(temp.toString())) {
+            try {
+                an = temp.getDeclaredField(pName).getAnnotation(annotationClass);
+            } catch (Exception e) {
+            }
+            try {
+                if (an == null)
+                    an = temp.getDeclaredMethod(PublicUtil.toAppendStr(GETTER_PREFIX, StringUtil.capitalize(pName)))
+                        .getAnnotation(annotationClass);
+            } catch (Exception e) {
+            }
+            temp = temp.getSuperclass();
+        }
+        return an;
+
     }
 
     /**
@@ -401,26 +414,10 @@ public class Reflections {
      * @return
      */
     public static <T extends Annotation> T getAnnotation(Object obj, String pName, Class<T> annotationClass) {
-        if (annotationClass == null || obj == null)
+        if (annotationClass == null || obj == null) {
             throw new NullPointerException();
-        T an = null;
-        Class<?> temp = obj.getClass();
-        while (an == null && checkClassIsBase(temp.toString())) {
-            try {
-                an = temp.getDeclaredField(pName).getAnnotation(annotationClass);
-            } catch (Exception e) {
-                // logger.debug(e.getMessage());
-            }
-            try {
-                if (an == null)
-                    an = temp.getDeclaredMethod(PublicUtil.toAppendStr(GETTER_PREFIX, StringUtil.capitalize(pName)))
-                            .getAnnotation(annotationClass);
-            } catch (Exception e) {
-                // logger.debug(e.getMessage());
-            }
-            temp = temp.getSuperclass();
         }
-        return an;
+        return getAnnotationByClazz(obj.getClass(), pName, annotationClass);
     }
 
     /**

@@ -21,14 +21,14 @@ public class TreeEntityVo extends DataEntityVo<String> {
     /*** 上级模块 */
     protected String parentId;
     /*** 上级模块 */
-    @BeanField
+    @BeanField(ingore = true)
     protected String parentIds;
     /*** 序号 */
     protected Integer sort;
     /*** 父模块名称 */
-    @BeanField
+    @BeanField(ingore = true)
     private String parentName;
-    @BeanField
+    @BeanField(ingore = true)
     private boolean isLeaf;
 
 }
