@@ -82,11 +82,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         String adminPath = albedoProperties.getAdminPath();
 
-        String[] permissAll = new String[SecurityConstants.authorizePermitAll.length];
+        String[] permissAll = new String[SecurityConstants.authorizePermitAll.length+SecurityConstants.authorizeAdminPermitAll.length];
 
         for (int i = 0; i < permissAll.length; i++) {
-            permissAll[i] = PublicUtil.toAppendStr(adminPath, SecurityConstants.authorizePermitAll[i]);
+            permissAll[i] = SecurityConstants.authorizePermitAll[i];
         }
+        for (int i = SecurityConstants.authorizePermitAll.length; i < permissAll.length; i++) {
+            permissAll[i] = adminPath+SecurityConstants.authorizeAdminPermitAll[i];
+        }
+
 
         http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(http401UnauthorizedEntryPoint)
