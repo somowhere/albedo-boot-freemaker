@@ -75,13 +75,13 @@ public class PageableParameterBuilderPlugin implements OperationBuilderPlugin {
     protected Parameter createPageParameter(ParameterContext context) {
         ModelReference intModel = this.createModelRefFactory(context).apply(this.resolver.resolve(Integer.TYPE, new Type[0]));
         return (new ParameterBuilder()).name(this.getPageName()).parameterType("query").modelRef(intModel)
-            .description("分页条数").build();
+            .description("页码").build();
     }
 
     protected Parameter createSizeParameter(ParameterContext context) {
         ModelReference intModel = this.createModelRefFactory(context).apply(this.resolver.resolve(Integer.TYPE, new Type[0]));
         return (new ParameterBuilder()).name(this.getSizeName()).parameterType("query").modelRef(intModel)
-            .description("页码").build();
+            .description("分页条数").build();
     }
     //sortName: notice desc
     protected Parameter createSortParameter(ParameterContext context) {
