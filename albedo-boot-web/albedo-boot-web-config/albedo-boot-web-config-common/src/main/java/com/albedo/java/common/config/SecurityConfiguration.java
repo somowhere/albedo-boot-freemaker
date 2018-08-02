@@ -84,11 +84,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         String[] permissAll = new String[SecurityConstants.authorizePermitAll.length+SecurityConstants.authorizeAdminPermitAll.length];
 
-        for (int i = 0; i < permissAll.length; i++) {
+        for (int i = 0; i < SecurityConstants.authorizePermitAll.length; i++) {
             permissAll[i] = SecurityConstants.authorizePermitAll[i];
         }
-        for (int i = SecurityConstants.authorizePermitAll.length; i < permissAll.length; i++) {
-            permissAll[i] = adminPath+SecurityConstants.authorizeAdminPermitAll[i];
+        for (int i = SecurityConstants.authorizePermitAll.length,j=0; i < permissAll.length; i++,j++) {
+            permissAll[i] = adminPath+SecurityConstants.authorizeAdminPermitAll[j];
         }
 
 
