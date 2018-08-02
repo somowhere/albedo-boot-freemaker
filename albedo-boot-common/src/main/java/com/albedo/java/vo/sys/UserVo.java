@@ -1,5 +1,6 @@
 package com.albedo.java.vo.sys;
 
+import com.albedo.java.util.annotation.BeanField;
 import com.albedo.java.util.base.Collections3;
 import com.albedo.java.vo.base.DataEntityVo;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -61,7 +62,10 @@ public class UserVo extends DataEntityVo<String> {
 
     private List<String> roleIdList;
     private String roleNames;
+    @BeanField(writeProperty = "org.name")
     private String orgName;
+    @BeanField(writeProperty = "org.code")
+    private String orgCode;
 
     private List<String> authorities;
 

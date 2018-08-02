@@ -1,6 +1,5 @@
 package com.albedo.java.web.rest;
 
-import com.albedo.java.AlbedoBootWebApp;
 import com.albedo.java.common.config.AlbedoProperties;
 import com.albedo.java.common.persistence.DynamicSpecifications;
 import com.albedo.java.common.persistence.SpecificationDetail;
@@ -18,6 +17,7 @@ import com.albedo.java.util.base.Collections3;
 import com.albedo.java.util.domain.Globals;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.vo.sys.UserVo;
+import com.albedo.java.AlbedoBootWebApp;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -156,8 +156,8 @@ public class UserResourceIntTest {
             null,
             null,
             null,
-
             Collections3.extractToList(roles, Role.F_ID),
+            null,
             null,
             null,null);
 
@@ -197,6 +197,7 @@ public class UserResourceIntTest {
             null,
             null,
             Collections3.extractToList(roles, Role.F_ID),
+            null,
             null,
             null,null);
 
@@ -279,6 +280,7 @@ public class UserResourceIntTest {
             null,
             Collections3.extractToList(roles, Role.F_ID),
             null,
+            null,
             null,null);
         managedUserVM.setId(updatedUser.getId());
         restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
@@ -324,6 +326,7 @@ public class UserResourceIntTest {
             null,
             Collections3.extractToList(roles, Role.F_ID),
             null,
+            null,
             null,null);
         managedUserVM.setId(updatedUser.getId());
         restUserMockMvc.perform(post(albedoProperties.getAdminPath("/sys/user/edit"))
@@ -358,6 +361,7 @@ public class UserResourceIntTest {
             null,
             null,
             Collections3.extractToList(roles, Role.F_ID),
+            null,
             null,null,null
         );
         managedUserVM.setId(updatedUser.getId());

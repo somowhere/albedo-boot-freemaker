@@ -63,9 +63,6 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         UserVo userResult = new UserVo();
         super.copyBeanToVo(user, userResult);
         userResult.setRoleNames(user.getRoleNames());
-        if (user.getOrg() != null) {
-            userResult.setOrgName(user.getOrg().getName());
-        }
         return userResult;
     }
 
