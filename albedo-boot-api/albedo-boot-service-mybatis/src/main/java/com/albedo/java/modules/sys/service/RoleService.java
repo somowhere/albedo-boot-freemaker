@@ -49,7 +49,7 @@ public class RoleService extends DataVoService<RoleRepository, Role, String, Rol
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
     public RoleVo findOneVo(String id) {
-        Role role = findRelationOne(id);
+        Role role = findRelationOneByPk(id);
         if(role!=null){
             role.setOrg(orgRepository.selectById(role.getOrgId()));
         }

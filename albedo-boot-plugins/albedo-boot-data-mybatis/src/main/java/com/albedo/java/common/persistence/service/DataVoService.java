@@ -40,7 +40,7 @@ public abstract class DataVoService<Repository extends BaseRepository<T, PK>,
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public V findOneVo(PK id) {
-        return copyBeanToVo(findRelationOne(id));
+        return copyBeanToVo(findRelationOneByPk(id));
     }
 
     public boolean doCheckByProperty(V entityForm) {

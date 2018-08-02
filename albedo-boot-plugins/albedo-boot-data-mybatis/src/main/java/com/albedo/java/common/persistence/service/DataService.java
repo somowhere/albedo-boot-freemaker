@@ -16,6 +16,8 @@ import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.SqlHelper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -38,11 +40,25 @@ public abstract class DataService<Repository extends BaseRepository<T, PK>, T ex
     }
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
-    public T findRelationOne(Serializable id) {
+    public T findRelationOneByPk(Serializable id) {
         List<T> relationList = repository.findRelationList(Condition.create().eq(getClassNameProfix()+DataEntity.F_SQL_ID, id));
         return SqlHelper.getObject(relationList);
     }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public T findRelationOne(Wrapper<T> wrapper) {
+        List<T> relationList = repository.findRelationList(wrapper);
+        return SqlHelper.getObject(relationList);
+    }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public T findRelationOne(Wrapper<T> wrapper, int max) {
+        List<T> relationList = repository.findRelationPage(new RowBounds(0,max),wrapper);
+        return SqlHelper.getObject(relationList);
+    }
 
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public T findRelationTopOne(Wrapper<T> wrapper) {
+        return findRelationOne(wrapper, 1);
+    }
 
     /**
      * 逻辑删除 集合
@@ -67,6 +83,7 @@ public abstract class DataService<Repository extends BaseRepository<T, PK>, T ex
         });
     }
 
+    @Override
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public PageModel<T> findPage(PageModel<T> pm) {
         return findPageQuery(pm, null);
@@ -100,13 +117,16 @@ public abstract class DataService<Repository extends BaseRepository<T, PK>, T ex
         return findRelationPage(pm, specificationDetail);
     }
 
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<ComboData> findJson(ComboSearch comboSearch) {
         return jpaCustomeRepository.findJson(comboSearch);
     }
 
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public long findCount(SpecificationDetail<T> specificationDetail) {
         return repository.selectCount(specificationDetail.toEntityWrapper());
     }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public long findCount() {
         return repository.selectCount(null);
     }

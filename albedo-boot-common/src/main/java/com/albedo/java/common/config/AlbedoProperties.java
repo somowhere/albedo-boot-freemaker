@@ -40,6 +40,7 @@ public class AlbedoProperties {
     private String frontPath = "/f";
     private String userType = "system";
     private String defaultView;
+    private String contextPath;
     private String application = "albedo";
     private String jedisKeyPrefix = "";
     private String urlSuffix = ".html";
@@ -57,7 +58,7 @@ public class AlbedoProperties {
     }
 
     public String getStaticUrlPath(String strs) {
-        return PublicUtil.toAppendStr(adminPath, "/file/get", strs);
+        return PublicUtil.toAppendStr(contextPath, adminPath, "/file/get", strs);
     }
 
     public String getStaticFileDirectory(String strs) {

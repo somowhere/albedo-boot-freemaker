@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -94,6 +95,8 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
     }
 
 
+
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public boolean doCheckWithEntity(T entity, Map<String, QueryCondition.Operator> maps) {
         boolean rs = false;
         if (PublicUtil.isNotEmpty(entity)) {
@@ -112,6 +115,7 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
         return rs;
     }
 
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public boolean doCheckByProperty(T entity) {
         Map<String, QueryCondition.Operator> maps = Maps.newHashMap();
         try {
@@ -125,6 +129,7 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
 
     }
 
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public boolean doCheckByPK(T entity) {
         Map<String, QueryCondition.Operator> maps = Maps.newHashMap();
         try {
@@ -156,7 +161,6 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
         return entity;
     }
 
-
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public T findOne(pk id) {
         return repository.selectById(id);
@@ -167,28 +171,41 @@ public abstract class BaseService<Repository extends BaseRepository<T, pk>,
         return Optional.of(findOne(id));
     }
 
-
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public T findOne(Map<String, Object> paramsMap) {
         List<T> ts = repository.selectByMap(paramsMap);
         return PublicUtil.isNotEmpty(ts) ? ts.get(0) : null;
     }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<T> findAll() {
         return repository.selectList(null);
     }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public T findOne(Wrapper<T> wrapper) {
         List<T> ts = repository.selectList(wrapper);
         return PublicUtil.isNotEmpty(ts) ? ts.get(0) : null;
     }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public T findOne(Wrapper<T> wrapper, int max) {
+        List<T> ts = repository.selectPage(new RowBounds(0, max), wrapper);
+        return PublicUtil.isNotEmpty(ts) ? ts.get(0) : null;
+    }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public T findTopOne(Wrapper<T> wrapper) {
+        return findOne(wrapper, 1);
+    }
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<T> findAll(Map<String, Object> paramsMap) {
         return repository.selectByMap(paramsMap);
     }
 
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public Page<T> findAll(Pageable pageable, Map<String, Object> paramsMap) {
 
         return selectPage(new PageQuery<>(pageable, paramsMap), new EntityWrapper<>());
 
     }
-
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
     public Integer countBasicAll(Wrapper<T> wrapper) {
         return repository.selectCount(wrapper);
     }

@@ -23,6 +23,7 @@ public class PageInitParamFilter extends OncePerRequestFilter {
         AlbedoProperties albedoProperties = SpringContextHolder.getBean(AlbedoProperties.class);
         String basePath =  albedoProperties.getGatewayModel() ? "" : PublicUtil.toAppendStr(request.getScheme(), "://", request.getServerName(), ":", request.getServerPort(), request.getContextPath());
         request.setAttribute("basePath", basePath);
+        albedoProperties.setContextPath(request.getContextPath());
         String adminPath = albedoProperties.getAdminPath();
         request.setAttribute("ctx", PublicUtil.toAppendStr(basePath, (albedoProperties.getGatewayModel() ? "../" + albedoProperties.getMicorservice() : "") + adminPath));
         request.setAttribute("gatewayModel", albedoProperties.getGatewayModel());

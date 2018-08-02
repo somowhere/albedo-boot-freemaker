@@ -75,8 +75,10 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
     public UserVo findOneVo(String id) {
-        User relationOne = findRelationOne(id);
-        relationOne.setRoles(roleRepository.selectListByUserId(id));
+        User relationOne = findRelationOneByPk(id);
+        if(relationOne!=null) {
+            relationOne.setRoles(roleRepository.selectListByUserId(id));
+        }
         return copyBeanToVo(relationOne);
     }
 
