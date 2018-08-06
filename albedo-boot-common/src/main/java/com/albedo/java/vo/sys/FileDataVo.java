@@ -1,17 +1,15 @@
 /**
  * Copyright &copy; 2018 <a href="https://github.com/somewhereMrli/albedo-boot">albedo-boot</a> All rights reserved.
  */
-package com.albedo.java.modules.sys.domain.vo;
+package com.albedo.java.vo.sys;
 
 import com.albedo.java.vo.base.DataEntityVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 文件管理EntityVo 文件
@@ -40,7 +38,7 @@ public class FileDataVo extends DataEntityVo<String> {
 	private String path;
 	/** size 大小 */
  @NotBlank @Length(max=50)
-	private String size;
+	private Long size;
 	/** type 类型 */
  @Length(max=60)
 	private String type;

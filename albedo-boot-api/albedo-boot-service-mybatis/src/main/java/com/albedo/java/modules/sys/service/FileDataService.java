@@ -5,8 +5,8 @@ package com.albedo.java.modules.sys.service;
 
 import com.albedo.java.common.persistence.service.DataVoService;
 import com.albedo.java.modules.sys.domain.FileData;
-import com.albedo.java.modules.sys.domain.vo.FileDataVo;
 import com.albedo.java.modules.sys.repository.FileDataRepository;
+import com.albedo.java.vo.sys.FileDataVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
