@@ -38,7 +38,7 @@
             this.$hidden = $('<input type="hidden">').insertBefore(this.$input)
         }
 
-        this.$preview = this.$element.find('.fileinput-preview')
+        this.$preview = this.$element.find('.fileinput-preview-div')
         var height = this.$preview.css('height')
         if (this.$preview.css('display') !== 'inline' && height !== '0px' && height !== 'none') {
             this.$preview.css('line-height', height)

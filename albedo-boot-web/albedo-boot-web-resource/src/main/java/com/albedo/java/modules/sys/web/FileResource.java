@@ -37,11 +37,9 @@ import java.util.UUID;
 @RequestMapping(value = "${albedo.adminPath}/file")
 public class FileResource extends BaseResource {
 
-   private final AlbedoProperties albedoProperties;
     private final FileDataService fileDataService;
 
-    public FileResource(AlbedoProperties albedoProperties, FileDataService fileDataService) {
-        this.albedoProperties = albedoProperties;
+    public FileResource(FileDataService fileDataService) {
         this.fileDataService = fileDataService;
     }
 
@@ -66,7 +64,7 @@ public class FileResource extends BaseResource {
             }
             fileData = new FileData();
             fileData.setName(originalFilename);
-            fileData.setPath(fileName);
+            fileData.setPath(fileName.replace(directory, ""));
             fileData.setSize(files[i].getSize());
             fileData.setType(extension);
             fileDataList.add(fileData);

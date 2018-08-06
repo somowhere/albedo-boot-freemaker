@@ -643,7 +643,7 @@ var albedoForm = function () {
             tempVal = tempVal.replace($(this).attr("file-value") + ",", "");
             tempVal = tempVal.length > 2 ? tempVal.substring(1, tempVal.length - 1) : "";
             $file.val(tempVal);
-            $(this).parent(".fileinput-preview").remove();
+            $(this).parent(".fileinput-preview-div").remove();
             if (tempVal == "") {
                 $parent.attr("class", "fileinput fileinput-new");
             }
@@ -658,23 +658,25 @@ var albedoForm = function () {
             }
             options = $.extend(true, {
                 autoUpload: true,
+                disableImageResize: true,
+                showBrowse: false,
                 singleFileUploads: false,
                 url: App.getCtxPath() + "/file/upload",
                 type: "POST",
                 dataType: 'json',
                 done: function (e, data) {
                     if (data && data.result && data.result.status == 1) {
-                        var files = data.result.data,fileIds;
+                        var files = data.result.data,fileIds="";
                         if(albedo.validateNotNull(files)){
                             for(var i=0;i<files.length; i++ ){
                                 fileIds+=files[i].id+",";
                             }
                         }
                         if(albedo.validateNotNull(fileIds)){
-                            fileIds = fileIds.sub(0,fileIds.length-1)
+                            fileIds = fileIds.substr(0,fileIds.length-1)
                         }
                         var $preview = $parent.find(".btn-file-div");
-                        $parent.find(".fileinput-exists.fileinput-preview").remove();
+                        // $parent.find(".fileinput-exists.fileinput-preview-div").remove();
                         if (multiple) {
                             var fileVal = $parent.find("input[type='hidden']").val();
                             $parent.find("input[type='hidden']").val(fileVal && fileVal.length > 0 ? (fileVal + "," + fileIds) : fileIds);
@@ -683,7 +685,7 @@ var albedoForm = function () {
                                 for (var i = 0; i < files.length; i++) {
                                     var file = files[i];
                                     if (albedo.validateNotNull(file)) {
-                                        $preview.before($("<div class=\"fileinput-preview fileinput-exists thumbnail "+("image" == showType ? "thumbnail-img" : "")+"\" ></div>").append(
+                                        $preview.before($("<div class=\"fileinput-preview-div fileinput-exists thumbnail "+("image" == showType ? "thumbnail-img" : "")+"\" ></div>").append(
                                             $("image" == showType ? ("<img title='双击移除' src='" + App.getCtxPath() + "/file/get/" + file.id + "' class=\"fileinput-item\" file-value=\"" + file.id + "\" />")
                                                 : "<span title='双击移除' class=\"fileinput-item\" file-value=\"" + file.id + "\" >" + file.name + "</span>").dblclick(clearVal)));
                                     }
@@ -692,11 +694,11 @@ var albedoForm = function () {
                         } else {
                             var file = files[0];
                             if ("image" == showType) {
-                                $preview.before($("<div class=\"fileinput-preview fileinput-exists thumbnail\" ></div>").append(
-                                    $("<img title='双击移除' src='" + App.getCtxPath() + "/file/get/" + file.id + "' class=\"fileinput-item\" file-value=\"" + file.path + "\" />").dblclick(clearVal)));
+                                $preview.before($("<div class=\"fileinput-preview-div fileinput-exists thumbnail\" ></div>").append(
+                                    $("<img title='双击移除' src='" + App.getCtxPath() + "/file/get/" + file.id + "' class=\"fileinput-item\" file-value=\"" + file.id + "\" />").dblclick(clearVal)));
                                 $parent.find("input[type='hidden']").val(file.id);
                             }else{
-                                $parent.find(".form-control").attr("title", file.name).val(file.path);
+                                $parent.find(".form-control").attr("title", file.name).val(file.name);
                                 $parent.find("input[type='hidden']").val(file.id);
                             }
                         }
@@ -710,7 +712,7 @@ var albedoForm = function () {
             $parent.find(".fileinput-remove").click(function () {
                 $parent.find("input[type='hidden']").val('');
                 if ("image" == showType || multiple) {
-                    $parent.find(".fileinput-preview").remove();
+                    $parent.find(".fileinput-preview-div").remove();
                 } else {
                     $parent.find(".form-control").attr("title", '').val('');
                 }

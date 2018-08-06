@@ -40,7 +40,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
                             fileName = fileData.getName();
                             path = fileData.getPath();
                         }
-                        sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
+                        sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                             .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(path)+"\" alt=\"\" class=\"fileinput-item scale-img\" />")
                                 :("<span>"+fileName+"</span>")).append("</div>");
                     }
@@ -48,10 +48,11 @@ public class FileInputDirective implements TemplateDirectiveModel {
                     FileData fileData = fileDataService.findOne(value);
                     if(fileData!=null){
                         path = fileData.getPath();
+                        fileName = fileData.getName();
                     }
-                    sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
+                    sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                         .append(isImg ? ("<img src=\""+(PublicUtil.isNotEmpty(path) ? albedoProperties.getStaticUrlPath(path) : path)+"\" alt=\"\" class=\"fileinput-item scale-img\" />")
-                            :("<span>"+fileData.getName()+"</span>")).append("</div>");
+                            :("<span>"+fileName+"</span>")).append("</div>");
                 }
             }
             sb.append("</div>");
@@ -59,7 +60,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
             if(isImg) {
                 sb.append("<div class=\"fileinput-new thumbnail fileinput-empty\"><img src=\"http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=请上传图片\" alt=\"\" class=\"fileinput-item\"  /></div>");
             }
-            sb.append("<input type=\"hidden\" class=\"").append(cssClass).append(" filepath\" name=\"").append(name).append("\" value=\"").append(value)
+            sb.append("<input type=\"hidden\" name=\"").append(name).append("\" value=\"").append(value)
                 .append("\" />");
             if (PublicUtil.isNotEmpty(value)) {
                 if (value.contains(StringUtil.SPLIT_DEFAULT)) {
@@ -70,7 +71,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
                             fileName = fileData.getName();
                             path = fileData.getPath();
                         }
-                        sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
+                        sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                             .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(path)
                                 +"\" alt=\"\" class=\"fileinput-item\" file-value=\""+fileData.getId()+"\"/>")
                                 :("<span class=\"fileinput-item\" file-value=\""+fileData.getId()+"\">"+fileName+"</span>")).append("</div>");
@@ -81,7 +82,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
                         fileName = fileData.getName();
                         path = fileData.getPath();
                     }
-                    sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
+                    sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                         .append(isImg ? ("<img src=\""+(PublicUtil.isNotEmpty(path) ? albedoProperties.getStaticUrlPath(path) : path)
                             +"\" alt=\"\" class=\"fileinput-item\" file-value=\""+value+"\"/>")
                             :("<span class=\"fileinput-item\" file-value=\""+value+"\">"+fileName+"</span>")).append("</div>");
@@ -108,12 +109,19 @@ public class FileInputDirective implements TemplateDirectiveModel {
             if(PublicUtil.isNotEmpty(multiple)){
                 dealMultiple(sb, isDisabled, isImage, name, value, cssClass);
             }else{
+                FileData fileData = fileDataService.findOne(value);
+                String fileName="";
+                if(fileData!=null){
+                    fileName = fileData.getName();
+                }
                 sb.append("<div class=\"input-group\" style=\"width:100%;overflow:auto;\">");
-                sb.append("<input type=\"text\" class=\"form-control ")
+                sb.append("<input type=\"hidden\"  name=\"")
+                    .append(name)
+                    .append("\" value=\"").append(value).append("\" />")
+                    .append("<input type=\"text\" class=\"form-control ")
                     .append(cssClass)
                     .append("\" ").append(isDisabled ? "disabled=\"disabled\"" : "")
-                    .append("name=\"").append(name)
-                    .append("\" value=\"").append(value).append("\" />");
+                    .append(" value=\"").append(fileName).append("\" />");
             }
         }
         if (!isDisabled) {
