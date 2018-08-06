@@ -2,6 +2,8 @@ package com.albedo.java.util;
 
 import com.albedo.java.util.annotation.BeanField;
 import com.albedo.java.util.base.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
@@ -22,6 +24,7 @@ import java.util.List;
  */
 public class BeanVoUtil extends BeanUtils {
 
+    private static Logger log = LoggerFactory.getLogger(FileUtil.class);
     public static void copyProperties(Object source, Object target, boolean ignoreNull, String... ignoreProperties) throws BeansException {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
@@ -78,6 +81,18 @@ public class BeanVoUtil extends BeanUtils {
             }
         }
 
+    }
+
+
+    public static <T> T copyPropertiesByClass(Object source, Class<T> requiredType){
+        T target = null;
+        try {
+            target = requiredType.newInstance();
+        } catch (Exception e) {
+            log.error("{}",e);
+        }
+        copyProperties(source, target, true);
+        return target;
     }
 
 }
