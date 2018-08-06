@@ -37,9 +37,11 @@ import java.util.UUID;
 @RequestMapping(value = "${albedo.adminPath}/file")
 public class FileResource extends BaseResource {
 
+    private final AlbedoProperties albedoProperties;
     private final FileDataService fileDataService;
 
-    public FileResource(FileDataService fileDataService) {
+    public FileResource(AlbedoProperties albedoProperties, FileDataService fileDataService) {
+        this.albedoProperties = albedoProperties;
         this.fileDataService = fileDataService;
     }
 
@@ -49,7 +51,7 @@ public class FileResource extends BaseResource {
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity upload(@RequestParam("uploadFile") MultipartFile[] files) {
-        String directory = SecurityUtil.albedoProperties.getStaticFileDirectory();
+        String directory = albedoProperties.getStaticFileDirectory();
         String dir = mkdirs(directory);
         List<FileData> fileDataList = Lists.newLinkedList();FileData fileData = null;
         for (int i = 0; i < files.length; i++) {
@@ -82,7 +84,7 @@ public class FileResource extends BaseResource {
         FileData fileData = fileDataService.findOne(id);
         Assert.assertIsTrue(fileData!=null, "无法获取文件信息");
         try {
-            String path = SecurityUtil.albedoProperties.getStaticFileDirectory(fileData.getPath());
+            String path = albedoProperties.getStaticFileDirectory(fileData.getPath());
             File file = FileUtils.getFile(path);
             byte[] bytes = FileCopyUtils.copyToByteArray(file);
             String contentType = new MimetypesFileTypeMap().getContentType(file);

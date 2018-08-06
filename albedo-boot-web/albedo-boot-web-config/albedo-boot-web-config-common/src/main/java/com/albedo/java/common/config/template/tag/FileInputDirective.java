@@ -73,8 +73,8 @@ public class FileInputDirective implements TemplateDirectiveModel {
                         }
                         sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                             .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(path)
-                                +"\" alt=\"\" class=\"fileinput-item\" file-value=\""+fileData.getId()+"\"/>")
-                                :("<span class=\"fileinput-item\" file-value=\""+fileData.getId()+"\">"+fileName+"</span>")).append("</div>");
+                                +"\" alt=\"\" class=\"fileinput-item\" file-value=\""+values[i]+"\"/>")
+                                :("<span class=\"fileinput-item\" file-value=\""+values[i]+"\">"+fileName+"</span>")).append("</div>");
                     }
                 } else {
                     FileData fileData = fileDataService.findOne(value);
