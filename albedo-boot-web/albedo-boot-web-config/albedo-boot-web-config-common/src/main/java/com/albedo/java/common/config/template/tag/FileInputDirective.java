@@ -1,8 +1,11 @@
 package com.albedo.java.common.config.template.tag;
 
 import com.albedo.java.common.config.AlbedoProperties;
+import com.albedo.java.modules.sys.domain.FileData;
+import com.albedo.java.modules.sys.service.FileDataService;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.StringUtil;
+import com.albedo.java.util.base.Assert;
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateDirectiveModel;
@@ -22,6 +25,8 @@ public class FileInputDirective implements TemplateDirectiveModel {
     private final Logger log = LoggerFactory.getLogger(FileInputDirective.class);
     @Autowired
     AlbedoProperties albedoProperties;
+    @Autowired
+    FileDataService fileDataService;
 
     private void dealMultiple(StringBuffer sb, boolean isDisabled, boolean isImg, String name, String value, String cssClass){
         if (isDisabled) {
@@ -29,14 +34,18 @@ public class FileInputDirective implements TemplateDirectiveModel {
                 if (value.contains(StringUtil.SPLIT_DEFAULT)) {
                     String[] values = value.split(StringUtil.SPLIT_DEFAULT);
                     for (int i = 0; i < values.length; i++) {
+                        FileData fileData = fileDataService.findOne(values[i]);
+                        Assert.assertIsTrue(fileData!=null, "无法获取文件信息");
                         sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
-                            .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(values[i])+"\" alt=\"\" class=\"fileinput-item scale-img\" />")
-                                :("<span>"+values[i]+"</span>")).append("</div>");
+                            .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(fileData.getPath())+"\" alt=\"\" class=\"fileinput-item scale-img\" />")
+                                :("<span>"+fileData.getName()+"</span>")).append("</div>");
                     }
                 } else {
+                    FileData fileData = fileDataService.findOne(value);
+                    Assert.assertIsTrue(fileData!=null, "无法获取文件信息");
                     sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
-                        .append(isImg ? ("<img src=\""+(PublicUtil.isNotEmpty(value) ? albedoProperties.getStaticUrlPath(value) : value)+"\" alt=\"\" class=\"fileinput-item scale-img\" />")
-                            :("<span>"+value+"</span>")).append("</div>");
+                        .append(isImg ? ("<img src=\""+(PublicUtil.isNotEmpty(fileData.getPath()) ? albedoProperties.getStaticUrlPath(fileData.getPath()) : fileData.getPath())+"\" alt=\"\" class=\"fileinput-item scale-img\" />")
+                            :("<span>"+fileData.getName()+"</span>")).append("</div>");
                 }
             }
             sb.append("</div>");
@@ -50,16 +59,20 @@ public class FileInputDirective implements TemplateDirectiveModel {
                 if (value.contains(StringUtil.SPLIT_DEFAULT)) {
                     String[] values = value.split(StringUtil.SPLIT_DEFAULT);
                     for (int i = 0; i < values.length; i++) {
+                        FileData fileData = fileDataService.findOne(values[i]);
+                        Assert.assertIsTrue(fileData!=null, "无法获取文件信息");
                         sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
-                            .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(values[i])
-                                +"\" alt=\"\" class=\"fileinput-item\" file-value=\""+values[i]+"\"/>")
-                                :("<span class=\"fileinput-item\" file-value=\""+values[i]+"\">"+values[i]+"</span>")).append("</div>");
+                            .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(fileData.getPath())
+                                +"\" alt=\"\" class=\"fileinput-item\" file-value=\""+fileData.getId()+"\"/>")
+                                :("<span class=\"fileinput-item\" file-value=\""+fileData.getId()+"\">"+fileData.getName()+"</span>")).append("</div>");
                     }
                 } else {
+                    FileData fileData = fileDataService.findOne(value);
+                    Assert.assertIsTrue(fileData!=null, "无法获取文件信息");
                     sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview\">")
-                        .append(isImg ? ("<img src=\""+(PublicUtil.isNotEmpty(value) ? albedoProperties.getStaticUrlPath(value) : value)
+                        .append(isImg ? ("<img src=\""+(PublicUtil.isNotEmpty(fileData.getPath()) ? albedoProperties.getStaticUrlPath(fileData.getPath()) : fileData.getPath())
                             +"\" alt=\"\" class=\"fileinput-item\" file-value=\""+value+"\"/>")
-                            :("<span class=\"fileinput-item\" file-value=\""+value+"\">"+value+"</span>")).append("</div>");
+                            :("<span class=\"fileinput-item\" file-value=\""+value+"\">"+fileData.getName()+"</span>")).append("</div>");
                 }
             }
         }

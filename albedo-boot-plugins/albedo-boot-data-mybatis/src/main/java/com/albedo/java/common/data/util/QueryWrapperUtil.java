@@ -68,7 +68,9 @@ public class QueryWrapperUtil {
                 String fieldName = specificationDetail.getPersistentClass()!=null ?
                     QueryWrapperUtil.getFieldRealColumnName(specificationDetail.getPersistentClass(), queryCondition.getFieldName())
                     : queryCondition.getFieldName();
-                if(specificationDetail.isRelationQuery()) fieldName = specificationDetail.getClassNameProfix() + fieldName;
+                if(specificationDetail.isRelationQuery() && !fieldName.contains(".")) {
+                    fieldName = specificationDetail.getClassNameProfix() + fieldName;
+                }
                 switch (queryCondition.getOperate()) {
                     case notIn:
                         entityWrapper.notIn(fieldName, handlerQueryConditionCollectionValue(queryCondition));

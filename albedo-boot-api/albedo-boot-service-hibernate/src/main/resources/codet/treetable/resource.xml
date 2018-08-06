@@ -107,7 +107,7 @@ public class ${ClassName}Resource extends TreeVoResource<${ClassName}Service, ${
 	@Timed
 	public ResponseEntity save(@Valid @RequestBody ${ClassName}Vo ${className}Vo) {
 		log.debug("REST request to save ${ClassName} : {}", ${className}Vo);
-        service.checkProperty({className}Vo);
+        service.checkProperty(${className}Vo);
 		service.save(${className}Vo);
         return ResultBuilder.buildOk("保存${functionNameSimple}成功");
 	}
