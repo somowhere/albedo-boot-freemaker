@@ -701,7 +701,7 @@ var albedoForm = function () {
                             }
                         }
                     } else {
-                        toastr.warning(data.result.msg);
+                        toastr.warning(data.result.message);
                     }
                 }
             }, options);
