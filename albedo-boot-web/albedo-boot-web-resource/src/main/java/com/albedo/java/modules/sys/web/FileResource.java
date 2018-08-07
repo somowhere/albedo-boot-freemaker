@@ -4,10 +4,14 @@ import com.albedo.java.common.config.AlbedoProperties;
 import com.albedo.java.common.security.SecurityUtil;
 import com.albedo.java.modules.sys.domain.FileData;
 import com.albedo.java.modules.sys.service.FileDataService;
+import com.albedo.java.util.BeanVoUtil;
 import com.albedo.java.util.base.Assert;
+import com.albedo.java.vo.sys.FileDataResultVo;
+import com.albedo.java.vo.sys.FileDataVo;
 import com.albedo.java.web.rest.ResultBuilder;
 import com.albedo.java.web.rest.base.BaseResource;
 import com.google.common.collect.Lists;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +33,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author somewhere
@@ -49,11 +54,16 @@ public class FileResource extends BaseResource {
      * @param files
      * @return
      */
+    /**
+     * @param files
+     * @return
+     */
+    @ApiOperation(value = "文件上传", response = FileDataResultVo.class)
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity upload(@RequestParam("uploadFile") MultipartFile[] files) {
         String directory = albedoProperties.getStaticFileDirectory();
         String dir = mkdirs(directory);
-        List<FileData> fileDataList = Lists.newLinkedList();FileData fileData = null;
+        List<FileData> fileDataList = Lists.newLinkedList();FileData fileData;
         for (int i = 0; i < files.length; i++) {
             String originalFilename = files[i].getOriginalFilename();
             String extension = FilenameUtils.getExtension(originalFilename);
@@ -72,7 +82,8 @@ public class FileResource extends BaseResource {
             fileDataList.add(fileData);
         }
         fileDataService.save(fileDataList);
-        return ResultBuilder.buildDataOk(fileDataList);
+        return ResultBuilder.buildDataOk(fileDataList.stream()
+            .map(item->BeanVoUtil.copyPropertiesByClass(item, FileDataResultVo.class)).collect(Collectors.toList()));
     }
 
     /**
