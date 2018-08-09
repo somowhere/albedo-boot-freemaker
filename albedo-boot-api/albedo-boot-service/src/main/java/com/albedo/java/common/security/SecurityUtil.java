@@ -176,7 +176,6 @@ public final class SecurityUtil {
      */
     public static List<Module> getModuleList() {
         List<Module> moduleList = getModuleList(false, null);
-        logger.info("{}", moduleList);
         return moduleList;
     }
 

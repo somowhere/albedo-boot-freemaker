@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class BeanVoUtil extends BeanUtils {
 
-    private static Logger log = LoggerFactory.getLogger(FileUtil.class);
+    private static Logger log = LoggerFactory.getLogger(BeanVoUtil.class);
     public static void copyProperties(Object source, Object target, boolean ignoreNull, String... ignoreProperties) throws BeansException {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");

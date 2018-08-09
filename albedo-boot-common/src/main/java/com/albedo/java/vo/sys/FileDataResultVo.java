@@ -3,6 +3,7 @@
  */
 package com.albedo.java.vo.sys;
 
+import com.albedo.java.util.annotation.BeanField;
 import com.albedo.java.vo.base.DataEntityVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class FileDataResultVo implements Serializable {
 	//columns START
     /** name 名称 */
     @Length(max=32)
+    @BeanField(writeProperty = "id")
     private String id;
 	/** name 名称 */
  @Length(max=32)

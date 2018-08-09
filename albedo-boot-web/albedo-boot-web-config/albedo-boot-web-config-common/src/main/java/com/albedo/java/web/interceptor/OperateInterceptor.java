@@ -168,6 +168,7 @@ public class OperateInterceptor implements HandlerInterceptor {
         // }
     }
 
+    @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         long beginTime = startTimeThreadLocal.get();// 得到线程绑定的局部变量（开始时间）
         long endTime = System.currentTimeMillis(); // 2、结束时间
@@ -181,6 +182,6 @@ public class OperateInterceptor implements HandlerInterceptor {
             key = keys.nextElement();
             params.put(key, StringUtil.abbr(StringUtil.endsWithIgnoreCase(key, "password") ? "" : request.getParameter(key), 100));
         }
-        logger.info("IP：{} 计时结束：{}  耗时：{}  URI: {} params: {} ", RequestUtil.getRemoteAddr(request), new SimpleDateFormat("hh:mm:ss.SSS").format(endTime), DateUtil.formatDateTime(endTime - beginTime), request.getRequestURI(), params);
+        logger.info("IP：{} 计时结束：{}  耗时：{}  URI: {} method: {} params: {} ", RequestUtil.getRemoteAddr(request), new SimpleDateFormat("hh:mm:ss.SSS").format(endTime), DateUtil.formatDateTime(endTime - beginTime), request.getRequestURI(), request.getMethod(), params);
     }
 }
