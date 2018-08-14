@@ -58,7 +58,7 @@ public class AlbedoProperties {
     }
 
     public String getStaticUrlPath(String strs) {
-        return PublicUtil.toAppendStr(contextPath, adminPath, "/file/get", strs);
+        return PublicUtil.toAppendStr(contextPath, adminPath, "/file/get/", strs);
     }
 
     public String getStaticFileDirectory(String strs) {

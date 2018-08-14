@@ -100,7 +100,7 @@ public class FileResource extends BaseResource {
             byte[] bytes = FileCopyUtils.copyToByteArray(file);
             String contentType = new MimetypesFileTypeMap().getContentType(file);
             response.setContentType(contentType);
-            response.setHeader("Content-disposition", "attachment; filename=\"" + file.getName() + "\"");
+            response.setHeader("Content-disposition", "attachment; filename=\"" + fileData.getName() + "\"");
             FileCopyUtils.copy(bytes, response.getOutputStream());
         } catch (IOException e) {
             logger.error(e.getMessage());
