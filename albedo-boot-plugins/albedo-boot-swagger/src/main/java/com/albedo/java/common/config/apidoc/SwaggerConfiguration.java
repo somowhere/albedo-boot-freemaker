@@ -104,6 +104,7 @@ public class SwaggerConfiguration {
     }
 
     @Configuration
+    @Profile({Globals.SPRING_PROFILE_SWAGGER})
     @ConditionalOnClass({Pageable.class})
     public static class SpringPagePluginConfiguration {
         public SpringPagePluginConfiguration() {
