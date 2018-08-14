@@ -38,7 +38,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
                         FileData fileData = fileDataService.findOne(values[i]);
                         if(fileData!=null){
                             fileName = fileData.getName();
-                            path = fileData.getPath();
+                            path = fileData.getId();
                         }
                         sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                             .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(path)+"\" alt=\"\" class=\"fileinput-item scale-img\" />")
@@ -47,7 +47,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
                 } else {
                     FileData fileData = fileDataService.findOne(value);
                     if(fileData!=null){
-                        path = fileData.getPath();
+                        path = fileData.getId();
                         fileName = fileData.getName();
                     }
                     sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
@@ -69,7 +69,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
                         FileData fileData = fileDataService.findOne(values[i]);
                         if(fileData!=null){
                             fileName = fileData.getName();
-                            path = fileData.getPath();
+                            path = fileData.getId();
                         }
                         sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                             .append(isImg ? ("<img src=\""+albedoProperties.getStaticUrlPath(path)
@@ -80,7 +80,7 @@ public class FileInputDirective implements TemplateDirectiveModel {
                     FileData fileData = fileDataService.findOne(value);
                     if(fileData!=null){
                         fileName = fileData.getName();
-                        path = fileData.getPath();
+                        path = fileData.getId();
                     }
                     sb.append("<div class=\"fileinput-exists thumbnail "+(isImg?"thumbnail-img" : "")+" fileinput-preview-div\">")
                         .append(isImg ? ("<img src=\""+(PublicUtil.isNotEmpty(path) ? albedoProperties.getStaticUrlPath(path) : path)
