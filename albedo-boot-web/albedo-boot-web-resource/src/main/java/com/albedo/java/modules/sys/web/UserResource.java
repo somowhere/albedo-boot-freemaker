@@ -244,9 +244,9 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
         response.setCharacterEncoding("utf-8");
 
         ExportExcel exportExcel = new ExportExcel("用户信息维护", UserExcelVo.class);
-        User user = service.findRelationTopOne(Condition.create()
+        UserVo userVo = service.findOneVo(Condition.create()
             .ne(service.getClassNameProfix(User.F_SQL_ID), "1"));
-        exportExcel.setDataList(Lists.newArrayList(service.copyBeanToVo(user)));
+        exportExcel.setDataList(Lists.newArrayList(userVo));
         exportExcel.write(response.getOutputStream()).dispose();
     }
 

@@ -82,6 +82,14 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         return copyBeanToVo(relationOne);
     }
 
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public UserVo findOneVo(Wrapper wrapper) {
+        User relationOne = findRelationOne(wrapper);
+        if(relationOne!=null) {
+            relationOne.setRoles(roleRepository.selectListByUserId(relationOne.getId()));
+        }
+        return copyBeanToVo(relationOne);
+    }
     @Override
     public void save(UserVo userVo) {
         User user = PublicUtil.isNotEmpty(userVo.getId()) ? repository.selectById(userVo.getId()) : new User();
