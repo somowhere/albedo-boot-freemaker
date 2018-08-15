@@ -97,4 +97,8 @@ public class RoleService extends DataVoService<RoleRepository, Role, String, Rol
             repository.addRoleOrgs(role);
         }
     }
+
+    public List<Role> selectListByUserId(String id) {
+        return repository.selectListByUserId(id);
+    }
 }

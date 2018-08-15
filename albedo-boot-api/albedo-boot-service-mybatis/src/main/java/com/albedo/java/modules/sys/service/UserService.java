@@ -7,8 +7,6 @@ import com.albedo.java.common.persistence.service.DataVoService;
 import com.albedo.java.modules.sys.domain.Org;
 import com.albedo.java.modules.sys.domain.Role;
 import com.albedo.java.modules.sys.domain.User;
-import com.albedo.java.modules.sys.repository.OrgRepository;
-import com.albedo.java.modules.sys.repository.RoleRepository;
 import com.albedo.java.modules.sys.repository.UserRepository;
 import com.albedo.java.util.PublicUtil;
 import com.albedo.java.util.RandomUtil;
@@ -17,7 +15,6 @@ import com.albedo.java.util.base.Reflections;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.domain.QueryCondition;
 import com.albedo.java.util.exception.RuntimeMsgException;
-import com.albedo.java.vo.account.PasswordChangeVo;
 import com.albedo.java.vo.sys.UserExcelVo;
 import com.albedo.java.vo.sys.UserTableVo;
 import com.albedo.java.vo.sys.UserVo;
@@ -32,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -46,17 +42,18 @@ import java.util.Optional;
 public class UserService extends DataVoService<UserRepository, User, String, UserVo> {
 
 
-    private final OrgRepository orgRepository;
+    private final OrgService orgService;
 
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     private final CacheManager cacheManager;
 
-    public UserService( OrgRepository orgRepository, RoleRepository roleRepository,CacheManager cacheManager) {
-        this.orgRepository = orgRepository;
-        this.roleRepository = roleRepository;
+    public UserService(OrgService orgService, RoleService roleService, CacheManager cacheManager) {
+        this.orgService = orgService;
+        this.roleService = roleService;
         this.cacheManager = cacheManager;
     }
+
 
     @Override
     public UserVo copyBeanToVo(User user) {
@@ -77,7 +74,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     public UserVo findOneVo(String id) {
         User relationOne = findRelationOneByPk(id);
         if(relationOne!=null) {
-            relationOne.setRoles(roleRepository.selectListByUserId(id));
+            relationOne.setRoles(roleService.selectListByUserId(id));
         }
         return copyBeanToVo(relationOne);
     }
@@ -86,7 +83,7 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     public UserVo findOneVo(Wrapper wrapper) {
         User relationOne = findRelationOne(wrapper);
         if(relationOne!=null) {
-            relationOne.setRoles(roleRepository.selectListByUserId(relationOne.getId()));
+            relationOne.setRoles(roleService.selectListByUserId(relationOne.getId()));
         }
         UserVo userVo = copyBeanToVo(relationOne);
         if(PublicUtil.isNotEmpty(relationOne.getRoles())){
@@ -213,11 +210,11 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     public void save(@Valid UserExcelVo userExcelVo) {
         User user = new User();
         BeanUtils.copyProperties(userExcelVo, user);
-        Org org = orgRepository.findOne(Condition.create().eq(Org.F_SQL_NAME, userExcelVo.getOrgName()));
+        Org org = orgService.findTopOne(Condition.create().eq(Org.F_SQL_NAME, userExcelVo.getOrgName()));
         if(org!=null){
             user.setOrgId(org.getId());
         }
-        Role role = roleRepository.findOne(Condition.create().eq(Role.F_SQL_NAME, userExcelVo.getRoleNames()));
+        Role role = roleService.findTopOne(Condition.create().eq(Role.F_SQL_NAME, userExcelVo.getRoleNames()));
         if(role==null){
             throw new RuntimeMsgException("无法获取角色"+userExcelVo.getRoleNames()+"信息");
         }
