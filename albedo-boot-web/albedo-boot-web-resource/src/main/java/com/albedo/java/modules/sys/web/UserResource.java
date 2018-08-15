@@ -209,7 +209,7 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
         List<UserExcelVo> dataList = importExcel.getDataList(UserExcelVo.class);
         for(UserExcelVo userExcelVo : dataList){
             beanValidator(null, userExcelVo);
-            if(userExcelVo.getPhone().length()!=11){
+            if(PublicUtil.isNotEmpty(userExcelVo.getPhone()) && userExcelVo.getPhone().length()!=11){
                 BigDecimal bd = new BigDecimal(userExcelVo.getPhone());
                 userExcelVo.setPhone(bd.toPlainString());
             }

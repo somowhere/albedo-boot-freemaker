@@ -88,7 +88,11 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
         if(relationOne!=null) {
             relationOne.setRoles(roleRepository.selectListByUserId(relationOne.getId()));
         }
-        return copyBeanToVo(relationOne);
+        UserVo userVo = copyBeanToVo(relationOne);
+        if(PublicUtil.isNotEmpty(relationOne.getRoles())){
+            userVo.setRoleNames(relationOne.getRoles().get(0).getName());
+        }
+        return userVo;
     }
     @Override
     public void save(UserVo userVo) {

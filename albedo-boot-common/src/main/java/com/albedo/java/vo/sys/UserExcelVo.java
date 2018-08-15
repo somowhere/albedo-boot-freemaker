@@ -23,7 +23,6 @@ public class UserExcelVo {
     @NotBlank
     @ExcelField(title = "姓名",sort = 30)
     private String name;
-    @NotBlank
     @ExcelField(title = "手机",sort = 40)
     private String phone;
     @ExcelField(title = "邮箱",sort = 50)
