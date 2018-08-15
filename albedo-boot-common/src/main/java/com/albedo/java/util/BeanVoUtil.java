@@ -50,7 +50,11 @@ public class BeanVoUtil extends BeanUtils {
                 }
                 Object value = null;
                 if(writeAnnotation!=null && PublicUtil.isNotEmpty(writeAnnotation.writeProperty())){
-                    value = Reflections.invokeGetter(source, writeAnnotation.writeProperty());
+                    try {
+                        value = Reflections.invokeGetter(source, writeAnnotation.writeProperty());
+                    }catch (Exception e){
+                        log.warn("{}",e.getMessage());
+                    }
                 }else{
                     PropertyDescriptor sourcePd = getPropertyDescriptor(source.getClass(), targetPd.getName());
                     if (sourcePd != null) {

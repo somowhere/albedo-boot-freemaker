@@ -13,6 +13,7 @@
                        messages:{name:{message:'组织名称已存在'}}}">
                 <div class="form-body">
                     <input type="hidden" name="id" value="${(orgVo.id)!}"/>
+                    <#if !(orgVo.id)?? || orgVo.id!='1'>
                     <div class="form-group">
                         <label class="control-label col-md-3">上级组织<span class="required">*</span>
                         </label>
@@ -22,6 +23,7 @@
                         title="选择组织" url="${ctx}/sys/org/findTreeData"> </@albedo.treeSelect>
                         </div>
                     </div>
+                    </#if>
                     <div class="form-group">
                         <label class="control-label col-md-3">名称<span class="required">*</span>
                         </label>

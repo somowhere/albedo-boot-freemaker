@@ -92,10 +92,10 @@ public class OrgResource extends TreeVoResource<OrgService, OrgVo> {
     public ResponseEntity save(@Valid @RequestBody OrgVo orgVo) {
         log.debug("REST request to save orgVo : {}", orgVo);
         // Lowercase the org login before comparing with database
-        if (!checkByProperty(Reflections.createObj(OrgVo.class, Lists.newArrayList(OrgVo.F_ID, OrgVo.F_NAME),
-                orgVo.getId(), orgVo.getName()))) {
-            throw new RuntimeMsgException("名称已存在");
-        }
+//        if (!checkByProperty(Reflections.createObj(OrgVo.class, Lists.newArrayList(OrgVo.F_ID, OrgVo.F_NAME),
+//                orgVo.getId(), orgVo.getName()))) {
+//            throw new RuntimeMsgException("名称已存在");
+//        }
         service.save(orgVo);
         SecurityUtil.clearUserJedisCache();
         return ResultBuilder.buildOk("保存", orgVo.getName(), "成功");
