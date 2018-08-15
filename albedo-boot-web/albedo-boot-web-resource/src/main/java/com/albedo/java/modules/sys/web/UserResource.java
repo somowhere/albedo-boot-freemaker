@@ -246,7 +246,9 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
         ExportExcel exportExcel = new ExportExcel("用户信息维护", UserExcelVo.class);
         UserVo userVo = service.findOneVo(Condition.create()
             .ne(service.getClassNameProfix(User.F_SQL_ID), "1"));
-        exportExcel.setDataList(Lists.newArrayList(userVo));
+        if(userVo!=null){
+            exportExcel.setDataList(Lists.newArrayList(userVo));
+        }
         exportExcel.write(response.getOutputStream()).dispose();
     }
 

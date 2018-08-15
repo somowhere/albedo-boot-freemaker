@@ -82,12 +82,13 @@ public class UserService extends DataVoService<UserRepository, User, String, Use
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public UserVo findOneVo(Wrapper wrapper) {
         User relationOne = findRelationOne(wrapper);
+        UserVo userVo = null;
         if(relationOne!=null) {
             relationOne.setRoles(roleService.selectListByUserId(relationOne.getId()));
-        }
-        UserVo userVo = copyBeanToVo(relationOne);
-        if(PublicUtil.isNotEmpty(relationOne.getRoles())){
-            userVo.setRoleNames(relationOne.getRoles().get(0).getName());
+            userVo = copyBeanToVo(relationOne);
+            if(PublicUtil.isNotEmpty(relationOne.getRoles())){
+                userVo.setRoleNames(relationOne.getRoles().get(0).getName());
+            }
         }
         return userVo;
     }
