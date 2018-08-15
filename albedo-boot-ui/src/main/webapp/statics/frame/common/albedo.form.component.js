@@ -692,14 +692,16 @@ var albedoForm = function () {
                                 }
                             }
                         } else {
-                            var file = files[0];
-                            if ("image" == showType) {
-                                $preview.before($("<div class=\"fileinput-preview-div fileinput-exists thumbnail\" ></div>").append(
-                                    $("<img title='双击移除' src='" + App.getCtxPath() + "/file/get/" + file.id + "' class=\"fileinput-item\" file-value=\"" + file.id + "\" />").dblclick(clearVal)));
-                                $parent.find("input[type='hidden']").val(file.id);
-                            }else{
-                                $parent.find(".form-control").attr("title", file.name).val(file.name);
-                                $parent.find("input[type='hidden']").val(file.id);
+                            if(albedo.validateNotNull(files)){
+                                var file = files[0];
+                                if ("image" == showType) {
+                                    $preview.before($("<div class=\"fileinput-preview-div fileinput-exists thumbnail\" ></div>").append(
+                                        $("<img title='双击移除' src='" + App.getCtxPath() + "/file/get/" + file.id + "' class=\"fileinput-item\" file-value=\"" + file.id + "\" />").dblclick(clearVal)));
+                                    $parent.find("input[type='hidden']").val(file.id);
+                                }else{
+                                    $parent.find(".form-control").attr("title", file.name).val(file.name);
+                                    $parent.find("input[type='hidden']").val(file.id);
+                                }
                             }
                         }
                     } else {

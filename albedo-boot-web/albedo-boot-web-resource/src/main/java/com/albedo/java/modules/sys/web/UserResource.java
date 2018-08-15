@@ -4,6 +4,7 @@ import com.albedo.java.common.config.template.tag.FormDirective;
 import com.albedo.java.common.security.SecurityUtil;
 import com.albedo.java.common.security.SecurityUtil;
 import com.albedo.java.modules.sys.domain.Role;
+import com.albedo.java.modules.sys.domain.User;
 import com.albedo.java.modules.sys.service.ModuleService;
 import com.albedo.java.modules.sys.service.UserService;
 import com.albedo.java.util.JsonUtil;
@@ -20,6 +21,7 @@ import com.albedo.java.vo.sys.UserVo;
 import com.albedo.java.web.rest.ResultBuilder;
 import com.albedo.java.web.rest.base.DataVoResource;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.mapper.Condition;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
@@ -206,6 +208,7 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
         ImportExcel importExcel = new ImportExcel(dataFile, 1, 0);
         List<UserExcelVo> dataList = importExcel.getDataList(UserExcelVo.class);
         for(UserExcelVo userExcelVo : dataList){
+            beanValidator(null, userExcelVo);
             if(userExcelVo.getPhone().length()!=11){
                 BigDecimal bd = new BigDecimal(userExcelVo.getPhone());
                 userExcelVo.setPhone(bd.toPlainString());
@@ -241,7 +244,9 @@ public class UserResource extends DataVoResource<UserService, UserVo> {
         response.setCharacterEncoding("utf-8");
 
         ExportExcel exportExcel = new ExportExcel("用户信息维护", UserExcelVo.class);
-
+        User user = service.findRelationTopOne(Condition.create()
+            .ne(service.getClassNameProfix(User.F_SQL_ID), "1"));
+        exportExcel.setDataList(Lists.newArrayList(service.copyBeanToVo(user)));
         exportExcel.write(response.getOutputStream()).dispose();
     }
 

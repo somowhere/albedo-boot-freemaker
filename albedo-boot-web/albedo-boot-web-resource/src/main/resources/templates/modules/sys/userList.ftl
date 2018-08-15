@@ -20,15 +20,25 @@
             </div>
             <div class="portlet-body">
                 <form class="form-inline form-search" role="form">
+                <#--<div class="form-group">-->
+                <#--<label class="input-label" for="loginId">所属组织 </label>-->
+                <#--<input type="text" class="form-control" searchItem="searchItem" id="loginId" name="loginId"-->
+                <#--realName="b.name_"-->
+                <#--placeholder="..." /></div>-->
                     <div class="form-group">
                         <label class="input-label" for="loginId">登录Id </label>
                         <input type="text" class="form-control" searchItem="searchItem" id="loginId" name="loginId"
                                realName="a.login_id"
                                placeholder="..." /></div>
                     <div class="form-group">
-                        <label class="input-label" for="email">邮箱</label>
+                        <label class="input-label" for="loginId">姓名 </label>
+                        <input type="text" class="form-control" searchItem="searchItem" id="name" name="name"
+                               realName="a.name_"
+                               placeholder="..." /></div>
+                    <div class="form-group">
+                        <label class="input-label" for="email">角色</label>
                         <input type="text" class="form-control" searchItem="searchItem" id="email" name="email"
-                               realName="a.email_"
+                               realName="c.roleNames"
                                placeholder="..." />
                     </div>
                     <div class="form-group">
@@ -42,7 +52,7 @@
                         <button id="dialogUserUpload" class="btn green btn-outline btn-sm" type="button"> 批量上传</button>
                         <button id="downloadUserTemplate" class="btn green btn-outline btn-sm" type="button"> 模板下载</button>
                         <button class="btn btn-sm red btn-outline filter-cancel" type="reset"><i
-                                class="fa fa-times"></i> 重置
+                            class="fa fa-times"></i> 重置
                         </button>
                     </div>
                 </form>
@@ -117,17 +127,17 @@
                         {data: "email"},
                         {data: "roleNames", orderable: false},
                         {data: "status", render: function (data, type, row) {
-                            var cssClass = (data == "正常" ? "info" : "warning");
-                            return '<span class="label label-sm label-' + cssClass + '">' + data + '</span>';
-                        }
+                                var cssClass = (data == "正常" ? "info" : "warning");
+                                return '<span class="label label-sm label-' + cssClass + '">' + data + '</span>';
+                            }
                         }, {data: "lastModifiedDate"},
                         {
                             orderable: false, data: function (row, type, val, meta) {
-                            var data = '<span class="operation">'<#if SecurityUtil.hasPermission('sys_user_edit')>+ '<a href="javascript:void(0);" class="dialog" data-table-id="#data-table-user" data-url="${ctx}/sys/user/edit?id='+ row.id+ '" data-modal-width="950"><i class=\"fa fa-lg fa-pencil\" title=\"编辑用户\"></i></a>'</#if>
+                                var data = '<span class="operation">'<#if SecurityUtil.hasPermission('sys_user_edit')>+ '<a href="javascript:void(0);" class="dialog" data-table-id="#data-table-user" data-url="${ctx}/sys/user/edit?id='+ row.id+ '" data-modal-width="950"><i class=\"fa fa-lg fa-pencil\" title=\"编辑用户\"></i></a>'</#if>
                                     <#if SecurityUtil.hasPermission('sys_user_lock')>+ '<a href="javascript:void(0);" class="confirm" data-table-id="#data-table-user" data-title="你确认要操作【'+ row.loginId+ '】用户吗？" data-url="${ctx}/sys/user/lock/'+ row.id+ '"><i class=\"fa fa-lg fa-'+ (row.status == "正常" ? "unlock" : "lock") + '  font-yellow-gold\" title=\"'+ (row.status == "正常" ? "锁定" : "解锁") + '用户\"></i></a></span>'</#if>
                                     <#if SecurityUtil.hasPermission('sys_user_delete')>+ '<a href="javascript:void(0);" class="confirm" data-table-id="#data-table-user" data-method="post" data-title="你确认要删除【'+ row.loginId+ '】用户吗？" data-url="${ctx}/sys/user/delete/'+ row.id+ '"><i class=\"fa fa-lg fa-trash-o font-red-mint\" title=\"删除\"></i></a>'</#if> + '</span>';
-                            return data;
-                        }
+                                return data;
+                            }
                         }
                     ]
                 }
@@ -148,9 +158,9 @@
 
     function fileuploadAdd(e, data) {
         $("input[name='dataFile']").val(data.files[0].name);
-        console.log($('#btn-confirm-user-upload'))
+        $("input[name='dataFile']").next().val(data.files[0].name);
         //绑定开始上传事件
-        $('#btn-confirm-user-upload').click(function() {
+        $('#btn-confirm-user-upload').off().click(function() {
             if(FormValidation.validate()){
                 jqXHR = data.submit()
                     .success(function (data, textStatus, jqXHR) {
@@ -162,7 +172,7 @@
                             //解绑，防止重复执行
                             $("#btn-confirm-user-upload").off("click");
                         }else{
-                            toastr.warning(data.message);
+                            // toastr.warning(data.message);
                         }
                     });
             }
