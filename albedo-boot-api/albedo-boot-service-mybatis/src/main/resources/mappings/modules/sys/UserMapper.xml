@@ -58,7 +58,7 @@
         sys_user_t a
     </sql>
     <select id="selectUserByLoginId" resultMap="userRelationResultMap">
-        <include refid="selectUserRelation"/> where a.login_id=#{loginId}
+        <include refid="selectUserRelation"/> where a.status_=0 and a.login_id=#{loginId}
     </select>
     <select id="selectRelationPage" resultType="com.albedo.java.vo.sys.UserTableVo">
         SELECT

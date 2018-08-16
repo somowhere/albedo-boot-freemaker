@@ -23,6 +23,6 @@
     </sql>
 
     <select id="selectListByRoleId" resultType="com.albedo.java.modules.sys.domain.Org">
-        select <include refid="orgColumns"/> from sys_org_t a LEFT JOIN sys_org_t p on p.id_=a.parent_id LEFT JOIN sys_role_org_t b on a.id_=b.org_id where b.role_id=#{id}
+        select <include refid="orgColumns"/> from sys_org_t a LEFT JOIN sys_org_t p on p.id_=a.parent_id LEFT JOIN sys_role_org_t b on a.id_=b.org_id where a.status_=0 and b.role_id=#{id}
     </select>
 </mapper>
