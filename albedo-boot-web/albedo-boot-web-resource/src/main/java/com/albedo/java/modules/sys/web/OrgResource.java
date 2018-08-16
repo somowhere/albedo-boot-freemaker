@@ -71,7 +71,7 @@ public class OrgResource extends TreeVoResource<OrgService, OrgVo> {
         if (orgVo == null) {
             throw new RuntimeMsgException(PublicUtil.toAppendStr("查询模块管理失败，原因：无法查找到编号区域"));
         }
-        if (PublicUtil.isNotEmpty(orgVo.getParentId())) {
+        if (PublicUtil.isNotEmpty(orgVo.getParentId()) && !"0".equals(orgVo.getParentId())) {
             service.findOptionalTopByParentId(orgVo.getParentId()).ifPresent(item -> {
                 if(PublicUtil.isEmpty(orgVo.getId()))orgVo.setSort(item.getSort() + 30);
             });
