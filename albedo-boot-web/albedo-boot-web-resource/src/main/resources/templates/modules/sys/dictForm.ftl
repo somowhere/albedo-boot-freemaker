@@ -13,6 +13,7 @@
                        messages:{code:{message:'字典编码已存在'}}}">
                 <div class="form-body">
                     <input type="hidden" name="id" value="${(dictVo.id)!}"/>
+                    <#if !(dictVo.id)?? || dictVo.id!='1'>
                     <div class="form-group">
                         <label class="control-label col-md-3">上级字典<span class="required">*</span>
                         </label>
@@ -22,6 +23,7 @@
                         title="选择字典" url="${ctx}/sys/dict/findTreeData"> </@albedo.treeSelect>
                         </div>
                     </div>
+                    </#if>
                     <div class="form-group">
                         <label class="control-label col-md-3">名称<span class="required">*</span>
                         </label>
