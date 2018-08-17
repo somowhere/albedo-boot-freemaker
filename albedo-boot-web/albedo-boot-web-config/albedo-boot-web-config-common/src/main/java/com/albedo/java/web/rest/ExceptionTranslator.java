@@ -78,9 +78,9 @@ public class ExceptionTranslator {
         } else {
             message.setCode(HttpStatus.INTERNAL_SERVER_ERROR);
             message.setStatusEmun(Globals.StatusEmun.MSG_TYPE_ERROR);
-            message.setData(e);
+//            message.setData(e);
             message.addMessage("操作异常; ");
-            message.addMessage(e.getMessage());
+//            message.addMessage(e.getMessage());
         }
 
 
