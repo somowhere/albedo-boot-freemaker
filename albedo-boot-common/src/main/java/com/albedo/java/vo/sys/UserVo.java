@@ -31,7 +31,7 @@ public class UserVo extends DataEntityVo<String> {
     /*** TYPE_APP_IOS ios */
     public static final String TYPE_APP_IOS = "ios";
     /*** TYPE_APP_ANDRIOD andriod */
-    public static final String TYPE_APP_ANDRIOD = "andriod";
+    public static final String TYPE_APP_ANDROID = "android";
     /*** F_LOGINID */
     public static final String F_LOGINID = "loginId";
     /*** F_LOGINID */
