@@ -512,6 +512,7 @@ DROP TABLE IF EXISTS sys_user_t;
 CREATE TABLE sys_user_t (
   id_ varchar(32) NOT NULL,
   org_id varchar(32) DEFAULT NULL,
+  avatar_ varchar(50) NOT NULL,
   login_id varchar(50) NOT NULL,
   password_hash varchar(60) DEFAULT NULL,
   name_ varchar(50) DEFAULT NULL,

@@ -26,10 +26,10 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mysql://192.168.88.247:3306/albedo-new?useUnicode=true&characterEncoding=utf8&useSSL=false
-        name:
-        username: root
-        password: 123456
+#        url: jdbc:mysql://192.168.88.247:3306/albedo-new?useUnicode=true&characterEncoding=utf8&useSSL=false
+#        name:
+#        username: root
+#        password: 123456
         hikari:
             data-source-properties:
                 cachePrepStmts: true

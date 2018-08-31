@@ -1,11 +1,12 @@
 package com.albedo.java.util.domain;
 
+import com.albedo.java.vo.gen.GenTableColumnVo;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class ComboData implements Serializable {
+public class ComboData implements Serializable,Comparable {
 
     public static final String F_NAME = "name";
     public static final String F_ID = "id";
@@ -30,4 +31,12 @@ public class ComboData implements Serializable {
     }
 
 
+    @Override
+    public int compareTo(Object obj) {
+        if (obj instanceof ComboData) {
+            ComboData b = (ComboData) obj;
+        return this.name.compareTo(b.name);
+      }
+        return 0;
+    }
 }
