@@ -121,15 +121,10 @@ public class ExportExcel {
             }
         }
         // Field sorting
-        Collections.sort(annotationList, new Comparator<Object[]>() {
-            public int compare(Object[] o1, Object[] o2) {
-                return new Integer(((ExcelField) o1[0]).sort()).compareTo(new Integer(((ExcelField) o2[0]).sort()));
-            }
-
-            ;
-        });
+        Collections.sort(annotationList, Comparator.comparing(o -> ((ExcelField) o[0]).sort()));
         // Initialize
         List<String> headerList = Lists.newArrayList();
+        List<ExcelField> headerFieldList = Lists.newArrayList();
         for (Object[] os : annotationList) {
             String t = ((ExcelField) os[0]).title();
             // 如果是导出，则去掉注释
@@ -140,11 +135,19 @@ public class ExportExcel {
                 }
             }
             headerList.add(t);
+            headerFieldList.add(((ExcelField) os[0]));
         }
         if (PublicUtil.isEmpty(headerList)) {
             throw new RuntimeException("还未设置导入、导出列");
         }
         initialize(title, headerList);
+
+        for (int i = 0; i < headerFieldList.size(); i++) {
+            int colWidth = sheet.getColumnWidth(i) * 2;
+            int width = headerFieldList.get(i).width();
+            sheet.setColumnWidth(i,width == 0 ?
+                (colWidth < 2500 ? 2500 : colWidth) : width);
+        }
     }
 
     /**

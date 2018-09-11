@@ -41,6 +41,11 @@ public @interface ExcelField {
     int align() default 0;
 
     /**
+     * 列宽（0：自动；）
+     */
+    int width() default 0;
+
+    /**
      * 导出字段字段排序（升序）
      */
     int sort() default 0;
