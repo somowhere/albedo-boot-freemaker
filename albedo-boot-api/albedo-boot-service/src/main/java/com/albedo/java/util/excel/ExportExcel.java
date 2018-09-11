@@ -143,10 +143,9 @@ public class ExportExcel {
         initialize(title, headerList);
 
         for (int i = 0; i < headerFieldList.size(); i++) {
-            int colWidth = sheet.getColumnWidth(i) * 2;
+            int colWidth = sheet.getColumnWidth(i);
             int width = headerFieldList.get(i).width();
-            sheet.setColumnWidth(i,width == 0 ?
-                (colWidth < 2500 ? 2500 : colWidth) : width);
+            sheet.setColumnWidth(i, width == 0 ? colWidth : width);
         }
     }
 
