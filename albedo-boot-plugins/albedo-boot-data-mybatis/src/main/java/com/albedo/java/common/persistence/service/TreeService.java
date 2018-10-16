@@ -92,7 +92,7 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
      */
     public int deleteById(PK id, String likeParentIds, String lastModifiedBy) {
         Assert.assertNotNull(id, "ids 信息为空，操作失败");
-        Assert.assertNotNull(likeParentIds, "likeParentIds 信息为空，操作失败");
+//        Assert.assertNotNull(likeParentIds, "likeParentIds 信息为空，操作失败");
         Assert.assertNotNull(lastModifiedBy, "lastModifiedBy 信息为空，操作失败");
         return operateStatusById(id, likeParentIds, BaseEntity.FLAG_DELETE, lastModifiedBy);
     }
