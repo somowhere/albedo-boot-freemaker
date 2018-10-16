@@ -98,13 +98,10 @@ public abstract class TreeService<Repository extends TreeRepository<T, PK>, T ex
     }
 
     public int operateStatusById(PK id, String likeParentIds, Integer status, String lastModifiedBy) {
+        Assert.assertNotNull(id, "id 信息为空，操作失败");
         List<T> entityList = findAllByIdOrParentIdsLike(id,
                 PublicUtil.toAppendStr(likeParentIds, id, ",", "%"));
-//        Assert.assertNotNull(entityList, "无法查询到对象信息");
-        Assert.assertNotNull(id, "id 信息为空，操作失败");
-        Assert.assertNotNull(likeParentIds, "likeParentIds 信息为空，操作失败");
         Assert.assertNotNull(status, "status 信息为空，操作失败");
-        Assert.assertNotNull(lastModifiedBy, "lastModifiedBy 信息为空，操作失败");
         for (T entity : entityList) {
             entity.setStatus(status);
             repository.updateById(entity);
