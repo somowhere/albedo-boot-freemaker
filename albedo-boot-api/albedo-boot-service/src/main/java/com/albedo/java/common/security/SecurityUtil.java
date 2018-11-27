@@ -86,7 +86,11 @@ public final class SecurityUtil {
         User currentUser = getCurrentUser();
         if (PublicUtil.isNotEmpty(currentUser)) {
             List<Org> orgList = getOrgList();
-            Org org = orgList.stream().filter((item) -> item.getId().equals(currentUser.getOrgId())).findFirst().get();
+            Org org = null;
+            try {
+                org = orgList.stream().filter((item) -> item.getId().equals(currentUser.getOrgId())).findFirst().get();
+            }catch (Exception e){
+            }
             if (org != null) {
                 return PublicUtil.isEmpty(org.getParentId()) ? org.getId() : org.getParentIds().substring(0, org.getParentIds().indexOf(","));
             }
