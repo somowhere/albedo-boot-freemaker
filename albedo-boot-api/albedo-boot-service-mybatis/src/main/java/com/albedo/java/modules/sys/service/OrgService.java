@@ -35,7 +35,7 @@ public class OrgService extends TreeVoService<OrgRepository, Org, String, OrgVo>
             if ((PublicUtil.isEmpty(extId)
                     || PublicUtil.isEmpty(e.getParentIds()) || (PublicUtil.isNotEmpty(extId) && !extId.equals(e.getId()) && e.getParentIds() != null && e.getParentIds().indexOf("," + extId + ",") == -1))
                     && (PublicUtil.isEmpty(showType)
-                    || (PublicUtil.isNotEmpty(showType) && (showType.equals("1") ? showType.equals(e.getType()) : true)))
+                    || (PublicUtil.isNotEmpty(showType) && showType.equals(e.getType())))
                     && (PublicUtil.isEmpty(grade) || (PublicUtil.isNotEmpty(grade) && Integer.parseInt(e.getGrade()) <= grade.intValue()))
                     && (all != null || (all == null && BaseEntity.FLAG_NORMAL.equals(e.getStatus())))) {
                 treeResult = new TreeResult();
