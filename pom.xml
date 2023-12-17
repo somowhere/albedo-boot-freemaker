@@ -56,7 +56,7 @@
         <!--</repository>-->
         <snapshotRepository>
             <id>tsy</id>
-            <url>http://onepiecekapu.com:8081/nexus/content/repositories/tsy</url>
+            <url>https://onepiecekapu.com:8081/nexus/content/repositories/tsy</url>
         </snapshotRepository>
     </distributionManagement>
     <repositories>
@@ -64,7 +64,7 @@
             <id>nexus-aliyun</id>
             <name>Nexus aliyun</name>
             <layout>default</layout>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <url>https://maven.aliyun.com/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
